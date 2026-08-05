@@ -208,7 +208,7 @@ function startServer() {
     res.writeHead(404).end();
   });
 
-  server.listen(PORT, () => log("info", "Combined backend endpoint listening", { port: PORT }));
+  server.listen(PORT, "0.0.0.0", () => log("info", "Combined backend endpoint listening", { port: PORT }));
   return server;
 }
 
