@@ -26,7 +26,7 @@ export default function Footer() {
   return (
     <>
       <footer className="mt-auto border-t border-line bg-surface">
-        <div className="container grid gap-10 py-12 md:grid-cols-3 md:gap-8 md:py-14">
+        <div className="container grid gap-10 py-12 md:grid-cols-4 md:gap-8 md:py-14">
           {/* Brand + address */}
           <div>
             <div className="flex min-w-0 items-center gap-3">
@@ -132,6 +132,31 @@ export default function Footer() {
                 >
                   Facebook page
                 </a>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Legal */}
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+              Legal
+            </h2>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li>
+                <Link
+                  href={`/${locale}/legal/privacy-policy`}
+                  className="text-muted transition-colors hover:text-primary"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}/legal/terms-and-conditions`}
+                  className="text-muted transition-colors hover:text-primary"
+                >
+                  Terms & Conditions
+                </Link>
               </li>
             </ul>
           </div>

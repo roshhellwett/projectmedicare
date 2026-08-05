@@ -42,6 +42,27 @@ export async function generateMetadata({
     description: t("description"),
     icons: {
       icon: "/websitelogo/jantamedicarelogo.webp",
+      shortcut: "/websitelogo/jantamedicarelogo.webp",
+      apple: "/websitelogo/jantamedicarelogo.webp",
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      siteName: "Janta Medicare",
+      images: [
+        {
+          url: "/websitelogo/jantamedicarelogo.webp",
+          width: 800,
+          height: 600,
+          alt: "Janta Medicare Logo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["/websitelogo/jantamedicarelogo.webp"],
     },
   };
 }
