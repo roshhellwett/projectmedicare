@@ -1,7 +1,7 @@
 {
   "Metadata": {
     "title": "Janta Medicare - Healthcare Portal",
-    "description": "Official healthcare portal for free checkups, camps, and medical information."
+    "description": "Official healthcare portal for checkups, camps, and medical information."
   },
   "Navbar": {
     "home": "Home",
@@ -79,17 +79,17 @@
     "posts": {
       "title": "Manage Posts",
       "desc": "Create, edit, or delete News, Camps, and Bulletin Board items.",
-      "button": "Manage Posts (Coming Soon)"
+      "button": "Manage Posts"
     },
     "medicines": {
       "title": "Manage Medicines",
       "desc": "Update the medicine list, prices, and pack sizes.",
-      "button": "Manage Medicines (Coming Soon)"
+      "button": "Manage Medicines"
     },
     "rates": {
       "title": "Manage Patient Rates",
       "desc": "Update pathology tests, rates, and vials.",
-      "button": "Manage Rates (Coming Soon)"
+      "button": "Manage Rates"
     }
   },
   "Footer": {
