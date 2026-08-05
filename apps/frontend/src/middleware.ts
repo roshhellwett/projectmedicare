@@ -11,7 +11,7 @@ const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
 const intlMiddleware = createMiddleware(routing);
 
 export default function proxy(request: NextRequest) {
-  const ip = request.ip || request.headers.get('x-forwarded-for') || 'anonymous';
+  const ip = request.headers.get('x-forwarded-for') || 'anonymous';
   const path = request.nextUrl.pathname;
 
   // 1. Rate Limiting for API routes (especially /api/chat)
