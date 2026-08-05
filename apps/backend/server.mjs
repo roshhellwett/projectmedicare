@@ -1,5 +1,4 @@
 import http from "node:http";
-import { createPublicClient } from "@jm/shared/supabase";
 
 // Purge env
 const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
@@ -129,18 +128,27 @@ async function httpCheck(name, url, { expect = 200 } = {}) {
 async function supabaseCheck() {
   const name = "supabase";
   const started = Date.now();
-  const client = createPublicClient();
-  if (!client) {
-    const error = new Error("Supabase env vars are missing in the health checker");
+  if (!SUPABASE_URL || !SERVICE_KEY) {
+    const error = new Error("Supabase env vars are missing");
     report(name, error);
     return { name, ok: false, ms: 0, error: error.message };
   }
-  const { error } = await client.from("bulletins").select("id", { head: true, count: "exact" });
-  if (error) {
-    report(name, new Error(`Supabase read failed: ${error.message}`));
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/bulletins?select=id&limit=1`, {
+      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
+      signal: controller.signal
+    });
+    if (!res.ok) throw new Error(`Supabase responded ${res.status}`);
+    return { name, ok: true, ms: Date.now() - started };
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    report(name, error);
     return { name, ok: false, ms: Date.now() - started, error: error.message };
+  } finally {
+    clearTimeout(timer);
   }
-  return { name, ok: true, ms: Date.now() - started };
 }
 
 async function runChecks() {
