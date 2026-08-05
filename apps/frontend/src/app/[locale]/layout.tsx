@@ -51,9 +51,9 @@ export async function generateMetadata({
       siteName: "Janta Medicare",
       images: [
         {
-          url: "/websitelogo/jantamedicarelogo.webp",
-          width: 800,
-          height: 600,
+          url: "/websitelogo/og-image.png",
+          width: 1200,
+          height: 630,
           alt: "Janta Medicare Logo",
         },
       ],
@@ -62,7 +62,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: ["/websitelogo/jantamedicarelogo.webp"],
+      images: ["/websitelogo/og-image.png"],
     },
   };
 }
