@@ -24,11 +24,5 @@
     "test:smoke": "npm run test:smoke --workspace @jm/tests",
     "test:e2e": "npm run test:e2e --workspace @jm/tests",
     "verify": "npm run lint && npm run typecheck && npm run build"
-  },
-  "dependencies": {
-    "@parcel/watcher-win32-x64": "^2.6.0",
-    "@swc/core-win32-x64-msvc": "^1.15.47",
-    "@tailwindcss/oxide-win32-x64-msvc": "^4.3.3",
-    "lightningcss-win32-x64-msvc": "^1.33.0"
   }
 }
