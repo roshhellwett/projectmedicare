@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { requireAdmin } from "@/lib/auth/guard";
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
 import { num, str, ValidationError } from "@/lib/utils/validation";
@@ -77,6 +78,8 @@ export async function POST(req: NextRequest) {
       .single();
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
+    revalidateTag("rates", 'max');
+    revalidateTag("stats", 'max');
     return NextResponse.json({ item: data });
   } catch (err) {
     return fail(err);
@@ -97,6 +100,8 @@ export async function PUT(req: NextRequest) {
       .single();
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
+    revalidateTag("rates", 'max');
+    revalidateTag("stats", 'max');
     return NextResponse.json({ item: data });
   } catch (err) {
     return fail(err);
@@ -117,6 +122,8 @@ export async function DELETE(req: NextRequest) {
       .in("id", ids);
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
+    revalidateTag("rates", 'max');
+    revalidateTag("stats", 'max');
     return NextResponse.json({ ok: true, deleted: ids.length });
   } catch (err) {
     return fail(err);

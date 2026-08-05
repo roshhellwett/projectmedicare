@@ -65,7 +65,7 @@ async function _getMedicines(
 export const getMedicines = unstable_cache(
   _getMedicines,
   ['medicines-data'],
-  { revalidate: 3600 } // cache for 1 hour
+  { revalidate: 3600, tags: ['medicines', 'stats'] } // cache for 1 hour
 );
 
 async function _getRates(
@@ -101,7 +101,7 @@ async function _getRates(
 export const getRates = unstable_cache(
   _getRates,
   ['rates-data'],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ['rates', 'stats'] }
 );
 
 async function _getStats(): Promise<{
@@ -138,7 +138,7 @@ async function _getStats(): Promise<{
 export const getStats = unstable_cache(
   _getStats,
   ['stats-data'],
-  { revalidate: 3600 }
+  { revalidate: 3600, tags: ['stats'] }
 );
 
 function paginateJson<T>(

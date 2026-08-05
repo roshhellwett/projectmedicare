@@ -11,13 +11,10 @@ import { usePathname } from "next/navigation";
 type Message = { id: string; role: "user" | "assistant" | "system"; content: string; isTyping?: boolean };
 
 const TypewriterMessage = ({ message, onComplete }: { message: Message, onComplete: () => void }) => {
-  const [displayed, setDisplayed] = useState(message.isTyping ? "" : message.content);
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    if (!message.isTyping) {
-      setDisplayed(message.content);
-      return;
-    }
+    if (!message.isTyping) return;
 
     let i = 0;
     const interval = setInterval(() => {
@@ -32,10 +29,12 @@ const TypewriterMessage = ({ message, onComplete }: { message: Message, onComple
     return () => clearInterval(interval);
   }, [message.content, message.isTyping, onComplete]);
 
+  const finalContent = message.isTyping ? displayed : message.content;
+
   return (
     <div className="prose prose-sm prose-slate max-w-none text-foreground prose-p:leading-relaxed prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-primary-strong">
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {displayed}
+        {finalContent}
       </ReactMarkdown>
       {message.isTyping && (
         <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-primary align-middle" />

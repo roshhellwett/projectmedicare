@@ -1,4 +1,7 @@
-import { getMedicines, getRates } from "@/lib/data";
+import { getMedicines, getRates, Medicine, RateTest } from "@/lib/data";
+
+type Message = { role: string; content: string | null; name?: string; tool_calls?: ToolCall[]; tool_call_id?: string };
+type ToolCall = { id: string; type: string; function: { name: string; arguments: string } };
 import { doctors, doctorChamberInfo } from "@/data/doctors";
 import { stores, mainContact } from "@/data/stores";
 
@@ -53,12 +56,12 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
     ];
 
     // Filter out UI-only fields or unsupported fields from messages before sending to Groq
-    const cleanMessages = messages.map((m: any) => ({
+    const cleanMessages = messages.map((m: Message) => ({
       role: m.role,
       content: m.content
     }));
 
-    const currentMessages: any[] = [
+    const currentMessages: Message[] = [
       { role: "system", content: systemPrompt },
       ...cleanMessages
     ];
@@ -94,21 +97,21 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
       if (message.tool_calls && message.tool_calls.length > 0) {
          for (const toolCall of message.tool_calls) {
             const args = JSON.parse(toolCall.function.arguments);
-            let resultData: any[] = [];
+            let resultData: Record<string, string | number | undefined>[] = [];
             
             if (toolCall.function.name === "search_medicines") {
               const { items } = await getMedicines(args.query, 1, { key: "medicine_name", dir: "asc" });
-              resultData = items.slice(0, 5).map((item: any) => ({
+              resultData = items.slice(0, 5).map((item: Medicine) => ({
                 medicine: `*${item.medicine_name}*`,
                 mrp: `**₹${item.mrp}**`,
-                janta_price: `**₹${item.janta_selling_price}**`,
+                janta_price: `**₹${item.selling_price}**`, // Using selling_price instead of undefined janta_selling_price
                 pack_size: item.pack_size
               }));
             } else if (toolCall.function.name === "search_rate_chart") {
               const { items } = await getRates(args.query, 1, { key: "test_name", dir: "asc" });
-              resultData = items.slice(0, 5).map((item: any) => ({
+              resultData = items.slice(0, 5).map((item: RateTest) => ({
                 test: `*${item.test_name}*`,
-                janta_rate: `**₹${item.janta_rate}**`
+                janta_rate: `**₹${item.jm_rate}**` // Using jm_rate instead of undefined janta_rate
               }));
             }
 
