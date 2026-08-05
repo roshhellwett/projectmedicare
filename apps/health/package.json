@@ -1,0 +1,17 @@
+{
+  "name": "@jm/health",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Railway health checker: probes the site, the API and Supabase, reports to Sentry, exposes /healthz.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "@jm/shared": "*",
+    "@sentry/node": "^8.55.0"
+  }
+}

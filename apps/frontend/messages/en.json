@@ -1,0 +1,98 @@
+{
+  "Metadata": {
+    "title": "Janta Medicare - Healthcare Portal",
+    "description": "Official healthcare portal for free checkups, camps, and medical information."
+  },
+  "Navbar": {
+    "home": "Home",
+    "medicines": "Medicines",
+    "patientRates": "Rate Chart",
+    "locations": "Locations",
+    "doctors": "Doctors",
+    "bulletins": "Notices"
+  },
+  "HomePage": {
+    "welcome": "Your trusted partner in health - accessible pharmacy, pathology and doctor consultation services for every citizen.",
+    "stats": {
+      "stores": "Stores",
+      "doctors": "Doctors",
+      "medicines": "Medicines",
+      "tests": "Lab Tests"
+    },
+    "services": {
+      "eyebrow": "What We Offer",
+      "title": "Complete Care Under One Roof",
+      "sub": "Three services, three stores, one promise - honest healthcare for everyone."
+    }
+  },
+  "MedicinesPage": {
+    "eyebrow": "Pharmacy",
+    "title": "Available Medicines List",
+    "sub": "Search our full medicine list and compare honest Janta prices against MRP.",
+    "searchPlaceholder": "Search medicines by name...",
+    "colNo": "S No",
+    "colName": "Medicine Name",
+    "colPack": "Pack Size",
+    "colMrp": "MRP",
+    "colPrice": "Janta Selling Price",
+    "empty": "No medicines found. Try a different search.",
+    "showing": "Showing {from} to {to} of {total} entries"
+  },
+  "RateChartPage": {
+    "eyebrow": "Pathology",
+    "title": "Patient Rate Chart",
+    "sub": "Transparent pricing for all our pathology tests - no hidden charges.",
+    "searchPlaceholder": "Search tests by name...",
+    "colNo": "Sl No.",
+    "colTest": "Test Name",
+    "colVial": "Vial Name",
+    "colRate": "Janta Rate",
+    "empty": "No tests found. Try a different search.",
+    "showing": "Showing {from} to {to} of {total} entries"
+  },
+  "LocationsPage": {
+    "eyebrow": "Find Us",
+    "title": "Our Stores & Clinics",
+    "description": "Visit any of our 3 branches for Pharmacy and Pathology services. Open daily from 8 AM to 10 PM. Doctor chambers available at the Shibpur Main Hub.",
+    "getDirections": "Get Directions",
+    "doctorTitle": "Doctor Chamber",
+    "drSeema": "Dr. Seema Farhin sits every day at the Shibpur chamber for general checkups.",
+    "campTitle": "Sunday Health Camp",
+    "campInfo": "Every Sunday we set up a free health checkup camp at Shibpur. Registration fee is only 100/-."
+  },
+  "DoctorsPage": {
+    "eyebrow": "Our Specialists",
+    "title": "Meet Our Doctors",
+    "description": "All doctors sit at the Shibpur Main Hub chamber. Call ahead to book your appointment.",
+    "chamberInfo": "Sits every day at the Shibpur chamber for general checkups.",
+    "bookAppointment": "Book Appointment",
+    "footerNote": "Doctor chambers available only at the Shibpur Main Hub address."
+  },
+  "AdminPage": {
+    "eyebrow": "Admin",
+    "title": "Admin Dashboard",
+    "sub": "Manage site content and pricing data.",
+    "dbConnected": "Supabase Connected",
+    "dbConnectedSub": "Live database in use for medicines and patient rates.",
+    "dbMissing": "Supabase Connection Required",
+    "dbMissingSub": "Configure NEXT_PUBLIC_SUPABASE_URL and an anon key in .env.local to activate live data.",
+    "posts": {
+      "title": "Manage Posts",
+      "desc": "Create, edit, or delete News, Camps, and Bulletin Board items.",
+      "button": "Manage Posts (Coming Soon)"
+    },
+    "medicines": {
+      "title": "Manage Medicines",
+      "desc": "Update the medicine list, prices, and pack sizes.",
+      "button": "Manage Medicines (Coming Soon)"
+    },
+    "rates": {
+      "title": "Manage Patient Rates",
+      "desc": "Update pathology tests, rates, and vials.",
+      "button": "Manage Rates (Coming Soon)"
+    }
+  },
+  "Footer": {
+    "rights": "© 2026 Janta Medicare LLP. All rights reserved."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "@jm/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Code shared by the frontend, the Railway worker and the health checker.",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./ist": {
+      "types": "./src/ist.d.ts",
+      "default": "./src/ist.js"
+    },
+    "./validation": {
+      "types": "./src/validation.d.ts",
+      "default": "./src/validation.js"
+    },
+    "./error-code": {
+      "types": "./src/error-code.d.ts",
+      "default": "./src/error-code.js"
+    },
+    "./supabase": {
+      "types": "./src/supabase.d.ts",
+      "default": "./src/supabase.js"
+    },
+    "./types": {
+      "types": "./src/types.d.ts",
+      "default": "./src/types.js"
+    }
+  }
+}

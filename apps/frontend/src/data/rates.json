@@ -1,0 +1,1485 @@
+[
+  {
+    "id": 1,
+    "sl_no": 1,
+    "test_name": "ABO Blood Group and Rh Type",
+    "jm_rate": 120,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 2,
+    "sl_no": 2,
+    "test_name": "AFB (PER SAMPLE)",
+    "jm_rate": 300,
+    "vail_name": ""
+  },
+  {
+    "id": 3,
+    "sl_no": 3,
+    "test_name": "AFB- DETECTION BY SMEAR EXAMINATION ZN STAIN SPUTUM",
+    "jm_rate": 300,
+    "vail_name": ""
+  },
+  {
+    "id": 4,
+    "sl_no": 4,
+    "test_name": "ALANINE TRANSAMINASE (SGPT)",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 5,
+    "sl_no": 5,
+    "test_name": "Albumin",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 6,
+    "sl_no": 6,
+    "test_name": "Albumin Creatinine Ratio (ACR) -Spot sample",
+    "jm_rate": 550,
+    "vail_name": "URINE POT"
+  },
+  {
+    "id": 7,
+    "sl_no": 7,
+    "test_name": "ALKALINE PHOSPHATE",
+    "jm_rate": 80,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 8,
+    "sl_no": 8,
+    "test_name": "ALLERGEN INDIVAUAN FOOD EGG WHITE ANDA",
+    "jm_rate": 1500,
+    "vail_name": ""
+  },
+  {
+    "id": 9,
+    "sl_no": 9,
+    "test_name": "ALLERGEN INDIVAUAN FOOD EGG YOLK ANDA",
+    "jm_rate": 1500,
+    "vail_name": ""
+  },
+  {
+    "id": 10,
+    "sl_no": 10,
+    "test_name": "AMYLASE",
+    "jm_rate": 275,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 11,
+    "sl_no": 11,
+    "test_name": "ANA SCREENING IFA (TITOR)",
+    "jm_rate": 1000,
+    "vail_name": ""
+  },
+  {
+    "id": 12,
+    "sl_no": 12,
+    "test_name": "ANC PANEL- 24 WEEKS",
+    "jm_rate": 850,
+    "vail_name": "376"
+  },
+  {
+    "id": 13,
+    "sl_no": 13,
+    "test_name": "ANC PANEL- BEFORE LSCS",
+    "jm_rate": 900,
+    "vail_name": "393"
+  },
+  {
+    "id": 14,
+    "sl_no": 14,
+    "test_name": "ANC Profile",
+    "jm_rate": 2300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 15,
+    "sl_no": 15,
+    "test_name": "ANTI CCP (ACCP)",
+    "jm_rate": 900,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 16,
+    "sl_no": 16,
+    "test_name": "ANTI HAV IGM",
+    "jm_rate": 800,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 17,
+    "sl_no": 17,
+    "test_name": "ANTI HCV IGM",
+    "jm_rate": 2000,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 18,
+    "sl_no": 18,
+    "test_name": "ANTI HEPATITIS A VIRUS (ANTI HAV) -IgM",
+    "jm_rate": 750,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 19,
+    "sl_no": 19,
+    "test_name": "ANTI HEPATITIS C Virus (HCV) Total",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 20,
+    "sl_no": 20,
+    "test_name": "ANTI MULLERIAN HORMONE (AMH) (dr ARCHANA)",
+    "jm_rate": "1300*",
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 21,
+    "sl_no": 21,
+    "test_name": "ANTI NUCLEAR ANTIBODIES (ANA)*",
+    "jm_rate": 450,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 22,
+    "sl_no": 22,
+    "test_name": "ANTI TPO ANTIBODY",
+    "jm_rate": 1100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 23,
+    "sl_no": 23,
+    "test_name": "ANTI-Streptolysin O (ASO)",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 24,
+    "sl_no": 24,
+    "test_name": "ANTITHYROGLOBULINV ANTIBODY (ATG)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 25,
+    "sl_no": 25,
+    "test_name": "APTT",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 26,
+    "sl_no": 26,
+    "test_name": "ASPARYATE AMINO TRASFERASE (SGOT)",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 27,
+    "sl_no": 27,
+    "test_name": "BETA HCG (DR ARCHANA)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 28,
+    "sl_no": 28,
+    "test_name": "BETA-THALASSAMIA SCREENING",
+    "jm_rate": 350,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 29,
+    "sl_no": 29,
+    "test_name": "BETA-THALASSAMIA SCREENING with Graph",
+    "jm_rate": 400,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 30,
+    "sl_no": 30,
+    "test_name": "BICARBONATE",
+    "jm_rate": 440,
+    "vail_name": ""
+  },
+  {
+    "id": 31,
+    "sl_no": 31,
+    "test_name": "BLOOD GROUPINGP",
+    "jm_rate": 120,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 32,
+    "sl_no": 32,
+    "test_name": "C - REACTIVE PROTEIN (CRP)",
+    "jm_rate": 220,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 33,
+    "sl_no": 33,
+    "test_name": "CA 125",
+    "jm_rate": 700,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 34,
+    "sl_no": 34,
+    "test_name": "CALCIUM",
+    "jm_rate": 80,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 35,
+    "sl_no": 35,
+    "test_name": "CALPROTECTIN",
+    "jm_rate": 3200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 36,
+    "sl_no": 36,
+    "test_name": "CBC - COMPLETE BLOOD COUNT",
+    "jm_rate": 150,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 37,
+    "sl_no": 37,
+    "test_name": "CBC + PBS (CBC & Peripheral Blood Smear)",
+    "jm_rate": 300,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 38,
+    "sl_no": 38,
+    "test_name": "CHLORIDE",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 39,
+    "sl_no": 39,
+    "test_name": "CREATININE  KINASE - MB (CK-MB)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 40,
+    "sl_no": 40,
+    "test_name": "CREATININE PHOSPHO KINASE (CPK) - TOTAL",
+    "jm_rate": 300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 41,
+    "sl_no": 41,
+    "test_name": "CORTISOL",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 42,
+    "sl_no": 42,
+    "test_name": "CORTISOL (4 PM)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 43,
+    "sl_no": 43,
+    "test_name": "CORTISOL (8 AM)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 44,
+    "sl_no": 44,
+    "test_name": "Culture & Sensitivity, Aerobic Bacteria Sputum (Sputum C/S)",
+    "vail_name": "URINE POT"
+  },
+  {
+    "id": 45,
+    "sl_no": 45,
+    "test_name": "D- DIMER",
+    "jm_rate": 800,
+    "vail_name": "NA+ CITRITED"
+  },
+  {
+    "id": 46,
+    "sl_no": 46,
+    "test_name": "DENGUE IgG (ELISA)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 47,
+    "sl_no": 47,
+    "test_name": "DENGUE IgM(ELISA)",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 48,
+    "sl_no": 48,
+    "test_name": "DENGUE NS - 1 ANTIGEN(ELISA)*",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 49,
+    "sl_no": 49,
+    "test_name": "DENGUE NS - 1 ANTIGEN(RAPID)*",
+    "jm_rate": 300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 50,
+    "sl_no": 50,
+    "test_name": "DENGUE NS-1 ANTIGEN(ELISA)",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 51,
+    "sl_no": 51,
+    "test_name": "DENGUE PROFILE(NS-1, IgM , IgG- ELISA)",
+    "jm_rate": 1600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 52,
+    "sl_no": 52,
+    "test_name": "DENGUE PROFILE(NS-1, IgM , IgG- RAPID)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 53,
+    "sl_no": 53,
+    "test_name": "DOUBLE MARKER  - FIRST TRIMESTER( dr archana)",
+    "jm_rate": "1300*",
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 54,
+    "sl_no": 54,
+    "test_name": "EGFR",
+    "jm_rate": 180,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 55,
+    "sl_no": 55,
+    "test_name": "ESR (Erythrocyte Sedimentation Rate)",
+    "jm_rate": 100,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 56,
+    "sl_no": 56,
+    "test_name": "Estradiol (Estrogen E2)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 57,
+    "sl_no": 57,
+    "test_name": "FERRITIN",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 58,
+    "sl_no": 58,
+    "test_name": "FOLLICLE STIMULATING HARMONE (FSH)( DR ARCHANA)",
+    "jm_rate": 250,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 59,
+    "sl_no": 59,
+    "test_name": "FOOD+INHALANTS+NONVEG ALLERGY SCREENING",
+    "jm_rate": 3500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 60,
+    "sl_no": 60,
+    "test_name": "FOOT+INHALANTS ALLERGY SCREENING",
+    "jm_rate": 3000,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 61,
+    "sl_no": 61,
+    "test_name": "FREE T3/ FREE T4",
+    "jm_rate": 150,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 62,
+    "sl_no": 62,
+    "test_name": "FREE TFT (FREE T3, FREE T4, TSH)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 63,
+    "sl_no": 63,
+    "test_name": "G6 PD",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 64,
+    "sl_no": 64,
+    "test_name": "GAD ANTI BODY",
+    "jm_rate": 5500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 65,
+    "sl_no": 65,
+    "test_name": "GGT",
+    "jm_rate": 150,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 66,
+    "sl_no": 66,
+    "test_name": "GRAM STAIN",
+    "jm_rate": 250,
+    "vail_name": "URINE POT"
+  },
+  {
+    "id": 67,
+    "sl_no": 67,
+    "test_name": "HBA1C (WHOLE BLOOD) WITH GRAPH",
+    "jm_rate": 250,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 68,
+    "sl_no": 68,
+    "test_name": "HBA1C (WHOLE BLOOD) WITHOUT GRAPH",
+    "jm_rate": 180,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 69,
+    "sl_no": 69,
+    "test_name": "HBSAG",
+    "jm_rate": 300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 70,
+    "sl_no": 70,
+    "test_name": "HDL CHOLESTEROL",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 71,
+    "sl_no": 71,
+    "test_name": "hemoglobin",
+    "jm_rate": 120,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 72,
+    "sl_no": 72,
+    "test_name": "HEPATITIS B SURFACE ANTIGEN (HBSAG) (Quantitative)",
+    "jm_rate": 250,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 73,
+    "sl_no": 73,
+    "test_name": "HIGH SENSITIVITY C-REATIVE PROTIN (HS-CRP)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 74,
+    "sl_no": 74,
+    "test_name": "HIV - I & II",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 75,
+    "sl_no": 75,
+    "test_name": "HLA B27 STUDIES (PCR)",
+    "jm_rate": 3000,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 76,
+    "sl_no": 76,
+    "test_name": "HLAB27 Studies",
+    "jm_rate": 1000,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 77,
+    "sl_no": 77,
+    "test_name": "HOMOCYSTEINE",
+    "jm_rate": 800,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 78,
+    "sl_no": 78,
+    "test_name": "HUMAN GROWTH HARMONE (HGH)",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 79,
+    "sl_no": 79,
+    "test_name": "IMMUMOGLOBULIN A",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 80,
+    "sl_no": 80,
+    "test_name": "INDIRECT / DIRECT  COOMBS  TEST                              EACH RATE-",
+    "jm_rate": 400,
+    "vail_name": ""
+  },
+  {
+    "id": 81,
+    "sl_no": 81,
+    "test_name": "INHALANTS ALLERGY SCREENING",
+    "jm_rate": 2500,
+    "vail_name": ""
+  },
+  {
+    "id": 82,
+    "sl_no": 82,
+    "test_name": "INSULIN FASTING",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 83,
+    "sl_no": 83,
+    "test_name": "IRON PROFILE INCULING FERRITIN (IRON, TIBC,T-SAT, FERRITIN)",
+    "jm_rate": 750,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 84,
+    "sl_no": 84,
+    "test_name": "IRON STUDIES (IRON , TIBC, Transferrin Saturation)",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 85,
+    "sl_no": 85,
+    "test_name": "IONISED CALCIUM",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 86,
+    "sl_no": 86,
+    "test_name": "KIDNEY PROFILE**??",
+    "jm_rate": 320,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 87,
+    "sl_no": 87,
+    "test_name": "Lactate Dehydrogenase (LDH Serum)",
+    "jm_rate": 150,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 88,
+    "sl_no": 88,
+    "test_name": "LDL CHOLESTERAL (DIRECT)",
+    "jm_rate": 120,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 89,
+    "sl_no": 89,
+    "test_name": "LFT (LIVER FUCTION TEST)",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 90,
+    "sl_no": 90,
+    "test_name": "LIPASE",
+    "jm_rate": 275,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 91,
+    "sl_no": 91,
+    "test_name": "LIPID PROFILE",
+    "jm_rate": 250,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 92,
+    "sl_no": 92,
+    "test_name": "LITHIUM",
+    "jm_rate": 300,
+    "vail_name": "150"
+  },
+  {
+    "id": 93,
+    "sl_no": 93,
+    "test_name": "Luteinizing Harmone (LH)",
+    "jm_rate": 250,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 94,
+    "sl_no": 94,
+    "test_name": "MAGNESIUM",
+    "jm_rate": 150,
+    "vail_name": "50"
+  },
+  {
+    "id": 95,
+    "sl_no": 95,
+    "test_name": "Malaria Antigen Detection (MPDA) / DUEL ANTIGEN",
+    "jm_rate": 300,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 96,
+    "sl_no": 96,
+    "test_name": "MICRO/ ALBUMIN CREATININE RATIO (ACR) SPOT SMAPLE",
+    "jm_rate": 900,
+    "vail_name": "FLOURIDE+CLOT"
+  },
+  {
+    "id": 97,
+    "sl_no": 97,
+    "test_name": "NT PRO BNP",
+    "jm_rate": 3200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 98,
+    "sl_no": 98,
+    "test_name": "OGTT(75GRM ORAL GLUCOSE TOLERANCE TEST)",
+    "jm_rate": 250,
+    "vail_name": "FLOURIDE"
+  },
+  {
+    "id": 99,
+    "sl_no": 99,
+    "test_name": "PCOD PROFILE",
+    "jm_rate": 1000,
+    "vail_name": "436"
+  },
+  {
+    "id": 100,
+    "sl_no": 100,
+    "test_name": "PERIPHERAL BLOOD SMEAR (PBS)",
+    "jm_rate": 200,
+    "vail_name": "100"
+  },
+  {
+    "id": 101,
+    "sl_no": 101,
+    "test_name": "Phosphorus",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 102,
+    "sl_no": 102,
+    "test_name": "Phosphorus (P04)",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 103,
+    "sl_no": 103,
+    "test_name": "POTASSIUM",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 104,
+    "sl_no": 104,
+    "test_name": "PRE DIALYSIS SEROLOGY(HBSAG,HIV,HCV) (Do it all tests individually)",
+    "jm_rate": 1000,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 105,
+    "sl_no": 105,
+    "test_name": "PROLACTIN",
+    "jm_rate": 280,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 106,
+    "sl_no": 106,
+    "test_name": "PROSTATE SPECIFIC ANTIGEN (PSA) - TOTAL",
+    "jm_rate": 300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 107,
+    "sl_no": 107,
+    "test_name": "PROTHOMBIN TIME (PT WITH INR)",
+    "jm_rate": 250,
+    "vail_name": "NA+ CITRITEDE"
+  },
+  {
+    "id": 108,
+    "sl_no": 108,
+    "test_name": "PROTHROMBIN TIME-( PT WITH INR)",
+    "jm_rate": 250,
+    "vail_name": "NA+ CITRITEDE"
+  },
+  {
+    "id": 109,
+    "sl_no": 109,
+    "test_name": "PROTIN ELECTROPHORESIS",
+    "jm_rate": 660,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 110,
+    "sl_no": 110,
+    "test_name": "PTH - INTACT (PARATHYROID HORMONE)",
+    "jm_rate": 900,
+    "vail_name": "375"
+  },
+  {
+    "id": 111,
+    "sl_no": 111,
+    "test_name": "PROCALCITONIN",
+    "jm_rate": 1800,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 112,
+    "sl_no": 112,
+    "test_name": "RETICULOCYTE COUNT",
+    "jm_rate": 80,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 113,
+    "sl_no": 113,
+    "test_name": "RHEUMATOID FACTOR (RF)",
+    "jm_rate": 400,
+    "vail_name": "200"
+  },
+  {
+    "id": 114,
+    "sl_no": 114,
+    "test_name": "SARS - COV-2RT-PCR",
+    "jm_rate": 700,
+    "vail_name": "380"
+  },
+  {
+    "id": 115,
+    "sl_no": 115,
+    "test_name": "Serum Bilirubin - Total & Direct",
+    "jm_rate": 120,
+    "vail_name": "60"
+  },
+  {
+    "id": 116,
+    "sl_no": 116,
+    "test_name": "SERUM CREATININE",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 117,
+    "sl_no": 117,
+    "test_name": "SERUM ELECTROLYTE PROFILE",
+    "jm_rate": 300,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 118,
+    "sl_no": 118,
+    "test_name": "SERUM FERRITIN",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 119,
+    "sl_no": 119,
+    "test_name": "SERUM IRON",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 120,
+    "sl_no": 120,
+    "test_name": "Smear for MP (Malaria Parasite)",
+    "jm_rate": 250,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 121,
+    "sl_no": 121,
+    "test_name": "SODIUM",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 122,
+    "sl_no": 122,
+    "test_name": "SPUTUM ROUTINE",
+    "jm_rate": 400,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 123,
+    "sl_no": 123,
+    "test_name": "STOOL OBT(OCCULT BLOOD)",
+    "jm_rate": 220,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 124,
+    "sl_no": 124,
+    "test_name": "STOOL ROUTINE",
+    "jm_rate": 150,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 125,
+    "sl_no": 125,
+    "test_name": "STOOL C/S",
+    "jm_rate": 300,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 126,
+    "sl_no": 126,
+    "test_name": "SUGAR (Glucose) FASTING",
+    "jm_rate": 40,
+    "vail_name": "FLOURIDE"
+  },
+  {
+    "id": 127,
+    "sl_no": 127,
+    "test_name": "SUGAR (Glucose) POST PRANDIAL",
+    "jm_rate": 40,
+    "vail_name": "FLOURIDE"
+  },
+  {
+    "id": 128,
+    "sl_no": 128,
+    "test_name": "SUGAR (Glucose) RANDOM",
+    "jm_rate": 40,
+    "vail_name": "FLOURIDE"
+  },
+  {
+    "id": 129,
+    "sl_no": 129,
+    "test_name": "TROPONIN T",
+    "jm_rate": 1400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 130,
+    "sl_no": 130,
+    "test_name": "TROPONIN I",
+    "jm_rate": 1200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 131,
+    "sl_no": 131,
+    "test_name": "TB GOLD",
+    "jm_rate": 1800,
+    "vail_name": "NA+ HEPARIN"
+  },
+  {
+    "id": 132,
+    "sl_no": 132,
+    "test_name": "TESTOSTERONE",
+    "jm_rate": 350,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 133,
+    "sl_no": 133,
+    "test_name": "Thyroid Profile - Total T3, Total T4, TSH (TFT)",
+    "jm_rate": 200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 134,
+    "sl_no": 134,
+    "test_name": "TOTAL CHOLESTEROL",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 135,
+    "sl_no": 135,
+    "test_name": "TOTAL IgE",
+    "jm_rate": 450,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 136,
+    "sl_no": 136,
+    "test_name": "Total Triidothyronine (T3) OR Total Thyroxine (T4)",
+    "jm_rate": 80,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 137,
+    "sl_no": 137,
+    "test_name": "TRIGLYCERIDES",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 138,
+    "sl_no": 138,
+    "test_name": "TSH - LH - FSH - PRL",
+    "jm_rate": 650,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 139,
+    "sl_no": 139,
+    "test_name": "TSH (Thyroid Stimulating Hormone)",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 140,
+    "sl_no": 140,
+    "test_name": "TYPHIDOT IgG",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 141,
+    "sl_no": 141,
+    "test_name": "TYPHIDOT IgM",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 142,
+    "sl_no": 142,
+    "test_name": "TYPHIDOT IgM +IgG",
+    "jm_rate": 1000,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 143,
+    "sl_no": 143,
+    "test_name": "UREA",
+    "jm_rate": 100,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 144,
+    "sl_no": 144,
+    "test_name": "URIC ACID (ESTIMATION - SAME)",
+    "jm_rate": 80,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 145,
+    "sl_no": 145,
+    "test_name": "URINE C/S",
+    "jm_rate": 300,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 146,
+    "sl_no": 146,
+    "test_name": "URINE COMPLETE (Urine R/E)",
+    "jm_rate": 150,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 147,
+    "sl_no": 147,
+    "test_name": "VALPROIC ACID",
+    "jm_rate": 550,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 148,
+    "sl_no": 148,
+    "test_name": "VDRL (RPR)",
+    "jm_rate": 180,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 149,
+    "sl_no": 149,
+    "test_name": "VITAMIN B12",
+    "jm_rate": 400,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 150,
+    "sl_no": 150,
+    "test_name": "VITAMIN D3",
+    "jm_rate": 500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 151,
+    "sl_no": 151,
+    "test_name": "WIDAL TEST(SLIDE)",
+    "jm_rate": 220,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 152,
+    "sl_no": 152,
+    "test_name": "URINE PREGNENCY TEST",
+    "jm_rate": 150,
+    "vail_name": "CONTAINER"
+  },
+  {
+    "id": 153,
+    "sl_no": 153,
+    "test_name": "HEMOGLOBINO PATHY PROFILE",
+    "jm_rate": 650,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 154,
+    "sl_no": 154,
+    "test_name": "ANTI DS (DNA)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 155,
+    "sl_no": 155,
+    "test_name": "BLOOD UREA NITROGEN (BUN)",
+    "jm_rate": 70,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 156,
+    "sl_no": 156,
+    "test_name": "HERPES SIMPLEX VIRUS (HSV I & II) IGM",
+    "jm_rate": 250,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 157,
+    "sl_no": 157,
+    "test_name": "HIV RNA DETECTION BY RT-PCR",
+    "jm_rate": 2500,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 158,
+    "sl_no": 158,
+    "test_name": "CD4 ABSOLUTE COUNT",
+    "jm_rate": 1200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 159,
+    "sl_no": 159,
+    "test_name": "EOSINOPHILS",
+    "jm_rate": 120,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 160,
+    "sl_no": 160,
+    "test_name": "GAMMA GLUTAMTYL TRANSFERASE (GGT)",
+    "jm_rate": 150,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 161,
+    "sl_no": 161,
+    "test_name": "DHEA",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 162,
+    "sl_no": 162,
+    "test_name": "ANGIOTENSIN CONVERTING ENZYME (ACE)",
+    "jm_rate": 1200,
+    "vail_name": ""
+  },
+  {
+    "id": 163,
+    "sl_no": 163,
+    "test_name": "CALTURE AND SENSITIVITY AEROBIC BACTERIA SPUTUM (METHOD)",
+    "jm_rate": 350,
+    "vail_name": ""
+  },
+  {
+    "id": 164,
+    "sl_no": 164,
+    "test_name": "AFB-M.TB DETECTION  (M.TB/NTM DETECTION)BY CBNAAT  SPUTUM",
+    "jm_rate": 2400,
+    "vail_name": ""
+  },
+  {
+    "id": 165,
+    "sl_no": 165,
+    "test_name": "GRAM STAIN SPUTUM",
+    "jm_rate": 250,
+    "vail_name": ""
+  },
+  {
+    "id": 166,
+    "sl_no": 166,
+    "test_name": "CULTURE AND SENSITIVITY, AEROBIC BACTERIA  THROAT SWAB\r\nMANUL METHOD",
+    "jm_rate": 400,
+    "vail_name": ""
+  },
+  {
+    "id": 167,
+    "sl_no": 167,
+    "test_name": "IMMUNONGLOBULIN  A (IGA)",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 168,
+    "sl_no": 168,
+    "test_name": "AFB- X PART PANEL BY COMBO (MTB/R/F DELECTION AND AFB CAL) EXTRAPULMONARY SAMPLE)",
+    "jm_rate": 3200,
+    "vail_name": ""
+  },
+  {
+    "id": 169,
+    "sl_no": 169,
+    "test_name": "PTH - INTACT (PARATHYROID HORMONE)",
+    "jm_rate": 900,
+    "vail_name": ""
+  },
+  {
+    "id": 170,
+    "sl_no": 170,
+    "test_name": "TISSU TRANSGLUTAMINASE IGE (TTG)",
+    "jm_rate": 1830,
+    "vail_name": ""
+  },
+  {
+    "id": 171,
+    "sl_no": 171,
+    "test_name": "TISSUE  TRANSGLUTAMINASE IGA (TTG)",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 172,
+    "sl_no": 172,
+    "test_name": "C-PEPTIDE FASTING",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 173,
+    "sl_no": 173,
+    "test_name": "OH- PROGESTERONE",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 174,
+    "sl_no": 174,
+    "test_name": "HOMA - IR (USING INSULIN)",
+    "jm_rate": 1100,
+    "vail_name": ""
+  },
+  {
+    "id": 175,
+    "sl_no": 175,
+    "test_name": "PAPPA(PREGNANCY ASSOCIATED PLASMA OROTEIN -A)",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 176,
+    "sl_no": 176,
+    "test_name": "TOTAL PROTEIN",
+    "jm_rate": 80,
+    "vail_name": ""
+  },
+  {
+    "id": 177,
+    "sl_no": 177,
+    "test_name": "CERULOPLASMIN",
+    "jm_rate": 800,
+    "vail_name": ""
+  },
+  {
+    "id": 178,
+    "sl_no": 178,
+    "test_name": "HEMOGLOBINOPATHY PROFILE - HBF/HBS (WITH GRAPH) HPLC",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 179,
+    "sl_no": 179,
+    "test_name": "FOLIC ACID",
+    "jm_rate": 350,
+    "vail_name": ""
+  },
+  {
+    "id": 180,
+    "sl_no": 180,
+    "test_name": "ANTI HEPATITS E VIRUS (HEV)IGM",
+    "jm_rate": 550,
+    "vail_name": ""
+  },
+  {
+    "id": 181,
+    "sl_no": 181,
+    "test_name": "SCRUB TYPHUS IGM",
+    "jm_rate": 1150,
+    "vail_name": ""
+  },
+  {
+    "id": 182,
+    "sl_no": 182,
+    "test_name": "CALTURE AND SENSITIVITY AEROBIC",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 183,
+    "sl_no": 183,
+    "test_name": "THYROGLOBULIN -CANCER MARKER",
+    "jm_rate": 900,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 184,
+    "sl_no": 184,
+    "test_name": "CA 19.9",
+    "jm_rate": 750,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 185,
+    "sl_no": 185,
+    "test_name": "BICARBONATE",
+    "jm_rate": 440,
+    "vail_name": ""
+  },
+  {
+    "id": 186,
+    "sl_no": 186,
+    "test_name": "FREE TESTOSTERONE",
+    "jm_rate": 750,
+    "vail_name": ""
+  },
+  {
+    "id": 187,
+    "sl_no": 187,
+    "test_name": "URINE FASTING/ PP",
+    "jm_rate": 60,
+    "vail_name": ""
+  },
+  {
+    "id": 188,
+    "sl_no": 188,
+    "test_name": "G6 PD",
+    "jm_rate": 0,
+    "vail_name": ""
+  },
+  {
+    "id": 189,
+    "sl_no": 189,
+    "test_name": "ANTI MITOCHONDRIAL ANTIBODY",
+    "jm_rate": 1900,
+    "vail_name": ""
+  },
+  {
+    "id": 190,
+    "sl_no": 190,
+    "test_name": "DHEA-SULPHATE (DHEAS)",
+    "jm_rate": 600,
+    "vail_name": ""
+  },
+  {
+    "id": 191,
+    "sl_no": 191,
+    "test_name": "FNAC",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 192,
+    "sl_no": 192,
+    "test_name": "CARDIOLIPIN ANTIBODY (ACL) IGA",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 193,
+    "sl_no": 193,
+    "test_name": "BASIC HELTH CHECKUP",
+    "jm_rate": 750,
+    "vail_name": ""
+  },
+  {
+    "id": 194,
+    "sl_no": 194,
+    "test_name": "LIPOPROTEIN (A) LP(A)",
+    "jm_rate": 500,
+    "vail_name": ""
+  },
+  {
+    "id": 195,
+    "sl_no": 195,
+    "test_name": "APOB: APO A1RATIO",
+    "jm_rate": 750,
+    "vail_name": ""
+  },
+  {
+    "id": 196,
+    "sl_no": 196,
+    "test_name": "CARDIAC PROFILE -A",
+    "jm_rate": 2200,
+    "vail_name": ""
+  },
+  {
+    "id": 197,
+    "sl_no": 197,
+    "test_name": "CARDIAC PROFILE -M",
+    "jm_rate": 1200,
+    "vail_name": ""
+  },
+  {
+    "id": 198,
+    "sl_no": 198,
+    "test_name": "ARTHRITIS PROFILE -B",
+    "jm_rate": 3600,
+    "vail_name": ""
+  },
+  {
+    "id": 199,
+    "sl_no": 199,
+    "test_name": "PROGESTERONE",
+    "jm_rate": 400,
+    "vail_name": ""
+  },
+  {
+    "id": 200,
+    "sl_no": 200,
+    "test_name": "OH- PROGESTERONE",
+    "jm_rate": 700,
+    "vail_name": ""
+  },
+  {
+    "id": 201,
+    "sl_no": 201,
+    "test_name": "ALPHA FETO PROTEIN(AFP)",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 202,
+    "sl_no": 202,
+    "test_name": "TRIPLE MARKER- SECOND TRIMESTER",
+    "jm_rate": 1800,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 203,
+    "sl_no": 203,
+    "test_name": "Complete Hemogram Test - ESR",
+    "jm_rate": 250,
+    "vail_name": "EDTA"
+  },
+  {
+    "id": 204,
+    "sl_no": 204,
+    "test_name": "25 OH VITAMIN D",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 205,
+    "sl_no": 205,
+    "test_name": "ZINC",
+    "jm_rate": 600,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 206,
+    "sl_no": 206,
+    "test_name": "HBV DNA",
+    "jm_rate": 2000,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 207,
+    "sl_no": 207,
+    "test_name": "PLATINUM PACKAGE",
+    "jm_rate": 2200,
+    "vail_name": "CLOT+EDTA"
+  },
+  {
+    "id": 208,
+    "sl_no": 208,
+    "test_name": "GOLD PACLAGE",
+    "jm_rate": 1500,
+    "vail_name": "CLOT+EDTA"
+  },
+  {
+    "id": 209,
+    "sl_no": 209,
+    "test_name": "SILVER PACKAGE",
+    "jm_rate": 1000,
+    "vail_name": "CLOT+EDTA"
+  },
+  {
+    "id": 210,
+    "sl_no": 210,
+    "test_name": "QUADRUPLE MARKER TEST",
+    "jm_rate": 2200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 211,
+    "sl_no": 211,
+    "test_name": "ANA PROFILE",
+    "jm_rate": 5200,
+    "vail_name": "CLOT"
+  },
+  {
+    "id": 212,
+    "sl_no": 212,
+    "test_name": "DI HYDRO TESTOSTERONE (DHT)",
+    "jm_rate": 2000,
+    "vail_name": "CLOT"
+  }
+]

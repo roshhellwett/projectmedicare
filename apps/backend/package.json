@@ -1,0 +1,17 @@
+{
+  "name": "@jm/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Railway worker: purges expired bulletin offers from Supabase on a schedule.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node purge.mjs",
+    "purge:once": "RUN_ONCE=true node purge.mjs"
+  },
+  "dependencies": {
+    "@jm/shared": "*"
+  }
+}
