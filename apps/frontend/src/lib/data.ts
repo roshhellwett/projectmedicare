@@ -4,6 +4,7 @@ import {
 } from "@/lib/supabase/admin";
 import medicinesJson from "@/data/medicines.json";
 import ratesJson from "@/data/rates.json";
+import { unstable_cache } from "next/cache";
 
 export type Medicine = {
   id: number;
@@ -28,7 +29,7 @@ function isSupabaseConfigured() {
   return supabaseReady();
 }
 
-export async function getMedicines(
+async function _getMedicines(
   query = "",
   page = 1,
   sort: { key: string; dir: "asc" | "desc" } = {
@@ -61,7 +62,13 @@ export async function getMedicines(
   return paginateJson(medicinesJson as Medicine[], query, page, sort);
 }
 
-export async function getRates(
+export const getMedicines = unstable_cache(
+  _getMedicines,
+  ['medicines-data'],
+  { revalidate: 3600 } // cache for 1 hour
+);
+
+async function _getRates(
   query = "",
   page = 1,
   sort: { key: string; dir: "asc" | "desc" } = { key: "test_name", dir: "asc" },
@@ -91,7 +98,13 @@ export async function getRates(
   return paginateJson(ratesJson as RateTest[], query, page, sort);
 }
 
-export async function getStats(): Promise<{
+export const getRates = unstable_cache(
+  _getRates,
+  ['rates-data'],
+  { revalidate: 3600 }
+);
+
+async function _getStats(): Promise<{
   medicinesCount: number;
   ratesCount: number;
   supabaseConnected: boolean;
@@ -121,6 +134,12 @@ export async function getStats(): Promise<{
     supabaseConnected: false,
   };
 }
+
+export const getStats = unstable_cache(
+  _getStats,
+  ['stats-data'],
+  { revalidate: 3600 }
+);
 
 function paginateJson<T>(
   all: T[],

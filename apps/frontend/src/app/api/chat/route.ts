@@ -8,9 +8,10 @@ import { doctors, doctorChamberInfo } from "@/data/doctors";
 import { stores, mainContact } from "@/data/stores";
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  try {
+    const { messages } = await req.json();
 
-  const systemPrompt = `You are the official Janta Medicare AI Assistant.
+    const systemPrompt = `You are the official Janta Medicare AI Assistant.
 Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare.
 Always be polite, helpful, and concise.
 
@@ -24,45 +25,56 @@ IMPORTANT RULES:
 
 When using tools, summarize the result nicely. E.g., "Yes, we have Crocin available. The MRP is ₹15, but our Janta price is ₹12."`;
 
-  const result = streamText({
-    model: groq("llama-3.3-70b-versatile"),
-    messages,
-    system: systemPrompt,
-    tools: {
-      search_medicines: tool({
-        description:
-          "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
-        parameters: z.object({
-          query: z.string().describe("The name of the medicine to search for"),
+    const result = streamText({
+      model: groq("llama-3.3-70b-versatile"),
+      messages,
+      system: systemPrompt,
+      maxTokens: 500,
+      tools: {
+        search_medicines: tool({
+          description:
+            "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
+          parameters: z.object({
+            query: z.string().describe("The name of the medicine to search for"),
+          }),
+          execute: async ({ query }) => {
+            const { items } = await getMedicines(query, 1, {
+              key: "medicine_name",
+              dir: "asc",
+            });
+            return items.slice(0, 5); // Return top 5 matches
+          },
         }),
-        execute: async ({ query }) => {
-          const { items } = await getMedicines(query, 1, {
-            key: "medicine_name",
-            dir: "asc",
-          });
-          return items.slice(0, 5); // Return top 5 matches
-        },
-      }),
-      search_rate_chart: tool({
-        description:
-          "Search for diagnostic tests by name to get their Janta rate/price.",
-        parameters: z.object({
-          query: z
-            .string()
-            .describe(
-              "The name of the diagnostic test or pathology test to search for",
-            ),
+        search_rate_chart: tool({
+          description:
+            "Search for diagnostic tests by name to get their Janta rate/price.",
+          parameters: z.object({
+            query: z
+              .string()
+              .describe(
+                "The name of the diagnostic test or pathology test to search for",
+              ),
+          }),
+          execute: async ({ query }) => {
+            const { items } = await getRates(query, 1, {
+              key: "test_name",
+              dir: "asc",
+            });
+            return items.slice(0, 5); // Return top 5 matches
+          },
         }),
-        execute: async ({ query }) => {
-          const { items } = await getRates(query, 1, {
-            key: "test_name",
-            dir: "asc",
-          });
-          return items.slice(0, 5); // Return top 5 matches
-        },
-      }),
-    },
-  });
+      },
+    });
 
-  return result.toDataStreamResponse();
+    return result.toDataStreamResponse();
+  } catch (error) {
+    console.error("Error in chat API:", error);
+    return new Response(
+      JSON.stringify({ error: "An error occurred while processing your request." }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 }

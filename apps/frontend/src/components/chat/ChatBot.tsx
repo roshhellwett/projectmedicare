@@ -8,7 +8,7 @@ import { MessageCircle, X, Send, Bot, User, Sparkles } from "lucide-react";
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
     useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -16,7 +16,7 @@ export default function ChatBot() {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [messages, error]);
 
   return (
     <>
@@ -119,6 +119,18 @@ export default function ChatBot() {
                           style={{ animationDelay: "0.3s" }}
                         ></span>
                       </span>
+                    </div>
+                  </div>
+                )}
+                {error && (
+                  <div className="flex items-end gap-2">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600 shadow-sm">
+                      <Bot className="h-4 w-4" />
+                    </div>
+                    <div className="flex items-center rounded-3xl rounded-bl-sm border border-red-200 bg-red-50 px-5 py-3 text-sm text-red-600 shadow-sm">
+                      {error.message?.includes('429') || error.message?.includes('Too many')
+                        ? "I'm receiving too many requests right now. Please try again in a minute." 
+                        : "Sorry, I encountered an error. Please try again."}
                     </div>
                   </div>
                 )}

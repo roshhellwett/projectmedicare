@@ -93,7 +93,31 @@ async function purgeOnce() {
 
 function startHealthServer() {
   if (!PORT) return;
+
+  const rateLimitMap = new Map();
+
   const server = http.createServer((req, res) => {
+    const ip = req.socket.remoteAddress || 'unknown';
+    const now = Date.now();
+    
+    // Cleanup old entries randomly to avoid memory leaks
+    if (Math.random() < 0.01) rateLimitMap.clear();
+
+    const info = rateLimitMap.get(ip) || { count: 0, ts: now };
+    if (now - info.ts > 60000) {
+      info.count = 1;
+      info.ts = now;
+    } else {
+      info.count++;
+    }
+    rateLimitMap.set(ip, info);
+
+    if (info.count > 30) {
+      res.writeHead(429, { "Content-Type": "text/plain" });
+      res.end("Too Many Requests");
+      return;
+    }
+
     if (req.url === "/healthz" || req.url === "/") {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
