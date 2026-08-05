@@ -20,8 +20,8 @@ Railway projects in minutes.
 ## Deploy on Railway (free tier)
 
 1. New Project → **Deploy from GitHub repo** → pick this repository.
-2. Set **Root Directory** to `worker`.
-3. Start command: `npm start` (already the default).
+2. Under Settings → Build → **Root Directory**: **Leave it completely empty** (or `/`). *This is critical so Railway sees the root `package.json` and workspace definitions.*
+3. Under Settings → Deploy → **Start Command**: Set it to `npm run worker`.
 4. Add variables (Settings → Variables):
 
    ```
@@ -38,7 +38,7 @@ Railway projects in minutes.
 
 Because the worker keeps **zero local state**, swapping is safe at any moment:
 
-1. Create the new Railway project with the same root directory and variables.
+1. Create the new Railway project with the same empty root directory, start command, and variables.
 2. Wait for its first successful log line.
 3. Delete (or pause) the old project.
 
@@ -49,9 +49,8 @@ on the site.
 ## Run locally
 
 ```bash
-cd worker
-cp .env.example .env      # fill in the values
-npm start
+cp apps/backend/.env.example apps/backend/.env      # fill in the values
+npm run worker
 ```
 
 Health check: the worker also serves `GET /healthz` on `PORT` (Railway sets it)
