@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ChatBot from "@/components/chat/ChatBot";
+import JantaChat from "@/components/chat/JantaChat";
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -77,7 +77,7 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer />
-            <ChatBot />
+            <JantaChat />
           </div>
         </NextIntlClientProvider>
       </body>

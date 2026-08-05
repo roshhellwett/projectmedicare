@@ -1,9 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-import { groq } from "@ai-sdk/groq";
-import { streamText, tool } from "ai";
 import { getMedicines, getRates } from "@/lib/data";
-import { z } from "zod";
 import { doctors, doctorChamberInfo } from "@/data/doctors";
 import { stores, mainContact } from "@/data/stores";
 
@@ -19,61 +14,135 @@ IMPORTANT RULES:
 1. Whenever the user asks to contact the pharmacy, book a test, or ask for a phone number to call, YOU MUST give them this exact number: ${mainContact.diagnostic}
 2. You have access to tools to search the medicines database and the diagnostic test rate chart database. USE THEM when a user asks for a price or if a medicine/test is available.
 3. If a user describes symptoms, you can suggest a doctor specialty, but ALWAYS remind them that you are an AI and they should consult a real doctor.
-4. Keep your answers brief and readable. Use bullet points if listing multiple items.
+4. Keep your answers brief, beautiful, and readable. You MUST strictly preserve the exact markdown formatting (*italics* and **bold**) that the tools provide to you!
 5. If the user asks for doctor details, use this data: ${JSON.stringify(doctors)}. The main doctor chamber is ${doctorChamberInfo.name} located at the Shibpur Main Hub.
 6. The store locations are: ${JSON.stringify(stores.map((s) => s.name + " - " + s.address))}.
+7. CRITICAL: When you need to call a tool, you must ONLY output the tool call. Do not add any extra text, thoughts, or conversational filler before or after the tool call.
 
 When using tools, summarize the result nicely. E.g., "Yes, we have Crocin available. The MRP is ₹15, but our Janta price is ₹12."`;
 
-    const result = streamText({
-      model: groq("llama-3.3-70b-versatile"),
-      messages,
-      system: systemPrompt,
-      maxTokens: 500,
-      tools: {
-        search_medicines: tool({
-          description:
-            "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
-          parameters: z.object({
-            query: z.string().describe("The name of the medicine to search for"),
-          }),
-          execute: async ({ query }) => {
-            const { items } = await getMedicines(query, 1, {
-              key: "medicine_name",
-              dir: "asc",
-            });
-            return items.slice(0, 5); // Return top 5 matches
-          },
-        }),
-        search_rate_chart: tool({
-          description:
-            "Search for diagnostic tests by name to get their Janta rate/price.",
-          parameters: z.object({
-            query: z
-              .string()
-              .describe(
-                "The name of the diagnostic test or pathology test to search for",
-              ),
-          }),
-          execute: async ({ query }) => {
-            const { items } = await getRates(query, 1, {
-              key: "test_name",
-              dir: "asc",
-            });
-            return items.slice(0, 5); // Return top 5 matches
-          },
-        }),
+    const tools = [
+      {
+        type: "function",
+        function: {
+          name: "search_medicines",
+          description: "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
+          parameters: {
+            type: "object",
+            properties: {
+              query: { type: "string", description: "The name of the medicine to search for" }
+            },
+            required: ["query"]
+          }
+        }
       },
-    });
+      {
+        type: "function",
+        function: {
+          name: "search_rate_chart",
+          description: "Search for diagnostic tests by name to get their Janta rate/price.",
+          parameters: {
+            type: "object",
+            properties: {
+              query: { type: "string", description: "The name of the diagnostic test or pathology test to search for" }
+            },
+            required: ["query"]
+          }
+        }
+      }
+    ];
 
-    return result.toDataStreamResponse();
+    // Filter out UI-only fields or unsupported fields from messages before sending to Groq
+    const cleanMessages = messages.map((m: any) => ({
+      role: m.role,
+      content: m.content
+    }));
+
+    const currentMessages: any[] = [
+      { role: "system", content: systemPrompt },
+      ...cleanMessages
+    ];
+
+    let finalMessage = null;
+
+    for (let i = 0; i < 3; i++) {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: currentMessages,
+          tools: tools,
+          tool_choice: "auto",
+          parallel_tool_calls: false,
+          max_tokens: 500
+        })
+      });
+
+      if (!res.ok) {
+         throw new Error(`Groq API error: ${await res.text()}`);
+      }
+
+      const data = await res.json();
+      const message = data.choices[0].message;
+
+      currentMessages.push(message);
+
+      if (message.tool_calls && message.tool_calls.length > 0) {
+         for (const toolCall of message.tool_calls) {
+            const args = JSON.parse(toolCall.function.arguments);
+            let resultData: any[] = [];
+            
+            if (toolCall.function.name === "search_medicines") {
+              const { items } = await getMedicines(args.query, 1, { key: "medicine_name", dir: "asc" });
+              resultData = items.slice(0, 5).map((item: any) => ({
+                medicine: `*${item.medicine_name}*`,
+                mrp: `**₹${item.mrp}**`,
+                janta_price: `**₹${item.janta_selling_price}**`,
+                pack_size: item.pack_size
+              }));
+            } else if (toolCall.function.name === "search_rate_chart") {
+              const { items } = await getRates(args.query, 1, { key: "test_name", dir: "asc" });
+              resultData = items.slice(0, 5).map((item: any) => ({
+                test: `*${item.test_name}*`,
+                janta_rate: `**₹${item.janta_rate}**`
+              }));
+            }
+
+            currentMessages.push({
+               role: "tool",
+               tool_call_id: toolCall.id,
+               name: toolCall.function.name,
+               content: JSON.stringify(resultData)
+            });
+         }
+      } else {
+         finalMessage = message;
+         break;
+      }
+    }
+
+    if (!finalMessage) {
+       finalMessage = currentMessages[currentMessages.length - 1];
+    }
+
+    return new Response(
+      JSON.stringify(finalMessage),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
   } catch (error) {
     console.error("Error in chat API:", error);
     return new Response(
       JSON.stringify({ error: "An error occurred while processing your request." }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       }
     );
   }

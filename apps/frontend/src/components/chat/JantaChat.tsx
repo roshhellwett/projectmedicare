@@ -2,19 +2,89 @@
 // @ts-nocheck
 "use client";
 
-import { useChat, type Message } from "@ai-sdk/react";
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, Bot, User, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { usePathname } from "next/navigation";
 
-export default function ChatBot() {
+type Message = { id: string; role: "user" | "assistant" | "system"; content: string; isTyping?: boolean };
+
+const TypewriterMessage = ({ message, onComplete }: { message: Message, onComplete: () => void }) => {
+  const [displayed, setDisplayed] = useState(message.isTyping ? "" : message.content);
+
+  useEffect(() => {
+    if (!message.isTyping) {
+      setDisplayed(message.content);
+      return;
+    }
+
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(message.content.slice(0, i + 1));
+      i++;
+      if (i >= message.content.length) {
+        clearInterval(interval);
+        onComplete();
+      }
+    }, 12); // Speed of typewriter
+
+    return () => clearInterval(interval);
+  }, [message.content, message.isTyping, onComplete]);
+
+  return (
+    <div className="prose prose-sm prose-slate max-w-none text-foreground prose-p:leading-relaxed prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-primary-strong">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {displayed}
+      </ReactMarkdown>
+      {message.isTyping && (
+        <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-primary align-middle" />
+      )}
+    </div>
+  );
+};
+
+export default function JantaChat() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
-    useChat();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = { id: Date.now().toString(), role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+    
+    setMessages(newMessages);
+    setInput("");
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })) })
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      const data = await res.json();
+      setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: data.content, isTyping: true }]);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error(String(err)));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -108,11 +178,12 @@ export default function ChatBot() {
                       {m.role === "user" ? (
                         m.content
                       ) : (
-                        <div className="prose prose-sm prose-slate max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {m.content}
-                          </ReactMarkdown>
-                        </div>
+                        <TypewriterMessage 
+                          message={m} 
+                          onComplete={() => {
+                            setMessages(prev => prev.map(msg => msg.id === m.id ? { ...msg, isTyping: false } : msg));
+                          }}
+                        />
                       )}
                     </div>
                   </div>
@@ -157,12 +228,12 @@ export default function ChatBot() {
           {/* Input Area */}
           <div className="bg-surface p-3 border-t border-line">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={onSubmit}
               className="relative flex items-center"
             >
               <input
                 value={input || ''}
-                onChange={handleInputChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your message..."
                 className="w-full rounded-full border border-line bg-surface-muted py-2.5 pl-4 pr-12 text-sm text-foreground shadow-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 pointer-events-auto"
                 autoFocus
