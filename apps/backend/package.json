@@ -8,10 +8,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "node purge.mjs",
-    "purge:once": "RUN_ONCE=true node purge.mjs"
+    "start": "node server.mjs",
+    "purge:once": "RUN_ONCE=true node server.mjs"
   },
   "dependencies": {
-    "@jm/shared": "*"
+    "@jm/shared": "*",
+    "@sentry/node": "^8.55.2"
   }
 }
