@@ -140,7 +140,17 @@ export default function Footer() {
         <div className="border-t border-line">
           <div className="container flex flex-col gap-1 py-5 text-center text-xs text-muted sm:flex-row sm:justify-between sm:text-left">
             <p>{t("rights")}</p>
-            <p className="text-muted-soft">Made in Howrah, West Bengal</p>
+            <p className="text-muted-soft">
+              Design and Build By{" "}
+              <a
+                href="https://zenithopensourceprojects.vercel.app/site"
+                target="_blank"
+                rel="noreferrer"
+                className="transition-colors hover:text-primary"
+              >
+                Zenith Open Source Projects
+              </a>
+            </p>
           </div>
         </div>
       </footer>
