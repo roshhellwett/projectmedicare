@@ -53,7 +53,7 @@ export default async function DoctorsPage() {
               </span>
               <span className="badge badge-blue">{doctor.department}</span>
             </div>
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="text-base leading-snug">{doctor.name}</h2>
                 <p className="mt-1.5 text-sm font-semibold text-secondary-dark">
@@ -63,7 +63,7 @@ export default async function DoctorsPage() {
               {doctor.contact && (
                 <a
                   href={`tel:${doctor.contact.replace(/\s+/g, "")}`}
-                  className="btn btn-primary btn-sm shrink-0 mt-1"
+                  className="btn btn-primary btn-sm shrink-0 w-full sm:w-auto mt-1 sm:mt-0"
                 >
                   <Phone className="h-4 w-4" /> {t("bookDoctor")}
                 </a>

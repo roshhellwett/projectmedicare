@@ -72,25 +72,6 @@ const trustItems = [
   },
 ];
 
-const heroImages = [
-  {
-    src: "/dashboardimg/imagesourceone.webp",
-    altKey: "imgAlt1",
-  },
-  {
-    src: "/dashboardimg/imagesourcetwo.webp",
-    altKey: "imgAlt2",
-  },
-  {
-    src: "/dashboardimg/imagesourcethree.webp",
-    altKey: "imgAlt3",
-  },
-  {
-    src: "/dashboardimg/imagesourcefour.webp",
-    altKey: "imgAlt4",
-  },
-];
-
 export default async function HomePage() {
   const t = await getTranslations("HomePage");
   const locale = await getLocale();
@@ -99,7 +80,6 @@ export default async function HomePage() {
   // Mix uploaded gallery images with static ones, always keeping exactly 4
   const finalImages = [
     ...gallery.map((g, i) => ({ src: g.url, altKey: `imgAlt${(i % 4) + 1}` })),
-    ...heroImages,
   ].slice(0, 4);
 
   return (
