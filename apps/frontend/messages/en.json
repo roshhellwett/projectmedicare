@@ -9,7 +9,8 @@
     "patientRates": "Rate Chart",
     "locations": "Locations",
     "doctors": "Doctors",
-    "bulletins": "Notices"
+    "bulletins": "Notices",
+    "gallery": "Gallery"
   },
   "HomePage": {
     "welcome": "Your trusted partner in health - accessible pharmacy, pathology and doctor consultation services for every citizen.",
@@ -58,7 +59,7 @@
     "doctorTitle": "Doctor Chamber",
     "drSeema": "Dr. Seema Farhin sits every day at the Shibpur chamber for general checkups.",
     "campTitle": "Sunday Health Camp",
-    "campInfo": "Every Sunday we set up a free health checkup camp at Shibpur. Registration fee is only 100/-."
+    "campInfo": "Every Sunday we set up a health checkup camp at Shibpur. Registration fee is only 100/-."
   },
   "DoctorsPage": {
     "eyebrow": "Our Specialists",

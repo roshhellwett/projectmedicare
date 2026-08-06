@@ -4,4 +4,5 @@ export {
   createPublicClient,
   isSupabaseConfigured,
   CAMP_BUCKET,
+  GALLERY_BUCKET,
 } from "@jm/shared/supabase";

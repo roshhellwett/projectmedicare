@@ -11,9 +11,11 @@ import {
   Megaphone,
   Pill,
   ShieldCheck,
+  Image as ImageIcon,
 } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
+import { getGalleryImages } from "@/lib/db/gallery";
 import { formatCampDate } from "@/lib/utils/ist";
 
 export const dynamic = "force-dynamic";
@@ -21,10 +23,11 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage() {
   const t = await getTranslations("AdminPage");
   const locale = await getLocale();
-  const [stats, camp, bulletins] = await Promise.all([
+  const [stats, camp, bulletins, gallery] = await Promise.all([
     getStats(),
     getActiveCamp(),
     getVisibleBulletins(50),
+    getGalleryImages(),
   ]);
 
   const tiles = [
@@ -65,6 +68,15 @@ export default async function AdminPage() {
       desc: t("rates.desc"),
       status: `${stats.ratesCount.toLocaleString()} lab tests listed`,
       cta: "Open rates manager",
+    },
+    {
+      href: `/${locale}/admin/gallery`,
+      icon: ImageIcon,
+      tone: "",
+      title: "Photo Gallery",
+      desc: "Upload and manage photos of activities to display on the public gallery page.",
+      status: `${gallery.length} photo(s) currently published`,
+      cta: "Open gallery manager",
     },
   ];
 

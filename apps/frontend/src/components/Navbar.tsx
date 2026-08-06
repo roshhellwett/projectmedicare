@@ -14,7 +14,10 @@ const NAV_LINKS = [
   { key: "locations", href: "/locations" },
   { key: "doctors", href: "/doctors" },
   { key: "bulletins", href: "/bulletins" },
+  { key: "gallery", href: "/gallery" },
 ] as const;
+
+// Cache invalidation comment for Turbopack
 
 export default function Navbar() {
   const t = useTranslations("Navbar");

@@ -41,11 +41,6 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
             <Lock className="h-10 w-10" />
           </div>
           <h1 className="mb-2 text-2xl font-extrabold">Admin Access</h1>
-          <p className="mb-8 text-sm text-muted">
-            Sign in to manage the Sunday camp post, bulletin board, medicines
-            and rates.
-          </p>
-
           {!configured ? (
             <p className="rounded-2xl bg-accent-soft px-5 py-4 text-left text-sm font-semibold text-accent">
               Admin login is not configured yet. Set <code>ADMIN_PASSWORD</code>{" "}

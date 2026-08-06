@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 /** Storage bucket that holds Sunday camp photos. */
 export const CAMP_BUCKET = "camp-images";
+export const GALLERY_BUCKET = "gallery";
 
 function pick(env, names) {
   for (const name of names) {

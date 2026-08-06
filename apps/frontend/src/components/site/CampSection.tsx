@@ -13,9 +13,9 @@ export default async function CampSection() {
           <CalendarHeart className="h-3.5 w-3.5" />
           Latest post
         </span>
-        <h2 className="section-title mt-2">Sunday free health camp</h2>
+        <h2 className="section-title mt-2">Sunday Health Camp</h2>
         <p className="section-sub mt-2">
-          Every Sunday we set up a free health checkup camp. Details for the
+          Every Sunday we set up a health checkup camp. Details for the
           upcoming camp are published here.
         </p>
       </div>
