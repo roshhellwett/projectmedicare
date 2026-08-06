@@ -13,7 +13,8 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
   const { data, error } = await supabase
     .from("gallery_images")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(8);
 
   if (error) {
     console.error("Failed to fetch gallery images:", error);

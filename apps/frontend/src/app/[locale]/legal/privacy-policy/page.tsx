@@ -59,7 +59,7 @@ export default async function PrivacyPolicyPage({
         <p>
           <strong>Name:</strong> Grievance Officer<br />
           <strong>Email:</strong> legal@jantamedicare.com<br />
-          <strong>Address:</strong> 53, Kalikumar Mukharjee Lane, Tram Depot More, P.O. & P.S. Shibpur, Howrah — 711102
+          <strong>Address:</strong> 493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. &amp; P.S. Shibpur, Dist. Howrah, Pin: 711101
         </p>
       </div>
     </div>

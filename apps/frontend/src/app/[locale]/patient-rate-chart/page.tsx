@@ -99,18 +99,6 @@ export default async function PatientRateChartPage({
               ),
             },
             {
-              key: "vail_name",
-              label: t("colVial"),
-              render: (r) =>
-                r.vail_name ? (
-                  <span className="badge badge-blue">
-                    <TestTube className="h-3 w-3" /> {r.vail_name}
-                  </span>
-                ) : (
-                  <span className="text-muted text-sm">-</span>
-                ),
-            },
-            {
               key: "jm_rate",
               label: t("colRate"),
               sortable: true,

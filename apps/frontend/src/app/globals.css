@@ -751,6 +751,13 @@
     border: 2px solid var(--secondary);
     animation: ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+  
+  .live-dot.is-accent {
+    background: var(--accent);
+  }
+  .live-dot.is-accent::after {
+    border-color: var(--accent);
+  }
 
   .pulse-ring::after {
     content: "";

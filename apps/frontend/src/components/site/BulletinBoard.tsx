@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ArrowRight, Megaphone, Pin, Tag, Timer } from "lucide-react";
 import { getVisibleBulletins, type Bulletin } from "@/lib/db/bulletins";
 import { formatDateTime, formatShortDate } from "@/lib/utils/ist";
 
 export function BulletinItem({ item }: { item: Bulletin }) {
+  const t = useTranslations("BulletinBoard");
   const isOffer = item.kind === "offer";
   return (
     <li className={`card card-marked !pl-5 ${isOffer ? "is-green" : ""}`}>
@@ -11,17 +14,19 @@ export function BulletinItem({ item }: { item: Bulletin }) {
         <span className={`badge ${isOffer ? "badge-green" : "badge-blue"}`}>
           {isOffer ? (
             <>
-              <Tag className="h-3 w-3" /> Offer
+              <span className="live-dot is-accent mr-1" aria-hidden />
+              <Tag className="h-3 w-3" /> {t("offer")}
             </>
           ) : (
             <>
-              <Megaphone className="h-3 w-3" /> Notice
+              <span className="live-dot mr-1" aria-hidden />
+              <Megaphone className="h-3 w-3" /> {t("notice")}
             </>
           )}
         </span>
         {item.pinned && (
           <span className="badge">
-            <Pin className="h-3 w-3" /> Pinned
+            <Pin className="h-3 w-3" /> {t("pinned")}
           </span>
         )}
         <span className="text-xs text-muted-soft">
@@ -34,7 +39,7 @@ export function BulletinItem({ item }: { item: Bulletin }) {
       {isOffer && item.ends_at && (
         <p className="mt-3 inline-flex items-center gap-1.5 border-t border-line pt-3 text-xs font-semibold text-accent">
           <Timer className="h-3.5 w-3.5" />
-          Valid till {formatShortDate(item.ends_at)}
+          {t("validTill", { date: formatShortDate(item.ends_at) })}
         </p>
       )}
     </li>
@@ -42,16 +47,17 @@ export function BulletinItem({ item }: { item: Bulletin }) {
 }
 
 export function BulletinEmpty() {
+  const t = useTranslations("BulletinBoard");
   return (
     <div className="card flex flex-col items-center gap-2 py-12 text-center">
       <span className="icon-tile">
         <Megaphone className="h-5 w-5" />
       </span>
       <p className="mt-2 font-heading text-base font-bold text-primary-deep">
-        No notices right now
+        {t("emptyTitle")}
       </p>
       <p className="max-w-md text-sm text-muted">
-        New offers and announcements appear here as soon as they are published.
+        {t("emptyDesc")}
       </p>
     </div>
   );
@@ -67,6 +73,7 @@ export default async function BulletinBoard({
   locale: string;
 }) {
   const items = await getVisibleBulletins(limit);
+  const t = await getTranslations("BulletinBoard");
 
   return (
     <section id="bulletin-board" className="section container">
@@ -74,20 +81,17 @@ export default async function BulletinBoard({
         <div className="min-w-0 max-w-2xl">
           <span className="eyebrow">
             <span className="live-dot" aria-hidden />
-            Live bulletin board
+            {t("eyebrow")}
           </span>
-          <h2 className="section-title mt-2">Latest notices &amp; offers</h2>
-          <p className="section-sub mt-2">
-            Updated by our team — every notice carries its exact Indian Standard
-            Time date.
-          </p>
+          <h2 className="section-title mt-2">{t("title")}</h2>
+          <p className="section-sub mt-2">{t("sub")}</p>
         </div>
         {showAllLink && (
           <Link
             href={`/${locale}/bulletins`}
             className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-dark"
           >
-            View all notices <ArrowRight className="h-4 w-4" />
+            {t("viewAll")} <ArrowRight className="h-4 w-4" />
           </Link>
         )}
       </div>

@@ -43,7 +43,7 @@ export default async function TermsAndConditionsPage({
 
         <h2>2. Pricing and Availability</h2>
         <p>
-          While we strive to keep our &quot;Janta Prices&quot; and MRPs updated in real-time, all prices are subject to change without prior notice. The final billed amount at our physical stores may vary slightly due to tax updates or batch differences. Product availability is subject to physical stock at our Shibpur Main Hub.
+          While we strive to keep our &quot;Janta Prices&quot; and MRPs updated in real-time, all prices are subject to change without prior notice. The final billed amount at our physical stores may vary slightly due to tax updates or batch differences. Product availability is subject to physical stock at our Vivek Vihar Main Hub.
         </p>
 
         <h2>3. Intellectual Property</h2>

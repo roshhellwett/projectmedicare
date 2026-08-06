@@ -1,22 +1,23 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { CalendarHeart, IndianRupee, MapPin, Navigation } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { formatCampDate } from "@/lib/utils/ist";
 
 export default async function CampSection() {
   const camp = await getActiveCamp();
+  const t = await getTranslations("CampSection");
 
   return (
     <section id="sunday-camp" className="section container">
       <div className="mb-8 max-w-2xl">
         <span className="eyebrow">
           <CalendarHeart className="h-3.5 w-3.5" />
-          Latest post
+          {t("eyebrow")}
         </span>
-        <h2 className="section-title mt-2">Sunday Health Camp</h2>
+        <h2 className="section-title mt-2">{t("title")}</h2>
         <p className="section-sub mt-2">
-          Every Sunday we set up a health checkup camp. Details for the
-          upcoming camp are published here.
+          {t("sub")}
         </p>
       </div>
 
@@ -26,11 +27,10 @@ export default async function CampSection() {
             <CalendarHeart className="h-5 w-5" />
           </span>
           <p className="mt-2 font-heading text-base font-bold text-primary-deep">
-            Next camp details coming soon
+            {t("emptyTitle")}
           </p>
           <p className="max-w-md text-sm text-muted">
-            The upcoming Sunday camp has not been announced yet. Please check
-            back shortly or call us on +91 62907 45327.
+            {t("emptyDesc")}
           </p>
         </div>
       ) : (
@@ -88,7 +88,7 @@ export default async function CampSection() {
                 className="btn btn-primary btn-sm w-fit"
               >
                 <Navigation className="h-4 w-4" />
-                Get directions
+                {t("getDirections")}
               </a>
             </div>
           </div>

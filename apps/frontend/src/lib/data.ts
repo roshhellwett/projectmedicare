@@ -108,21 +108,24 @@ async function _getStats(): Promise<{
   medicinesCount: number;
   ratesCount: number;
   supabaseConnected: boolean;
+  storageSizeBytes: number;
 }> {
   if (isSupabaseConfigured()) {
     try {
       const supabase = createPublicClient();
       if (!supabase) throw new Error("Supabase is not configured");
-      const [medRes, rateRes] = await Promise.all([
+      const [medRes, rateRes, storageRes] = await Promise.all([
         supabase.from("medicines").select("*", { count: "exact", head: true }),
         supabase
           .from("patient_rates")
           .select("*", { count: "exact", head: true }),
+        supabase.rpc("get_storage_size_bytes")
       ]);
       return {
         medicinesCount: medRes.count ?? 0,
         ratesCount: rateRes.count ?? 0,
         supabaseConnected: !medRes.error && !rateRes.error,
+        storageSizeBytes: storageRes.data ?? 0,
       };
     } catch {
       // fall through
@@ -132,6 +135,7 @@ async function _getStats(): Promise<{
     medicinesCount: (medicinesJson as Medicine[]).length,
     ratesCount: (ratesJson as RateTest[]).length,
     supabaseConnected: false,
+    storageSizeBytes: 0,
   };
 }
 

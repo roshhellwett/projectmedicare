@@ -53,12 +53,24 @@ export default async function DoctorsPage() {
               </span>
               <span className="badge badge-blue">{doctor.department}</span>
             </div>
-            <h2 className="text-base leading-snug">{doctor.name}</h2>
-            <p className="mt-1.5 text-sm font-semibold text-secondary-dark">
-              {doctor.specialty}
-            </p>
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="text-base leading-snug">{doctor.name}</h2>
+                <p className="mt-1.5 text-sm font-semibold text-secondary-dark">
+                  {doctor.specialty}
+                </p>
+              </div>
+              {doctor.contact && (
+                <a
+                  href={`tel:${doctor.contact.replace(/\s+/g, "")}`}
+                  className="btn btn-primary btn-sm shrink-0 mt-1"
+                >
+                  <Phone className="h-4 w-4" /> {t("bookDoctor")}
+                </a>
+              )}
+            </div>
             {doctor.qualifications.length > 0 && (
-              <ul className="mt-4 space-y-1.5 border-t border-line pt-4">
+              <ul className="mt-4 space-y-1.5 border-t border-line pt-4 flex-1">
                 {doctor.qualifications.map((q) => (
                   <li
                     key={q}

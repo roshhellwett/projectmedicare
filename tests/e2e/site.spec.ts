@@ -17,6 +17,9 @@ test.describe("public site", () => {
       "/en/locations",
       "/en/doctors",
       "/en/bulletins",
+      "/en/careers",
+      "/en/order",
+      "/en/gallery",
     ]) {
       const response = await page.goto(path);
       expect(response?.status(), `${path} status`).toBe(200);

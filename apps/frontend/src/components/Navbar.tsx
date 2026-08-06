@@ -15,10 +15,11 @@ const NAV_LINKS = [
   { key: "doctors", href: "/doctors" },
   { key: "bulletins", href: "/bulletins" },
   { key: "gallery", href: "/gallery" },
+  { key: "careers", href: "/careers" },
+  { key: "order", href: "/order" },
 ] as const;
 
-// Cache invalidation comment for Turbopack
-
+// Cache invalidation comment for Turbopack (Bust cache again)
 export default function Navbar() {
   const t = useTranslations("Navbar");
   const locale = useLocale();
@@ -56,18 +57,22 @@ export default function Navbar() {
       {/* Utility strip */}
       <div className="border-b border-line bg-surface-muted">
         <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5">
-          <a
-            href="tel:+916290745327"
-            className="flex min-w-0 items-center gap-1.5 text-xs text-muted transition-colors hover:text-primary"
-          >
-            <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-            <span className="truncate">
-              Toll free{" "}
-              <span className="font-semibold text-foreground">
-                +91 62907 45327
-              </span>
-            </span>
-          </a>
+          <div className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges">
+            <a href="tel:+916290745327" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+              <span>{t("tramDepot")} <span className="font-semibold text-foreground">+91 62907 45327</span></span>
+            </a>
+            <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+            <a href="tel:+918240804490" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+              <span>{t("vivekVihar")} <span className="font-semibold text-foreground">+91 82408 04490</span></span>
+            </a>
+            <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+            <a href="tel:+919123899472" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+              <span>{t("pilkhana")} <span className="font-semibold text-foreground">+91 91238 99472</span></span>
+            </a>
+          </div>
 
           <div className="flex shrink-0 items-center gap-3">
             <div className="flex items-center rounded-md border border-line bg-surface p-0.5">
@@ -189,9 +194,20 @@ export default function Navbar() {
               >
                 Book consultation
               </Link>
-              <a href="tel:+916290745327" className="btn btn-outline w-full">
-                <Phone className="h-4 w-4" /> Call +91 62907 45327
-              </a>
+              <div className="flex flex-col gap-2 rounded-lg bg-surface-muted p-3">
+                <a href="tel:+916290745327" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
+                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("tramDepot")}</span>
+                  <span className="text-foreground">+91 62907 45327</span>
+                </a>
+                <a href="tel:+918240804490" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
+                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("vivekVihar")}</span>
+                  <span className="text-foreground">+91 82408 04490</span>
+                </a>
+                <a href="tel:+919123899472" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
+                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("pilkhana")}</span>
+                  <span className="text-foreground">+91 91238 99472</span>
+                </a>
+              </div>
             </div>
           </nav>
         </div>

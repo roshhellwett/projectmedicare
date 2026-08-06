@@ -7,13 +7,27 @@ export type Store = {
   services: string[];
   isMainHub: boolean;
   mapQuery: string;
+  mapUrl?: string;
 };
 
 export const stores: Store[] = [
   {
+    id: "vivekvihar",
+    name: "Vivek Vihar Main Hub",
+    tagline: "Main Branch · Pharmacy & Pathology",
+    address:
+      "493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. & P.S. Shibpur, Dist. Howrah, Pin: 711101",
+    phones: [{ label: "Store", number: "+918240804490" }],
+    services: ["Pharmacy", "Pathology"],
+    isMainHub: true,
+    mapQuery:
+      "493 G T Road South Fazir Bazar More Vivek Vihar Phase II Howrah 711101",
+    mapUrl: "https://maps.app.goo.gl/zHZvuowxANBXK5rQ9?g_st=iw",
+  },
+  {
     id: "shibpur",
-    name: "Shibpur Main Hub",
-    tagline: "Main Branch · Doctor Chambers",
+    name: "Shibpur Store",
+    tagline: "Pharmacy, Pathology & Doctor Chambers",
     address:
       "53, Kalikumar Mukharjee Lane, Tram Depot More, P.O. & P.S. Shibpur, D.T. Howrah, Pin: 711102",
     phones: [
@@ -21,20 +35,8 @@ export const stores: Store[] = [
       { label: "Diagnostic & Appointment", number: "+916290745327" },
     ],
     services: ["Pharmacy", "Pathology", "Doctor Chambers"],
-    isMainHub: true,
-    mapQuery: "53 Kalikumar Mukharjee Lane Shibpur Howrah 711102",
-  },
-  {
-    id: "vivekvihar",
-    name: "Vivek Vihar Store",
-    tagline: "Pharmacy & Pathology",
-    address:
-      "493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. & P.S. Shibpur, Dist. Howrah, Pin: 711101",
-    phones: [{ label: "Store", number: "+918240804490" }],
-    services: ["Pharmacy", "Pathology"],
     isMainHub: false,
-    mapQuery:
-      "493 G T Road South Fazir Bazar More Vivek Vihar Phase II Howrah 711101",
+    mapQuery: "53 Kalikumar Mukharjee Lane Shibpur Howrah 711102",
   },
   {
     id: "pilkhana",
@@ -47,6 +49,7 @@ export const stores: Store[] = [
     isMainHub: false,
     mapQuery:
       "67A G T Road North Oriya Para More Pilkhana Salkia Howrah 711106",
+    mapUrl: "https://maps.app.goo.gl/XsZcrW8Yd2SgkMEv8?g_st=iw",
   },
 ];
 

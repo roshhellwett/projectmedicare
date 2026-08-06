@@ -3,6 +3,7 @@ export type Doctor = {
   specialty: string;
   department: string;
   qualifications: string[];
+  contact?: string;
 };
 
 export const doctors: Doctor[] = [
@@ -15,12 +16,14 @@ export const doctors: Doctor[] = [
       "Fellowship in Critical Care Medicine",
       "Diabetologist, Cardiology, PDT (III)",
     ],
+    contact: "+91 70666 66499",
   },
   {
     name: "Dr. Archana Verma",
     specialty: "Infertility & IVF Specialist",
     department: "Obs & Gynaecology",
     qualifications: ["MBBS, DGO, DNB", "Infertility & IVF Specialist"],
+    contact: "+91 70666 66399",
   },
   {
     name: "Dr. Lalit Agarwal",

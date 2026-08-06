@@ -19,7 +19,6 @@ type Rate = {
   sl_no: number;
   test_name: string;
   jm_rate: number | string;
-  vail_name: string;
 };
 
 const PAGE_SIZE = 15;
@@ -36,7 +35,6 @@ export default function AdminRatesTable() {
   const [newRate, setNewRate] = useState({
     test_name: "",
     jm_rate: "",
-    vail_name: "",
     sl_no: "",
   });
   const [saving, setSaving] = useState(false);
@@ -128,14 +126,13 @@ export default function AdminRatesTable() {
         body: JSON.stringify({
           test_name: newRate.test_name,
           jm_rate: newRate.jm_rate,
-          vail_name: newRate.vail_name,
           sl_no: Number(newRate.sl_no) || 0,
         }),
       });
       if (res.ok) {
         showToast("Rate added successfully");
         setShowAdd(false);
-        setNewRate({ test_name: "", jm_rate: "", vail_name: "", sl_no: "" });
+        setNewRate({ test_name: "", jm_rate: "", sl_no: "" });
         fetchData();
       } else {
         const json = await res.json();
@@ -212,15 +209,6 @@ export default function AdminRatesTable() {
               placeholder="Janta Rate (₹)"
               className="admin-input"
             />
-            <input
-              type="text"
-              value={newRate.vail_name}
-              onChange={(e) =>
-                setNewRate({ ...newRate, vail_name: e.target.value })
-              }
-              placeholder="Vial Name"
-              className="admin-input"
-            />
           </div>
           <div className="flex gap-2 mt-4">
             <button
@@ -252,7 +240,6 @@ export default function AdminRatesTable() {
             <tr>
               <th className="w-16">Sl.No</th>
               <th>Test Name</th>
-              <th>Vial Name</th>
               <th className="text-right">Janta Rate (₹)</th>
               <th className="text-center w-24">Actions</th>
             </tr>
@@ -260,13 +247,13 @@ export default function AdminRatesTable() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-16 text-center">
+                <td colSpan={4} className="py-16 text-center">
                   <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
                 </td>
               </tr>
             ) : items.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-16 text-center text-muted">
+                <td colSpan={4} className="py-16 text-center text-muted">
                   No tests found.
                 </td>
               </tr>
@@ -292,25 +279,6 @@ export default function AdminRatesTable() {
                       />
                     ) : (
                       <span className="font-semibold">{item.test_name}</span>
-                    )}
-                  </td>
-                  <td>
-                    {editId === item.id ? (
-                      <input
-                        type="text"
-                        defaultValue={item.vail_name}
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            vail_name: e.target.value,
-                          })
-                        }
-                        className="admin-input !w-32"
-                      />
-                    ) : item.vail_name ? (
-                      <span className="badge badge-blue">{item.vail_name}</span>
-                    ) : (
-                      <span className="text-muted text-sm">-</span>
                     )}
                   </td>
                   <td className="text-right">

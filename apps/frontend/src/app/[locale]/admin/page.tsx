@@ -12,22 +12,28 @@ import {
   Pill,
   ShieldCheck,
   Image as ImageIcon,
+  HardDrive,
 } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
 import { getGalleryImages } from "@/lib/db/gallery";
+import { getJobApplications } from "@/lib/db/careers";
+import { getMedicineOrders } from "@/lib/db/orders";
 import { formatCampDate } from "@/lib/utils/ist";
+import { FileText, ShoppingBag } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const t = await getTranslations("AdminPage");
   const locale = await getLocale();
-  const [stats, camp, bulletins, gallery] = await Promise.all([
+  const [stats, camp, bulletins, gallery, applications, orders] = await Promise.all([
     getStats(),
     getActiveCamp(),
     getVisibleBulletins(50),
     getGalleryImages(),
+    getJobApplications(),
+    getMedicineOrders(),
   ]);
 
   const tiles = [
@@ -78,6 +84,24 @@ export default async function AdminPage() {
       status: `${gallery.length} photo(s) currently published`,
       cta: "Open gallery manager",
     },
+    {
+      href: `/${locale}/admin/careers`,
+      icon: FileText,
+      tone: "is-accent",
+      title: t("careers.title"),
+      desc: t("careers.desc"),
+      status: `${applications.length} application(s) received`,
+      cta: t("careers.button"),
+    },
+    {
+      href: `/${locale}/admin/orders`,
+      icon: ShoppingBag,
+      tone: "is-green",
+      title: t("orders.title"),
+      desc: t("orders.desc"),
+      status: `${orders.length} order(s) total`,
+      cta: t("orders.button"),
+    },
   ];
 
   return (
@@ -111,7 +135,7 @@ export default async function AdminPage() {
       </div>
 
       {/* Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           {
             icon: Pill,
@@ -130,6 +154,12 @@ export default async function AdminPage() {
             value: stats.supabaseConnected ? "Live" : "JSON",
             label: "Data source",
             tone: "",
+          },
+          {
+            icon: HardDrive,
+            value: `${(stats.storageSizeBytes / (1024 * 1024)).toFixed(1)} MB`,
+            label: "Storage used (500 MB max)",
+            tone: (stats.storageSizeBytes / (1024 * 1024)) > 400 ? "is-accent" : "is-green",
           },
         ].map((s) => (
           <div

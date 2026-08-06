@@ -4,7 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, MapPin, MessageCircle, Phone, Stethoscope } from "lucide-react";
-import { mainContact } from "@/data/stores";
+import { stores } from "@/data/stores";
 
 export default function Footer() {
   const t = useTranslations("Footer");
@@ -53,38 +53,43 @@ export default function Footer() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <span>
                 <span className="block font-semibold text-foreground">
-                  Main hub — Shibpur
+                  Main hub — Vivek Vihar
                 </span>
-                53, Kalikumar Mukharjee Lane, Tram Depot More, P.O. &amp; P.S.
-                Shibpur, Howrah — 711102
+                493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. &amp; P.S. Shibpur, Dist. Howrah, Pin: 711101
               </span>
             </p>
 
-            <div className="mt-4 space-y-2 text-sm">
-              <a
-                href={`tel:${mainContact.tollFree}`}
-                className="flex items-center gap-2 text-muted transition-colors hover:text-primary"
-              >
-                <Phone className="h-4 w-4 shrink-0 text-secondary" />
-                <span className="font-semibold text-foreground">
-                  +91 62907 45327
-                </span>
-                <span className="text-xs">Toll free</span>
-              </a>
-              <a
-                href={`tel:${mainContact.diagnostic}`}
-                className="flex items-center gap-2 text-muted transition-colors hover:text-primary"
-              >
-                <Stethoscope className="h-4 w-4 shrink-0 text-secondary" />
-                <span className="font-semibold text-foreground">
-                  +91 62907 45327
-                </span>
-                <span className="text-xs">Diagnostics</span>
-              </a>
-              <p className="flex items-center gap-2 text-muted">
-                <Clock className="h-4 w-4 shrink-0 text-secondary" />
-                Open daily 8 AM – 10 PM
-              </p>
+            <div className="mt-5 space-y-4 text-sm">
+              {stores.map((store) => (
+                <div key={store.id} className="space-y-1.5">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    {store.name}
+                  </p>
+                  {store.phones.map((phone) => (
+                    <a
+                      key={phone.number}
+                      href={`tel:${phone.number}`}
+                      className="flex items-center gap-2 text-muted transition-colors hover:text-primary"
+                    >
+                      {phone.label.includes("Diagnostic") ? (
+                        <Stethoscope className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                      ) : (
+                        <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                      )}
+                      <span className="font-semibold text-foreground">
+                        {phone.number.replace("+91", "+91 ")}
+                      </span>
+                      <span className="text-xs">{phone.label}</span>
+                    </a>
+                  ))}
+                </div>
+              ))}
+              <div className="pt-2">
+                <p className="flex items-center gap-2 text-muted">
+                  <Clock className="h-4 w-4 shrink-0 text-secondary" />
+                  Open daily 8 AM – 10 PM
+                </p>
+              </div>
             </div>
           </div>
 

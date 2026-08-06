@@ -35,6 +35,18 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
+
+  // Enforce max 8 photos limit
+  const { count } = await supabase
+    .from("gallery_images")
+    .select("*", { count: "exact", head: true });
+    
+  if (count !== null && count >= 8) {
+    return NextResponse.json(
+      { error: "Maximum limit of 8 photos reached. Please delete an older photo first." },
+      { status: 400 },
+    );
+  }
   if (file.size > MAX_BYTES) {
     return NextResponse.json(
       { error: "Image must be smaller than 5 MB" },

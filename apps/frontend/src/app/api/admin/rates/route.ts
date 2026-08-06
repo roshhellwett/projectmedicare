@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/auth/guard";
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
 import { num, str, ValidationError } from "@/lib/utils/validation";
 
-const SORTABLE = ["sl_no", "test_name", "vail_name", "jm_rate"];
+const SORTABLE = ["sl_no", "test_name", "jm_rate"];
 
 function db(write: boolean) {
   const client = write
@@ -27,7 +27,6 @@ function fail(err: unknown) {
 function parse(body: Record<string, unknown>) {
   return {
     test_name: str(body.test_name, "Test name", { max: 200 }),
-    vail_name: str(body.vail_name, "Vial name", { max: 120, optional: true }),
     jm_rate: str(String(body.jm_rate ?? ""), "Janta rate", { max: 40 }),
     sl_no: num(body.sl_no, "Sl No"),
   };

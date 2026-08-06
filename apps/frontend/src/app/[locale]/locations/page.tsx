@@ -99,7 +99,12 @@ export default async function LocationsPage() {
                 </a>
               ))}
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.mapQuery)}`}
+                href={
+                  store.mapUrl ||
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    store.mapQuery
+                  )}`
+                }
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-outline btn-sm mt-1 w-full"
@@ -140,7 +145,7 @@ export default async function LocationsPage() {
           </p>
           <div className="mt-5 border-t border-line pt-4">
             <span className="badge badge-magenta">
-              ₹100/- registration only
+              ₹100/- cost only
             </span>
           </div>
         </div>

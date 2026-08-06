@@ -94,28 +94,36 @@ export default function GalleryManager({ initialImages }: Props) {
           </div>
         )}
 
-        <div className="mt-6 flex items-center justify-center rounded-xl border-2 border-dashed border-line bg-surface p-12 transition-colors hover:bg-surface-hover">
-          <label className="flex cursor-pointer flex-col items-center gap-3 text-center">
-            {isUploading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            ) : (
-              <Upload className="h-8 w-8 text-primary" />
-            )}
-            <div>
-              <span className="font-semibold text-primary hover:underline">
-                {isUploading ? "Uploading..." : "Click to upload"}
-              </span>
-              <span className="text-muted"> or drag and drop</span>
-            </div>
-            <input
-              type="file"
-              className="hidden"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleUpload}
-              disabled={isUploading}
-            />
-          </label>
-        </div>
+        {images.length >= 8 ? (
+          <div className="mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-red-500/20 bg-red-500/5 p-12 text-center text-red-500 transition-colors">
+            <AlertCircle className="h-8 w-8 mb-3 opacity-80" />
+            <p className="font-semibold text-lg">Maximum limit reached</p>
+            <p className="text-sm mt-1 opacity-80">You can only have 8 photos in the gallery. Delete an older photo below to upload a new one.</p>
+          </div>
+        ) : (
+          <div className="mt-6 flex items-center justify-center rounded-xl border-2 border-dashed border-line bg-surface p-12 transition-colors hover:bg-surface-hover">
+            <label className="flex cursor-pointer flex-col items-center gap-3 text-center">
+              {isUploading ? (
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              ) : (
+                <Upload className="h-8 w-8 text-primary" />
+              )}
+              <div>
+                <span className="font-semibold text-primary hover:underline">
+                  {isUploading ? "Uploading..." : "Click to upload"}
+                </span>
+                <span className="text-muted"> or drag and drop</span>
+              </div>
+              <input
+                type="file"
+                className="hidden"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleUpload}
+                disabled={isUploading}
+              />
+            </label>
+          </div>
+        )}
       </div>
 
       {/* Grid of Photos */}
