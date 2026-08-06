@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import CampSection from "@/components/site/CampSection";
 import BulletinBoard from "@/components/site/BulletinBoard";
+import FeaturedPackages from "@/components/site/FeaturedPackages";
 import { getGalleryImages } from "@/lib/db/gallery";
 
 const stats = [
@@ -38,7 +39,7 @@ const services = [
   {
     icon: FlaskConical,
     key: "pathology",
-    href: "/patient-rate-chart",
+    href: "/packages",
     tone: "is-green",
   },
   {
@@ -192,6 +193,34 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ---------- Trust ---------- */}
+      <section className="section bg-surface">
+        <div className="container">
+          <div className="mb-8 max-w-2xl">
+            <span className="eyebrow">{t("trust.eyebrow")}</span>
+            <h2 className="section-title mt-2">{t("trust.title")}</h2>
+            <p className="section-sub mt-2">{t("trust.sub")}</p>
+          </div>
+          <div className="trust-grid">
+            {trustItems.map((item) => (
+              <div key={item.key} className="trust-card">
+                <span className={`icon-tile ${item.tone}`}>
+                  <item.icon className="h-4 w-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-foreground">
+                    {t(`trust.items.${item.key}.title`)}
+                  </span>
+                  <span className="mt-0.5 block text-xs leading-relaxed text-muted">
+                    {t(`trust.items.${item.key}.desc`)}
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ---------- Services card grid ---------- */}
       <section className="section container">
         <div className="mb-8 max-w-2xl">
@@ -223,41 +252,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ---------- Sunday camp (admin managed) ---------- */}
-      <div className="border-y border-line bg-surface">
-        <CampSection />
-      </div>
-
-      {/* ---------- Live bulletin board (admin managed) ---------- */}
-      <BulletinBoard locale={locale} />
-
-      {/* ---------- Trust ---------- */}
-      <section className="section border-t border-line bg-surface">
-        <div className="container">
-          <div className="mb-8 max-w-2xl">
-            <span className="eyebrow">{t("trust.eyebrow")}</span>
-            <h2 className="section-title mt-2">{t("trust.title")}</h2>
-            <p className="section-sub mt-2">{t("trust.sub")}</p>
-          </div>
-          <div className="trust-grid">
-            {trustItems.map((item) => (
-              <div key={item.key} className="trust-card">
-                <span className={`icon-tile ${item.tone}`}>
-                  <item.icon className="h-4 w-4" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-semibold text-foreground">
-                    {t(`trust.items.${item.key}.title`)}
-                  </span>
-                  <span className="mt-0.5 block text-xs leading-relaxed text-muted">
-                    {t(`trust.items.${item.key}.desc`)}
-                  </span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ---------- Featured Packages ---------- */}
+      <FeaturedPackages locale={locale} />
 
       {/* ---------- Doctor checkup + CTA ---------- */}
       <section className="section container">
@@ -315,6 +311,14 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ---------- Sunday camp (admin managed) ---------- */}
+      <div className="border-t border-line bg-surface">
+        <CampSection />
+      </div>
+
+      {/* ---------- Live bulletin board (admin managed) ---------- */}
+      <BulletinBoard locale={locale} />
     </div>
   );
 }

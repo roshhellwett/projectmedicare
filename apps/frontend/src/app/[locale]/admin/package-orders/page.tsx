@@ -1,20 +1,20 @@
 import { getTranslations } from "next-intl/server";
-import { cookies } from "next/headers";
 import PageHeader from "@/components/PageHeader";
-import { ShoppingBag } from "lucide-react";
-import OrdersTable from "@/components/admin/OrdersTable";
-import { getMedicineOrders } from "@/lib/db/orders";
+import { ClipboardList } from "lucide-react";
+import { getPackageOrders } from "@/lib/db/package-orders";
 import { getPharmacyStores } from "@/lib/db/stores";
-import Link from "next/link";
+import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import PackageOrdersTable from "@/components/admin/PackageOrdersTable";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminOrdersPage() {
-  const t = await getTranslations("AdminPage.orders");
+export default async function AdminPackageOrdersPage() {
+  const t = await getTranslations("AdminPage");
   const [orders, stores] = await Promise.all([
-    getMedicineOrders(),
+    getPackageOrders(),
     getPharmacyStores(),
   ]);
 
@@ -23,7 +23,7 @@ export default async function AdminOrdersPage() {
   const locale = await getLocale();
 
   return (
-    <div className="container py-10">
+    <div className="container py-10 md:py-14">
       <div className="mb-6">
         <Link
           href={`/${locale}/admin`}
@@ -33,17 +33,16 @@ export default async function AdminOrdersPage() {
         </Link>
       </div>
       <PageHeader
-        eyebrow="Management"
-        eyebrowIcon={<ShoppingBag className="h-4 w-4" />}
-        title={t("title")}
-        sub={t("desc")}
+        eyebrow={t("eyebrow")}
+        eyebrowIcon={<ClipboardList className="h-4 w-4" />}
+        title="Package Bookings"
+        sub="Manage incoming customer bookings for diagnostic packages."
       />
-      
-      <div className="card mt-8 !p-0 overflow-hidden">
-        <OrdersTable 
-          initialData={orders} 
-          currentStoreId={currentStoreId || ""} 
-          stores={stores} 
+      <div className="mt-8">
+        <PackageOrdersTable 
+          initialOrders={orders} 
+          currentStoreId={currentStoreId || ""}
+          stores={stores}
         />
       </div>
     </div>

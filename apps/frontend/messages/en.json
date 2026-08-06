@@ -6,6 +6,7 @@
   "Navbar": {
     "home": "Home",
     "medicines": "Medicines",
+    "packages": "Health Packages",
     "patientRates": "Rate Chart",
     "locations": "Locations",
     "doctors": "Doctors",
@@ -36,9 +37,9 @@
           "cta": "View medicine list"
         },
         "pathology": {
-          "title": "Pathology & diagnostics",
-          "desc": "210+ lab tests with transparent patient rates across all three stores.",
-          "cta": "View rate chart"
+          "title": "Health Packages",
+          "desc": "Comprehensive diagnostic health packages with transparent Janta pricing.",
+          "cta": "View packages"
         },
         "doctors": {
           "title": "Doctor chambers",

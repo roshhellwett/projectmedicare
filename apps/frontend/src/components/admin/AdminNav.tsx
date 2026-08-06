@@ -3,20 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
-import {
-  CalendarHeart,
-  FlaskConical,
-  LayoutDashboard,
-  Megaphone,
-  Pill,
-} from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 
 const ITEMS = [
   { href: "", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/camp", label: "Sunday Camp", icon: CalendarHeart },
-  { href: "/bulletins", label: "Bulletin Board", icon: Megaphone },
-  { href: "/medicines", label: "Medicines", icon: Pill },
-  { href: "/rates", label: "Rates", icon: FlaskConical },
 ] as const;
 
 export default function AdminNav() {

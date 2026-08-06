@@ -17,7 +17,10 @@ export const stores: Store[] = [
     tagline: "Main Branch · Pharmacy & Pathology",
     address:
       "493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. & P.S. Shibpur, Dist. Howrah, Pin: 711101",
-    phones: [{ label: "Store", number: "+918240804490" }],
+    phones: [
+      { label: "Pharmacy", number: "+918240804490" },
+      { label: "Diagnostic", number: "+918100518482" },
+    ],
     services: ["Pharmacy", "Pathology"],
     isMainHub: true,
     mapQuery:
@@ -44,7 +47,10 @@ export const stores: Store[] = [
     tagline: "Pharmacy & Pathology",
     address:
       "67/A, G. T. Road (North), Oriya Para More, Pilkhana, Salkia, Howrah - 711106, West Bengal",
-    phones: [{ label: "Store", number: "+919123899472" }],
+    phones: [
+      { label: "Pharmacy", number: "+919123899472" },
+      { label: "Diagnostic", number: "+919123890747" },
+    ],
     services: ["Pharmacy", "Pathology"],
     isMainHub: false,
     mapQuery:

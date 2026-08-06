@@ -139,14 +139,14 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={locale}>
+    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${plex.variable} ${baskerville.variable} antialiased`}>
+      <body className={`${plex.variable} ${baskerville.variable} antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">
             <a

@@ -13,40 +13,90 @@ import {
   ShieldCheck,
   Image as ImageIcon,
   HardDrive,
+  Stethoscope,
 } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
 import { getGalleryImages } from "@/lib/db/gallery";
 import { getJobApplications } from "@/lib/db/careers";
 import { getMedicineOrders } from "@/lib/db/orders";
+import { getDoctors } from "@/lib/db/doctors";
+import { getPackages } from "@/lib/db/packages";
+import { getPackageOrders } from "@/lib/db/package-orders";
 import { formatCampDate } from "@/lib/utils/ist";
-import { FileText, ShoppingBag } from "lucide-react";
+import { FileText, ShoppingBag, Box, ClipboardList } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const t = await getTranslations("AdminPage");
   const locale = await getLocale();
-  const [stats, camp, bulletins, gallery, applications, orders] = await Promise.all([
+  const [stats, camp, bulletins, gallery, applications, orders, doctors, packages, packageOrders] = await Promise.all([
     getStats(),
     getActiveCamp(),
     getVisibleBulletins(50),
     getGalleryImages(),
     getJobApplications(),
     getMedicineOrders(),
+    getDoctors(),
+    getPackages(),
+    getPackageOrders(),
   ]);
 
   const tiles = [
     {
-      href: `/${locale}/admin/camp`,
-      icon: CalendarHeart,
+      href: `/${locale}/admin/medicines`,
+      icon: Pill,
+      tone: "is-green",
+      title: t("medicines.title"),
+      desc: t("medicines.desc"),
+      status: `${stats.medicinesCount.toLocaleString()} medicines in catalogue`,
+      cta: "Open medicines manager",
+    },
+    {
+      href: `/${locale}/admin/orders`,
+      icon: ShoppingBag,
+      tone: "is-green",
+      title: t("orders.title"),
+      desc: t("orders.desc"),
+      status: `${orders.length} order(s) total`,
+      cta: t("orders.button"),
+    },
+    {
+      href: `/${locale}/admin/rates`,
+      icon: FlaskConical,
+      tone: "is-accent",
+      title: t("rates.title"),
+      desc: t("rates.desc"),
+      status: `${stats.ratesCount.toLocaleString()} lab tests listed`,
+      cta: "Open rates manager",
+    },
+    {
+      href: `/${locale}/admin/packages`,
+      icon: Box,
+      tone: "is-accent",
+      title: "Health Packages",
+      desc: "Manage health diagnostic packages, their prices, and featured status.",
+      status: `${packages.length} package(s) available`,
+      cta: "Open package manager",
+    },
+    {
+      href: `/${locale}/admin/package-orders`,
+      icon: ClipboardList,
+      tone: "is-accent",
+      title: "Package Bookings",
+      desc: "View and manage incoming customer bookings for health packages.",
+      status: `${packageOrders.length} booking(s) total`,
+      cta: "Open package bookings",
+    },
+    {
+      href: `/${locale}/admin/doctors`,
+      icon: Stethoscope,
       tone: "",
-      title: "Sunday camp post",
-      desc: "Publish this week's free camp with venue, date and one photo. The previous post is archived automatically.",
-      status: camp
-        ? `Live: ${formatCampDate(camp.camp_date)} · ${camp.venue}`
-        : "No camp published yet",
-      cta: "Open camp manager",
+      title: "Doctors",
+      desc: "Manage doctor profiles, specialties, and schedules for the public website.",
+      status: `${doctors.length} doctor(s) listed`,
+      cta: "Open doctor manager",
     },
     {
       href: `/${locale}/admin/bulletins`,
@@ -58,22 +108,15 @@ export default async function AdminPage() {
       cta: "Open bulletin manager",
     },
     {
-      href: `/${locale}/admin/medicines`,
-      icon: Pill,
-      tone: "is-green",
-      title: t("medicines.title"),
-      desc: t("medicines.desc"),
-      status: `${stats.medicinesCount.toLocaleString()} medicines in catalogue`,
-      cta: "Open medicines manager",
-    },
-    {
-      href: `/${locale}/admin/rates`,
-      icon: FlaskConical,
-      tone: "is-accent",
-      title: t("rates.title"),
-      desc: t("rates.desc"),
-      status: `${stats.ratesCount.toLocaleString()} lab tests listed`,
-      cta: "Open rates manager",
+      href: `/${locale}/admin/camp`,
+      icon: CalendarHeart,
+      tone: "",
+      title: "Sunday camp post",
+      desc: "Publish this week's free camp with venue, date and one photo. The previous post is archived automatically.",
+      status: camp
+        ? `Live: ${formatCampDate(camp.camp_date)} · ${camp.venue}`
+        : "No camp published yet",
+      cta: "Open camp manager",
     },
     {
       href: `/${locale}/admin/gallery`,
@@ -92,15 +135,6 @@ export default async function AdminPage() {
       desc: t("careers.desc"),
       status: `${applications.length} application(s) received`,
       cta: t("careers.button"),
-    },
-    {
-      href: `/${locale}/admin/orders`,
-      icon: ShoppingBag,
-      tone: "is-green",
-      title: t("orders.title"),
-      desc: t("orders.desc"),
-      status: `${orders.length} order(s) total`,
-      cta: t("orders.button"),
     },
   ];
 

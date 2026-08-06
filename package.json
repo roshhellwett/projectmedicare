@@ -2,7 +2,7 @@
   "name": "jantamedicare",
   "version": "1.0.0",
   "private": true,
-  "description": "Janta Medicare \u2014 monorepo: frontend (Cloudflare), backend worker + health (Railway), Supabase, tests.",
+  "description": "Janta Medicare — monorepo: frontend (Cloudflare), backend worker + health (Railway), Supabase, tests.",
   "workspaces": [
     "apps/*",
     "packages/*",
@@ -23,6 +23,12 @@
     "health": "npm start --workspace @jm/health",
     "test:smoke": "npm run test:smoke --workspace @jm/tests",
     "test:e2e": "npm run test:e2e --workspace @jm/tests",
+    "test:integration": "vitest run",
     "verify": "npm run lint && npm run typecheck && npm run build"
+  },
+  "devDependencies": {
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.10"
   }
 }

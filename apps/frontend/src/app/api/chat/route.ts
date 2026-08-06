@@ -2,12 +2,16 @@ import { getMedicines, getRates, Medicine, RateTest } from "@/lib/data";
 
 type Message = { role: string; content: string | null; name?: string; tool_calls?: ToolCall[]; tool_call_id?: string };
 type ToolCall = { id: string; type: string; function: { name: string; arguments: string } };
-import { doctors, doctorChamberInfo } from "@/data/doctors";
+import { getDoctors } from "@/lib/db/doctors";
 import { stores, mainContact } from "@/data/stores";
 
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
+
+    const allDoctors = await getDoctors();
+    const chamberDoctors = allDoctors.filter(d => d.is_daily_chamber).map(d => d.name).join(", ");
+    const doctorListForPrompt = allDoctors.map(d => ({ name: d.name, specialty: d.specialty, contact: d.contact }));
 
     const systemPrompt = `You are the official Janta Medicare AI Assistant.
 Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare.
@@ -19,7 +23,7 @@ IMPORTANT RULES:
 3. You have access to tools to search the medicines database and the diagnostic test rate chart database. USE THEM when a user asks for a price or if a medicine/test is available.
 4. If a user describes symptoms, you can suggest a doctor specialty, but ALWAYS remind them that you are an AI and they should consult a real doctor.
 5. Keep your answers brief, beautiful, and readable. You MUST strictly preserve the exact markdown formatting (*italics* and **bold**) that the tools provide to you!
-6. If the user asks for doctor details, use this data: ${JSON.stringify(doctors)}. The main doctor chamber is ${doctorChamberInfo.name} located at Shibpur.
+6. If the user asks for doctor details, use this data: ${JSON.stringify(doctorListForPrompt)}. The doctors who sit everyday at the chamber are: ${chamberDoctors}.
 7. The store locations are: ${JSON.stringify(stores.map((s) => s.name + " - " + s.address))}.
 8. CRITICAL: When you need to call a tool, you must ONLY output the tool call. Do not add any extra text, thoughts, or conversational filler before or after the tool call.
 

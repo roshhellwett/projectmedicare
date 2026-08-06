@@ -10,6 +10,7 @@ import { Menu, Phone, Settings, X } from "lucide-react";
 const NAV_LINKS = [
   { key: "home", href: "" },
   { key: "medicines", href: "/medicines" },
+  { key: "packages", href: "/packages" },
   { key: "patientRates", href: "/patient-rate-chart" },
   { key: "locations", href: "/locations" },
   { key: "doctors", href: "/doctors" },
@@ -19,7 +20,7 @@ const NAV_LINKS = [
   { key: "order", href: "/order" },
 ] as const;
 
-// Cache invalidation comment for Turbopack (Bust cache again)
+// Cache invalidation comment for Turbopack (Bust cache again 2)
 export default function Navbar() {
   const t = useTranslations("Navbar");
   const locale = useLocale();
@@ -53,11 +54,11 @@ export default function Navbar() {
       : pathname.startsWith(`/${locale}${href}`);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur">
+    <header suppressHydrationWarning className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur">
       {/* Utility strip */}
       <div className="border-b border-line bg-surface-muted">
         <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5">
-          <div className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges">
+          <div suppressHydrationWarning className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges">
             <a href="tel:+916290745327" className="flex items-center gap-1.5 transition-colors hover:text-primary">
               <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
               <span>{t("tramDepot")} <span className="font-semibold text-foreground">+91 62907 45327</span></span>

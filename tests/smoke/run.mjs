@@ -62,6 +62,9 @@ async function main() {
   await check("medicines page renders", () =>
     expectPage("/en/medicines", "medicine"),
   );
+  await check("packages page renders", () =>
+    expectPage("/en/packages", "package"),
+  );
   await check("rate chart renders", () =>
     expectPage("/en/patient-rate-chart", "rate"),
   );
@@ -89,6 +92,14 @@ async function main() {
     assert(
       res.status === 401,
       `/api/admin/camp responded ${res.status}, expected 401`,
+    );
+  });
+
+  await check("admin packages API rejects anonymous reads", async () => {
+    const res = await get("/api/admin/packages");
+    assert(
+      res.status === 401,
+      `/api/admin/packages responded ${res.status}, expected 401`,
     );
   });
 

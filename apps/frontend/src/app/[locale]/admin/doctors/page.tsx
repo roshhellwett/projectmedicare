@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Megaphone } from "lucide-react";
+import { Stethoscope } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
-import BulletinManager from "@/components/admin/BulletinManager";
-import { getAllBulletins } from "@/lib/db/bulletins";
+import DoctorManager from "@/components/admin/DoctorManager";
+import { getDoctors } from "@/lib/db/doctors";
 import Link from "next/link";
 import { getLocale } from "next-intl/server";
 import { ArrowLeft } from "lucide-react";
@@ -10,14 +10,13 @@ import { ArrowLeft } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Bulletin Board Manager — Janta Medicare Admin",
-  description:
-    "Publish, edit and remove notices and time-limited offers on the live bulletin board.",
+  title: "Doctor Manager — Janta Medicare Admin",
+  description: "Manage doctor profiles and chamber schedules.",
   robots: { index: false, follow: false },
 };
 
-export default async function AdminBulletinsPage() {
-  const items = await getAllBulletins();
+export default async function AdminDoctorsPage() {
+  const doctors = await getDoctors();
   const locale = await getLocale();
 
   return (
@@ -32,11 +31,11 @@ export default async function AdminBulletinsPage() {
       </div>
       <PageHeader
         eyebrow="Admin"
-        eyebrowIcon={<Megaphone className="h-4 w-4" />}
-        title="Live Bulletin Board"
-        sub="Notices stay until you delete them. Offers hide automatically after their end time and are cleaned up by the worker."
+        eyebrowIcon={<Stethoscope className="h-4 w-4" />}
+        title="Doctor Manager"
+        sub="Add, edit, or remove doctor profiles displayed on the website."
       />
-      <BulletinManager initialItems={items} />
+      <DoctorManager initialDoctors={doctors} />
     </div>
   );
 }
