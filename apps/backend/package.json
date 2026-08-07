@@ -12,6 +12,6 @@
     "purge:once": "RUN_ONCE=true node server.mjs"
   },
   "dependencies": {
-    "@sentry/node": "^8.55.0"
+    "@sentry/node": "^10.69.0"
   }
 }
