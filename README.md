@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Janta Medicare
 
-## Getting Started
+Welcome to the **Janta Medicare** monorepo! This repository contains the source code for the Janta Medicare web platform, which includes a modern frontend built with Next.js, and a Supabase backend for database and authentication.
 
-First, run the development server:
+## 🏗 Architecture
 
+The project is structured as a monorepo containing multiple apps and packages:
+
+- **`apps/frontend`**: The main Next.js web application. It handles the user interface, localization (`next-intl`), and forms. Deployed to **Cloudflare Pages**.
+- **`apps/backend`**: Backend worker services (deployed to Railway).
+- **`apps/health`**: Health check services.
+- **`tests`**: End-to-End and Integration testing suites using Playwright and Vitest.
+- **`supabase`**: Local database schema, migrations, and Edge Functions.
+
+## 🚀 Getting Started Locally
+
+To run this project locally, you will need **Node.js (v20+)** and **Docker** installed.
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
+### 2. Start the Local Supabase Database
+Ensure Docker is running, then start the Supabase containers:
+```bash
+npx supabase start
+```
+*(This will automatically apply all database migrations found in `supabase/migrations`)*
+
+### 3. Run the Frontend Development Server
+Start the Next.js development server:
+```bash
+npm run dev
+```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧪 Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+We take quality seriously! We use Playwright for End-to-End testing and Vitest for Integration testing.
 
-## Learn More
+- **Run all E2E Tests**:
+  ```bash
+  npm run test:e2e
+  ```
+- **Run Smoke Tests**:
+  ```bash
+  npm run test:smoke
+  ```
+- **Run Integration Tests** *(requires valid Supabase connection strings in `.env`)*:
+  ```bash
+  npm run test:integration
+  ```
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for details on our code of conduct, and the process for submitting pull requests to us.
