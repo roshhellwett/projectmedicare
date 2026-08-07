@@ -3,12 +3,22 @@ import http from "node:http";
 // Purge env
 const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
-const PURGE_INTERVAL_MINUTES = clamp(process.env.PURGE_INTERVAL_MINUTES, 60, 5, 1440);
+const PURGE_INTERVAL_MINUTES = clamp(
+  process.env.PURGE_INTERVAL_MINUTES,
+  60,
+  5,
+  1440,
+);
 const GRACE_HOURS = clamp(process.env.PURGE_GRACE_HOURS, 24, 0, 720);
 
 // Health env
 const SITE_URL = (process.env.SITE_URL || "").replace(/\/+$/, "");
-const HEALTH_INTERVAL_MINUTES = clamp(process.env.HEALTH_INTERVAL_MINUTES, 5, 1, 1440);
+const HEALTH_INTERVAL_MINUTES = clamp(
+  process.env.HEALTH_INTERVAL_MINUTES,
+  5,
+  1,
+  1440,
+);
 const TIMEOUT_MS = clamp(process.env.HEALTH_TIMEOUT_MS, 15000, 1000, 60000);
 
 const RUN_ONCE = /^(1|true|yes)$/i.test(process.env.RUN_ONCE || "");
@@ -62,7 +72,9 @@ function requirePurgeConfig() {
   if (!SUPABASE_URL) missing.push("SUPABASE_URL");
   if (!SERVICE_KEY) missing.push("SUPABASE_SERVICE_ROLE_KEY");
   if (missing.length) {
-    log("error", "Missing required environment variables for Purge", { missing });
+    log("error", "Missing required environment variables for Purge", {
+      missing,
+    });
   }
 }
 
@@ -87,15 +99,27 @@ async function purgeOnce() {
 
     const text = await res.text();
     if (!res.ok)
-      throw new Error(`Supabase responded ${res.status}: ${text.slice(0, 300)}`);
+      throw new Error(
+        `Supabase responded ${res.status}: ${text.slice(0, 300)}`,
+      );
 
     const removed = Number(text) || 0;
-    lastPurge = { at: new Date().toISOString(), removed, ok: true, error: null };
+    lastPurge = {
+      at: new Date().toISOString(),
+      removed,
+      ok: true,
+      error: null,
+    };
     log("info", "Purge complete", { removed, graceHours: GRACE_HOURS });
     return removed;
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    lastPurge = { at: new Date().toISOString(), removed: null, ok: false, error: message };
+    lastPurge = {
+      at: new Date().toISOString(),
+      removed: null,
+      ok: false,
+      error: message,
+    };
     log("error", "Purge failed — will retry next cycle", { error: message });
     return null;
   } finally {
@@ -111,7 +135,10 @@ async function httpCheck(name, url, { expect = 200 } = {}) {
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   const started = Date.now();
   try {
-    const res = await fetch(url, { signal: controller.signal, redirect: "follow" });
+    const res = await fetch(url, {
+      signal: controller.signal,
+      redirect: "follow",
+    });
     if (res.status !== expect) {
       throw new Error(`${url} responded ${res.status}, expected ${expect}`);
     }
@@ -136,10 +163,16 @@ async function supabaseCheck() {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/bulletins?select=id&limit=1`, {
-      headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
-      signal: controller.signal
-    });
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/bulletins?select=id&limit=1`,
+      {
+        headers: {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+        },
+        signal: controller.signal,
+      },
+    );
     if (!res.ok) throw new Error(`Supabase responded ${res.status}`);
     return { name, ok: true, ms: Date.now() - started };
   } catch (err) {
@@ -156,7 +189,11 @@ async function runChecks() {
   if (SITE_URL) {
     checks.push(await httpCheck("home", `${SITE_URL}/en`));
     checks.push(await httpCheck("bulletins", `${SITE_URL}/en/bulletins`));
-    checks.push(await httpCheck("admin-api-locked", `${SITE_URL}/api/admin/camp`, { expect: 401 }));
+    checks.push(
+      await httpCheck("admin-api-locked", `${SITE_URL}/api/admin/camp`, {
+        expect: 401,
+      }),
+    );
   } else {
     log("info", "SITE_URL not set — skipping website checks");
   }
@@ -164,7 +201,11 @@ async function runChecks() {
 
   const ok = checks.every((c) => c.ok);
   lastHealth = { at: new Date().toISOString(), ok, checks };
-  log(ok ? "info" : "error", ok ? "All health checks passed" : "One or more health checks failed", { checks });
+  log(
+    ok ? "info" : "error",
+    ok ? "All health checks passed" : "One or more health checks failed",
+    { checks },
+  );
   return ok;
 }
 
@@ -175,9 +216,9 @@ function startServer() {
   const rateLimitMap = new Map();
 
   const server = http.createServer((req, res) => {
-    const ip = req.socket.remoteAddress || 'unknown';
+    const ip = req.socket.remoteAddress || "unknown";
     const now = Date.now();
-    
+
     if (Math.random() < 0.01) rateLimitMap.clear();
 
     const info = rateLimitMap.get(ip) || { count: 0, ts: now };
@@ -197,18 +238,30 @@ function startServer() {
 
     if (req.url === "/healthz" || req.url === "/") {
       const healthy = lastHealth.ok !== false; // treat null as ok initially
-      res.writeHead(healthy ? 200 : 503, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ 
-        status: healthy ? "ok" : "degraded",
-        health: { intervalMinutes: HEALTH_INTERVAL_MINUTES, lastReport: lastHealth },
-        purge: { intervalMinutes: PURGE_INTERVAL_MINUTES, lastRun: lastPurge }
-      }));
+      res.writeHead(healthy ? 200 : 503, {
+        "Content-Type": "application/json",
+      });
+      res.end(
+        JSON.stringify({
+          status: healthy ? "ok" : "degraded",
+          health: {
+            intervalMinutes: HEALTH_INTERVAL_MINUTES,
+            lastReport: lastHealth,
+          },
+          purge: {
+            intervalMinutes: PURGE_INTERVAL_MINUTES,
+            lastRun: lastPurge,
+          },
+        }),
+      );
       return;
     }
     res.writeHead(404).end();
   });
 
-  server.listen(PORT, "0.0.0.0", () => log("info", "Combined backend endpoint listening", { port: PORT }));
+  server.listen(PORT, "0.0.0.0", () =>
+    log("info", "Combined backend endpoint listening", { port: PORT }),
+  );
   return server;
 }
 
@@ -229,7 +282,7 @@ async function main() {
 
   if (RUN_ONCE) {
     server.close();
-    process.exit((lastHealth.ok !== false && lastPurge.ok !== false) ? 0 : 1);
+    process.exit(lastHealth.ok !== false && lastPurge.ok !== false ? 0 : 1);
   }
 
   const healthTimer = setInterval(runChecks, HEALTH_INTERVAL_MINUTES * 60_000);

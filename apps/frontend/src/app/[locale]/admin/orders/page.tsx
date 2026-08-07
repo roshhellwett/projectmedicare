@@ -38,12 +38,12 @@ export default async function AdminOrdersPage() {
         title={t("title")}
         sub={t("desc")}
       />
-      
+
       <div className="card mt-8 !p-0 overflow-hidden">
-        <OrdersTable 
-          initialData={orders} 
-          currentStoreId={currentStoreId || ""} 
-          stores={stores} 
+        <OrdersTable
+          initialData={orders}
+          currentStoreId={currentStoreId || ""}
+          stores={stores}
         />
       </div>
     </div>

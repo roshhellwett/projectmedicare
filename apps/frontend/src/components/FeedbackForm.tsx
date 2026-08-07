@@ -74,7 +74,9 @@ export default function FeedbackForm() {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-6">
           <CheckCircle2 className="h-8 w-8" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">{t("successTitle")}</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          {t("successTitle")}
+        </h3>
         <p className="text-muted max-w-sm mx-auto">{t("successDesc")}</p>
         <button
           onClick={() => setSuccess(false)}
@@ -104,7 +106,10 @@ export default function FeedbackForm() {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="phone" className="text-sm font-medium text-foreground">
+          <label
+            htmlFor="phone"
+            className="text-sm font-medium text-foreground"
+          >
             {t("phoneLabel")}
           </label>
           <div className="relative">
@@ -121,7 +126,11 @@ export default function FeedbackForm() {
               pattern="[0-9]{10}"
               placeholder={t("phonePlaceholder")}
               className="flex h-11 w-full rounded-md border border-line bg-surface pl-11 pr-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(t("errorPhone"))}
+              onInvalid={(e) =>
+                (e.target as HTMLInputElement).setCustomValidity(
+                  t("errorPhone"),
+                )
+              }
               onInput={(e) => {
                 const target = e.target as HTMLInputElement;
                 target.value = target.value.replace(/\D/g, "").slice(0, 10);
@@ -149,7 +158,9 @@ export default function FeedbackForm() {
         <label className="text-sm font-medium text-foreground flex items-center justify-between">
           <span>{t("imageLabel")}</span>
         </label>
-        <div className={`relative group overflow-hidden rounded-lg border-2 border-dashed border-line bg-surface-muted transition-colors hover:border-primary/50 hover:bg-primary/5 ${preview ? 'border-primary/50 bg-primary/5' : ''}`}>
+        <div
+          className={`relative group overflow-hidden rounded-lg border-2 border-dashed border-line bg-surface-muted transition-colors hover:border-primary/50 hover:bg-primary/5 ${preview ? "border-primary/50 bg-primary/5" : ""}`}
+        >
           <input
             type="file"
             name="image"
@@ -158,11 +169,15 @@ export default function FeedbackForm() {
             className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
             onChange={handleImageChange}
           />
-          
+
           {preview ? (
             <div className="relative flex flex-col items-center justify-center p-4">
               <div className="h-32 w-full max-w-sm rounded overflow-hidden shadow-sm mb-3">
-                <img src={preview} alt="Feedback preview" className="h-full w-full object-cover opacity-80" />
+                <img
+                  src={preview}
+                  alt="Feedback preview"
+                  className="h-full w-full object-cover opacity-80"
+                />
               </div>
               <p className="text-sm font-medium text-foreground bg-surface/90 px-3 py-1 rounded shadow-sm backdrop-blur">
                 {fileName}

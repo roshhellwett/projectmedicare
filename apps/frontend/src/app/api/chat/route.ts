@@ -1,7 +1,17 @@
 import { getMedicines, getRates, Medicine, RateTest } from "@/lib/data";
 
-type Message = { role: string; content: string | null; name?: string; tool_calls?: ToolCall[]; tool_call_id?: string };
-type ToolCall = { id: string; type: string; function: { name: string; arguments: string } };
+type Message = {
+  role: string;
+  content: string | null;
+  name?: string;
+  tool_calls?: ToolCall[];
+  tool_call_id?: string;
+};
+type ToolCall = {
+  id: string;
+  type: string;
+  function: { name: string; arguments: string };
+};
 import { getDoctors } from "@/lib/db/doctors";
 import { stores, mainContact } from "@/data/stores";
 
@@ -10,8 +20,15 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const allDoctors = await getDoctors();
-    const chamberDoctors = allDoctors.filter(d => d.is_daily_chamber).map(d => d.name).join(", ");
-    const doctorListForPrompt = allDoctors.map(d => ({ name: d.name, specialty: d.specialty, contact: d.contact }));
+    const chamberDoctors = allDoctors
+      .filter((d) => d.is_daily_chamber)
+      .map((d) => d.name)
+      .join(", ");
+    const doctorListForPrompt = allDoctors.map((d) => ({
+      name: d.name,
+      specialty: d.specialty,
+      contact: d.contact,
+    }));
 
     const systemPrompt = `You are the official Janta Medicare AI Assistant.
 Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare.
@@ -34,64 +51,76 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
         type: "function",
         function: {
           name: "search_medicines",
-          description: "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
+          description:
+            "Search for medicines by name to get their availability, pack size, MRP, and Janta selling price.",
           parameters: {
             type: "object",
             properties: {
-              query: { type: "string", description: "The name of the medicine to search for" }
+              query: {
+                type: "string",
+                description: "The name of the medicine to search for",
+              },
             },
-            required: ["query"]
-          }
-        }
+            required: ["query"],
+          },
+        },
       },
       {
         type: "function",
         function: {
           name: "search_rate_chart",
-          description: "Search for diagnostic tests by name to get their Janta rate/price.",
+          description:
+            "Search for diagnostic tests by name to get their Janta rate/price.",
           parameters: {
             type: "object",
             properties: {
-              query: { type: "string", description: "The name of the diagnostic test or pathology test to search for" }
+              query: {
+                type: "string",
+                description:
+                  "The name of the diagnostic test or pathology test to search for",
+              },
             },
-            required: ["query"]
-          }
-        }
-      }
+            required: ["query"],
+          },
+        },
+      },
     ];
 
     // Filter out UI-only fields or unsupported fields from messages before sending to Groq
     const cleanMessages = messages.map((m: Message) => ({
       role: m.role,
-      content: m.content
+      content: m.content,
     }));
 
     const currentMessages: Message[] = [
       { role: "system", content: systemPrompt },
-      ...cleanMessages
+      ...cleanMessages,
     ];
 
     let finalMessage = null;
 
     for (let i = 0; i < 3; i++) {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
-          "Content-Type": "application/json"
+      const res = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "llama-3.1-8b-instant",
+            messages: currentMessages,
+            tools: tools,
+            tool_choice: "auto",
+            parallel_tool_calls: false,
+            max_tokens: 500,
+          }),
         },
-        body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
-          messages: currentMessages,
-          tools: tools,
-          tool_choice: "auto",
-          parallel_tool_calls: false,
-          max_tokens: 500
-        })
-      });
+      );
 
       if (!res.ok) {
-         throw new Error(`Groq API error: ${await res.text()}`);
+        throw new Error(`Groq API error: ${await res.text()}`);
       }
 
       const data = await res.json();
@@ -100,58 +129,63 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
       currentMessages.push(message);
 
       if (message.tool_calls && message.tool_calls.length > 0) {
-         for (const toolCall of message.tool_calls) {
-            const args = JSON.parse(toolCall.function.arguments);
-            let resultData: Record<string, string | number | undefined>[] = [];
-            
-            if (toolCall.function.name === "search_medicines") {
-              const { items } = await getMedicines(args.query, 1, { key: "medicine_name", dir: "asc" });
-              resultData = items.slice(0, 5).map((item: Medicine) => ({
-                medicine: `*${item.medicine_name}*`,
-                mrp: `**₹${item.mrp}**`,
-                janta_price: `**₹${item.selling_price}**`, // Using selling_price instead of undefined janta_selling_price
-                pack_size: item.pack_size
-              }));
-            } else if (toolCall.function.name === "search_rate_chart") {
-              const { items } = await getRates(args.query, 1, { key: "test_name", dir: "asc" });
-              resultData = items.slice(0, 5).map((item: RateTest) => ({
-                test: `*${item.test_name}*`,
-                janta_rate: `**₹${item.jm_rate}**` // Using jm_rate instead of undefined janta_rate
-              }));
-            }
+        for (const toolCall of message.tool_calls) {
+          const args = JSON.parse(toolCall.function.arguments);
+          let resultData: Record<string, string | number | undefined>[] = [];
 
-            currentMessages.push({
-               role: "tool",
-               tool_call_id: toolCall.id,
-               name: toolCall.function.name,
-               content: JSON.stringify(resultData)
+          if (toolCall.function.name === "search_medicines") {
+            const { items } = await getMedicines(args.query, 1, {
+              key: "medicine_name",
+              dir: "asc",
             });
-         }
+            resultData = items.slice(0, 5).map((item: Medicine) => ({
+              medicine: `*${item.medicine_name}*`,
+              mrp: `**₹${item.mrp}**`,
+              janta_price: `**₹${item.selling_price}**`, // Using selling_price instead of undefined janta_selling_price
+              pack_size: item.pack_size,
+            }));
+          } else if (toolCall.function.name === "search_rate_chart") {
+            const { items } = await getRates(args.query, 1, {
+              key: "test_name",
+              dir: "asc",
+            });
+            resultData = items.slice(0, 5).map((item: RateTest) => ({
+              test: `*${item.test_name}*`,
+              janta_rate: `**₹${item.jm_rate}**`, // Using jm_rate instead of undefined janta_rate
+            }));
+          }
+
+          currentMessages.push({
+            role: "tool",
+            tool_call_id: toolCall.id,
+            name: toolCall.function.name,
+            content: JSON.stringify(resultData),
+          });
+        }
       } else {
-         finalMessage = message;
-         break;
+        finalMessage = message;
+        break;
       }
     }
 
     if (!finalMessage) {
-       finalMessage = currentMessages[currentMessages.length - 1];
+      finalMessage = currentMessages[currentMessages.length - 1];
     }
 
-    return new Response(
-      JSON.stringify(finalMessage),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      }
-    );
+    return new Response(JSON.stringify(finalMessage), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error in chat API:", error);
     return new Response(
-      JSON.stringify({ error: "An error occurred while processing your request." }),
+      JSON.stringify({
+        error: "An error occurred while processing your request.",
+      }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" }
-      }
+        headers: { "Content-Type": "application/json" },
+      },
     );
   }
 }

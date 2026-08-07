@@ -1,13 +1,17 @@
 /**
  * Compresses an image file locally in the browser using HTML5 Canvas
  * before uploading it to the server.
- * 
+ *
  * @param file The original File object from an input element
  * @param maxWidth The maximum width to scale the image to
  * @param quality The image quality (0 to 1) for JPEG/WebP
  * @returns A Promise resolving to a new Blob/File containing the compressed image
  */
-export async function compressImage(file: File, maxWidth = 1000, quality = 0.7): Promise<File> {
+export async function compressImage(
+  file: File,
+  maxWidth = 1000,
+  quality = 0.7,
+): Promise<File> {
   return new Promise((resolve, reject) => {
     if (!file.type.startsWith("image/")) {
       reject(new Error("File must be an image"));
@@ -50,17 +54,21 @@ export async function compressImage(file: File, maxWidth = 1000, quality = 0.7):
               reject(new Error("Failed to compress image"));
               return;
             }
-            
+
             // Create a new File from the Blob
-            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, ".webp"), {
-              type: format,
-              lastModified: Date.now(),
-            });
-            
+            const compressedFile = new File(
+              [blob],
+              file.name.replace(/\.[^/.]+$/, ".webp"),
+              {
+                type: format,
+                lastModified: Date.now(),
+              },
+            );
+
             resolve(compressedFile);
           },
           format,
-          quality
+          quality,
         );
       };
       img.onerror = (error) => reject(error);

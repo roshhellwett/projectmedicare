@@ -8,9 +8,20 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { usePathname } from "next/navigation";
 
-type Message = { id: string; role: "user" | "assistant" | "system"; content: string; isTyping?: boolean };
+type Message = {
+  id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  isTyping?: boolean;
+};
 
-const TypewriterMessage = ({ message, onComplete }: { message: Message, onComplete: () => void }) => {
+const TypewriterMessage = ({
+  message,
+  onComplete,
+}: {
+  message: Message;
+  onComplete: () => void;
+}) => {
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
@@ -33,9 +44,7 @@ const TypewriterMessage = ({ message, onComplete }: { message: Message, onComple
 
   return (
     <div className="prose prose-sm prose-slate max-w-none text-foreground prose-p:leading-relaxed prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-primary-strong">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {finalContent}
-      </ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{finalContent}</ReactMarkdown>
       {message.isTyping && (
         <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-primary align-middle" />
       )}
@@ -50,16 +59,20 @@ export default function JantaChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { id: Date.now().toString(), role: "user", content: input };
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input,
+    };
     const newMessages = [...messages, userMessage];
-    
+
     setMessages(newMessages);
     setInput("");
     setIsLoading(true);
@@ -69,7 +82,12 @@ export default function JantaChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })) })
+        body: JSON.stringify({
+          messages: newMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
       });
 
       if (!res.ok) {
@@ -77,7 +95,15 @@ export default function JantaChat() {
       }
 
       const data = await res.json();
-      setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: data.content, isTyping: true }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: data.content,
+          isTyping: true,
+        },
+      ]);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
     } finally {
@@ -92,7 +118,7 @@ export default function JantaChat() {
   }, [messages, error]);
 
   // Hide on admin pages
-  if (pathname?.includes('/admin')) return null;
+  if (pathname?.includes("/admin")) return null;
 
   return (
     <>
@@ -121,13 +147,15 @@ export default function JantaChat() {
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-bold tracking-wide text-white">Janta AI</h3>
+                <h3 className="text-sm font-bold tracking-wide text-white">
+                  Janta AI
+                </h3>
                 <p className="text-[0.7rem] font-medium text-primary-line">
                   Online and ready to help
                 </p>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="rounded-full bg-white/10 p-1.5 text-white/90 transition-colors hover:bg-white/20 hover:text-white"
             >
@@ -142,9 +170,12 @@ export default function JantaChat() {
                 <div className="mb-3 rounded-full bg-primary-soft p-3 shadow-inner">
                   <Bot className="h-8 w-8 text-primary" />
                 </div>
-                <h4 className="mb-1.5 text-base font-semibold text-foreground">How can we help?</h4>
+                <h4 className="mb-1.5 text-base font-semibold text-foreground">
+                  How can we help?
+                </h4>
                 <p className="max-w-[220px] text-xs text-muted">
-                  Ask me about medicines, pathology tests, or getting a doctor consultation.
+                  Ask me about medicines, pathology tests, or getting a doctor
+                  consultation.
                 </p>
               </div>
             ) : (
@@ -177,10 +208,16 @@ export default function JantaChat() {
                       {m.role === "user" ? (
                         m.content
                       ) : (
-                        <TypewriterMessage 
-                          message={m} 
+                        <TypewriterMessage
+                          message={m}
                           onComplete={() => {
-                            setMessages(prev => prev.map(msg => msg.id === m.id ? { ...msg, isTyping: false } : msg));
+                            setMessages((prev) =>
+                              prev.map((msg) =>
+                                msg.id === m.id
+                                  ? { ...msg, isTyping: false }
+                                  : msg,
+                              ),
+                            );
                           }}
                         />
                       )}
@@ -213,8 +250,9 @@ export default function JantaChat() {
                       <Bot className="h-3.5 w-3.5" />
                     </div>
                     <div className="flex items-center rounded-2xl rounded-bl-sm border border-accent-line bg-accent-soft px-4 py-2.5 text-[0.8rem] text-accent shadow-sm">
-                      {error.message?.includes('429') || error.message?.includes('Too many')
-                        ? "I'm receiving too many requests right now. Please try again in a minute." 
+                      {error.message?.includes("429") ||
+                      error.message?.includes("Too many")
+                        ? "I'm receiving too many requests right now. Please try again in a minute."
                         : "Sorry, I encountered an error. Please try again."}
                     </div>
                   </div>
@@ -226,12 +264,9 @@ export default function JantaChat() {
 
           {/* Input Area */}
           <div className="bg-surface p-3 border-t border-line">
-            <form
-              onSubmit={onSubmit}
-              className="relative flex items-center"
-            >
+            <form onSubmit={onSubmit} className="relative flex items-center">
               <input
-                value={input || ''}
+                value={input || ""}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your message..."
                 className="w-full rounded-full border border-line bg-surface-muted py-2.5 pl-4 pr-12 text-sm text-foreground shadow-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 pointer-events-auto"
@@ -239,7 +274,7 @@ export default function JantaChat() {
               />
               <button
                 type="submit"
-                disabled={!(input || '').trim() || isLoading}
+                disabled={!(input || "").trim() || isLoading}
                 className="absolute right-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white shadow-sm transition-all hover:scale-105 active:scale-95 disabled:scale-100 disabled:opacity-50"
               >
                 <Send className="ml-0.5 h-3.5 w-3.5" />

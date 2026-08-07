@@ -5,12 +5,21 @@ import { Download, Trash2, Loader2 } from "lucide-react";
 import type { JobApplication } from "@/lib/db/careers";
 import { showToast } from "../Toast";
 
-export default function CareersTable({ initialData }: { initialData: JobApplication[] }) {
+export default function CareersTable({
+  initialData,
+}: {
+  initialData: JobApplication[];
+}) {
   const [items, setItems] = useState<JobApplication[]>(initialData);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this application? The CV will also be deleted to free up space.")) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete this application? The CV will also be deleted to free up space.",
+      )
+    )
+      return;
     setDeletingId(id);
     try {
       const res = await fetch(`/api/admin/careers/${id}`, { method: "DELETE" });
@@ -34,9 +43,13 @@ export default function CareersTable({ initialData }: { initialData: JobApplicat
           <tr className="border-b border-line bg-surface">
             <th className="p-4 font-semibold text-secondary-dark">Name</th>
             <th className="p-4 font-semibold text-secondary-dark">Phone</th>
-            <th className="p-4 font-semibold text-secondary-dark">Applied Store</th>
+            <th className="p-4 font-semibold text-secondary-dark">
+              Applied Store
+            </th>
             <th className="p-4 font-semibold text-secondary-dark">Date</th>
-            <th className="p-4 text-center font-semibold text-secondary-dark">Actions</th>
+            <th className="p-4 text-center font-semibold text-secondary-dark">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line">
@@ -48,7 +61,10 @@ export default function CareersTable({ initialData }: { initialData: JobApplicat
             </tr>
           ) : (
             items.map((item) => (
-              <tr key={item.id} className="transition-colors hover:bg-surface/50">
+              <tr
+                key={item.id}
+                className="transition-colors hover:bg-surface/50"
+              >
                 <td className="p-4 font-medium text-foreground">{item.name}</td>
                 <td className="p-4 text-muted">{item.phone}</td>
                 <td className="p-4 text-muted capitalize">{item.store_id}</td>

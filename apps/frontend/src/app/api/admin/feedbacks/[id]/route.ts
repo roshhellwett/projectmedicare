@@ -4,7 +4,7 @@ import { isAdminAuthenticated } from "@/lib/auth/guard";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const auth = await isAdminAuthenticated();
@@ -16,7 +16,10 @@ export async function DELETE(
     const supabase = createAdminClient();
 
     if (!supabase) {
-      return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Supabase not configured" },
+        { status: 500 },
+      );
     }
 
     // First, get the feedback to see if there's an image
@@ -27,7 +30,10 @@ export async function DELETE(
       .single();
 
     if (fetchError) {
-      return NextResponse.json({ error: "Feedback not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Feedback not found" },
+        { status: 404 },
+      );
     }
 
     // Delete the row
@@ -45,9 +51,12 @@ export async function DELETE(
       const { error: storageError } = await supabase.storage
         .from("feedbacks")
         .remove([feedback.image_url]);
-        
+
       if (storageError) {
-        console.error("Failed to delete feedback image from storage:", storageError);
+        console.error(
+          "Failed to delete feedback image from storage:",
+          storageError,
+        );
         // We still return success since the DB row was deleted
       }
     }
@@ -55,6 +64,9 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Delete feedback error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

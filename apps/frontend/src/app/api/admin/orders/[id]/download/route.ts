@@ -4,11 +4,11 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    
+
     const supabase = createAdminClient();
     if (!supabase) throw new Error("Supabase admin client not available");
 
@@ -17,7 +17,7 @@ export async function GET(
       .select("prescription_url")
       .eq("id", id)
       .single();
-      
+
     if (error || !data?.prescription_url) {
       throw new Error("Prescription not found");
     }

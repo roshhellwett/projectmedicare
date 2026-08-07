@@ -30,7 +30,7 @@ export default async function AdminCareersPage() {
         title={t("title")}
         sub={t("desc")}
       />
-      
+
       <div className="card mt-8 !p-0 overflow-hidden">
         <CareersTable initialData={applications} />
       </div>

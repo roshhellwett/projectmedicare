@@ -11,12 +11,18 @@ type DoctorModalProps = {
   onSave: () => void;
 };
 
-export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
+export default function DoctorModal({
+  doctor,
+  onClose,
+  onSave,
+}: DoctorModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(doctor?.image_url || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    doctor?.image_url || null,
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,17 +61,21 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
           canvas.toBlob(
             (blob) => {
               if (blob) {
-                const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
-                  type: "image/webp",
-                  lastModified: Date.now(),
-                });
+                const newFile = new File(
+                  [blob],
+                  file.name.replace(/\.[^/.]+$/, "") + ".webp",
+                  {
+                    type: "image/webp",
+                    lastModified: Date.now(),
+                  },
+                );
                 resolve(newFile);
               } else {
                 reject(new Error("Canvas to Blob failed"));
               }
             },
             "image/webp",
-            0.8
+            0.8,
           );
         };
         img.onerror = (error) => reject(error);
@@ -94,13 +104,13 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
     setError(null);
 
     const formData = new FormData(e.currentTarget);
-    
+
     // Parse qualifications (comma separated to array)
     const qualsRaw = formData.get("qualifications") as string;
     const qualifications = qualsRaw
       .split(",")
-      .map(q => q.trim())
-      .filter(q => q.length > 0);
+      .map((q) => q.trim())
+      .filter((q) => q.length > 0);
 
     const input: DoctorInput = {
       name: formData.get("name") as string,
@@ -128,13 +138,16 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
         });
 
         const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData.error || "Failed to upload image");
-        
+        if (!uploadRes.ok)
+          throw new Error(uploadData.error || "Failed to upload image");
+
         input.image_url = uploadData.url;
       }
 
       // 2. Save doctor record
-      const url = doctor ? `/api/admin/doctors/${doctor.id}` : "/api/admin/doctors";
+      const url = doctor
+        ? `/api/admin/doctors/${doctor.id}`
+        : "/api/admin/doctors";
       const method = doctor ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -159,7 +172,9 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
       <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl bg-surface p-6 shadow-xl border border-line">
         <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-xl font-bold">{doctor ? "Edit Doctor" : "Add Doctor"}</h3>
+          <h3 className="text-xl font-bold">
+            {doctor ? "Edit Doctor" : "Add Doctor"}
+          </h3>
           <button
             onClick={onClose}
             className="rounded-full p-2 text-muted hover:bg-surface-muted hover:text-foreground"
@@ -176,14 +191,21 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
-            
             {/* Image Upload */}
             <div className="sm:col-span-2">
-              <label className="mb-1.5 block text-sm font-semibold">Profile Image</label>
+              <label className="mb-1.5 block text-sm font-semibold">
+                Profile Image
+              </label>
               <div className="flex items-center gap-4">
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-line bg-surface-muted">
                   {imagePreview ? (
-                    <Image src={imagePreview} alt="Preview" fill sizes="80px" className="object-cover" />
+                    <Image
+                      src={imagePreview}
+                      alt="Preview"
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-muted">
                       No Image
@@ -212,7 +234,8 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
                         onClick={() => {
                           setImageFile(null);
                           setImagePreview(null);
-                          if (fileInputRef.current) fileInputRef.current.value = "";
+                          if (fileInputRef.current)
+                            fileInputRef.current.value = "";
                         }}
                         className="btn btn-outline btn-sm text-red-600"
                       >
@@ -221,14 +244,18 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
                     )}
                   </div>
                   <p className="mt-1.5 text-xs text-muted">
-                    Leave blank to use default gender avatar. Large images are automatically compressed.
+                    Leave blank to use default gender avatar. Large images are
+                    automatically compressed.
                   </p>
                 </div>
               </div>
             </div>
 
             <div>
-              <label htmlFor="name" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="name"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -243,7 +270,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div>
-              <label htmlFor="gender" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="gender"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Gender <span className="text-red-500">*</span>
               </label>
               <select
@@ -259,7 +289,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div>
-              <label htmlFor="department" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="department"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Department <span className="text-red-500">*</span>
               </label>
               <input
@@ -274,7 +307,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div>
-              <label htmlFor="specialty" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="specialty"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Specialty <span className="text-red-500">*</span>
               </label>
               <input
@@ -289,7 +325,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="qualifications" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="qualifications"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Qualifications <span className="text-red-500">*</span>
               </label>
               <input
@@ -304,7 +343,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="contact" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="contact"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Contact Number (Optional)
               </label>
               <input
@@ -316,7 +358,8 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
                 placeholder="+91 9876543210"
               />
               <p className="mt-1 text-xs text-muted">
-                If left blank, the "Book Appointment" button will NOT be shown for this doctor.
+                If left blank, the "Book Appointment" button will NOT be shown
+                for this doctor.
               </p>
             </div>
           </div>
@@ -332,13 +375,19 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
                 defaultChecked={doctor?.is_daily_chamber || false}
                 className="h-4 w-4 rounded border-gray-300"
               />
-              <label htmlFor="is_daily_chamber" className="text-sm font-semibold">
+              <label
+                htmlFor="is_daily_chamber"
+                className="text-sm font-semibold"
+              >
                 Is Daily Chamber Doctor?
               </label>
             </div>
-            
+
             <div>
-              <label htmlFor="daily_fee" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="daily_fee"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Daily Fee (₹)
               </label>
               <input
@@ -352,7 +401,10 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="display_order" className="mb-1.5 block text-sm font-semibold">
+              <label
+                htmlFor="display_order"
+                className="mb-1.5 block text-sm font-semibold"
+              >
                 Display Order Priority
               </label>
               <input
@@ -364,7 +416,8 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
                 placeholder="999"
               />
               <p className="mt-1 text-xs text-muted">
-                Lower number = appears higher in the list (e.g. 1 is at the top).
+                Lower number = appears higher in the list (e.g. 1 is at the
+                top).
               </p>
             </div>
           </div>
@@ -378,8 +431,14 @@ export default function DoctorModal({ doctor, onClose, onSave }: DoctorModalProp
             >
               Cancel
             </button>
-            <button type="submit" disabled={isSubmitting} className="btn btn-primary">
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn btn-primary"
+            >
+              {isSubmitting && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               {doctor ? "Update Doctor" : "Add Doctor"}
             </button>
           </div>

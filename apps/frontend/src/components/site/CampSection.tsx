@@ -16,9 +16,7 @@ export default async function CampSection() {
           {t("eyebrow")}
         </span>
         <h2 className="section-title mt-2">{t("title")}</h2>
-        <p className="section-sub mt-2">
-          {t("sub")}
-        </p>
+        <p className="section-sub mt-2">{t("sub")}</p>
       </div>
 
       {!camp ? (
@@ -29,9 +27,7 @@ export default async function CampSection() {
           <p className="mt-2 font-heading text-base font-bold text-primary-deep">
             {t("emptyTitle")}
           </p>
-          <p className="max-w-md text-sm text-muted">
-            {t("emptyDesc")}
-          </p>
+          <p className="max-w-md text-sm text-muted">{t("emptyDesc")}</p>
         </div>
       ) : (
         <article className="card overflow-hidden !p-0">

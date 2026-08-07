@@ -38,7 +38,9 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://projectmedicare.roshhellwett.workers.dev";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://projectmedicare.roshhellwett.workers.dev";
 
   return {
     metadataBase: new URL(siteUrl),
@@ -93,50 +95,53 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MedicalOrganization",
-    "name": "Janta Medicare",
-    "url": process.env.NEXT_PUBLIC_SITE_URL || "https://projectmedicare.roshhellwett.workers.dev",
-    "logo": `${process.env.NEXT_PUBLIC_SITE_URL || "https://projectmedicare.roshhellwett.workers.dev"}/websitelogo/jantamedicarelogo.webp`,
-    "department": [
+    name: "Janta Medicare",
+    url:
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://projectmedicare.roshhellwett.workers.dev",
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://projectmedicare.roshhellwett.workers.dev"}/websitelogo/jantamedicarelogo.webp`,
+    department: [
       {
         "@type": "Pharmacy",
-        "name": "Janta Medicare - Vivek Vihar Main Hub",
-        "address": {
+        name: "Janta Medicare - Vivek Vihar Main Hub",
+        address: {
           "@type": "PostalAddress",
-          "streetAddress": "493/C/A, G. T. Road (South), Fazir Bazar More, Shop No. 4",
-          "addressLocality": "Shibpur, Howrah",
-          "addressRegion": "West Bengal",
-          "postalCode": "711101",
-          "addressCountry": "IN"
+          streetAddress:
+            "493/C/A, G. T. Road (South), Fazir Bazar More, Shop No. 4",
+          addressLocality: "Shibpur, Howrah",
+          addressRegion: "West Bengal",
+          postalCode: "711101",
+          addressCountry: "IN",
         },
-        "telephone": "+91 82408 04490"
+        telephone: "+91 82408 04490",
       },
       {
         "@type": "Pharmacy",
-        "name": "Janta Medicare - Shibpur Store",
-        "address": {
+        name: "Janta Medicare - Shibpur Store",
+        address: {
           "@type": "PostalAddress",
-          "streetAddress": "53, Kalikumar Mukharjee Lane, Tram Depot More",
-          "addressLocality": "Shibpur, Howrah",
-          "addressRegion": "West Bengal",
-          "postalCode": "711102",
-          "addressCountry": "IN"
+          streetAddress: "53, Kalikumar Mukharjee Lane, Tram Depot More",
+          addressLocality: "Shibpur, Howrah",
+          addressRegion: "West Bengal",
+          postalCode: "711102",
+          addressCountry: "IN",
         },
-        "telephone": "+91 62907 45327"
+        telephone: "+91 62907 45327",
       },
       {
         "@type": "Pharmacy",
-        "name": "Janta Medicare - Pilkhana Store",
-        "address": {
+        name: "Janta Medicare - Pilkhana Store",
+        address: {
           "@type": "PostalAddress",
-          "streetAddress": "67/A, G. T. Road (North), Oriya Para More, Pilkhana",
-          "addressLocality": "Salkia, Howrah",
-          "addressRegion": "West Bengal",
-          "postalCode": "711106",
-          "addressCountry": "IN"
+          streetAddress: "67/A, G. T. Road (North), Oriya Para More, Pilkhana",
+          addressLocality: "Salkia, Howrah",
+          addressRegion: "West Bengal",
+          postalCode: "711106",
+          addressCountry: "IN",
         },
-        "telephone": "+91 91238 99472"
-      }
-    ]
+        telephone: "+91 91238 99472",
+      },
+    ],
   };
 
   return (
@@ -147,7 +152,10 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${plex.variable} ${baskerville.variable} antialiased`} suppressHydrationWarning>
+      <body
+        className={`${plex.variable} ${baskerville.variable} antialiased`}
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider messages={messages}>
           <div className="flex min-h-screen flex-col">
             <a

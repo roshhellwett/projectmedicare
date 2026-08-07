@@ -9,7 +9,7 @@ describe("Backend Worker Tests", () => {
     try {
       const res = await fetch(`${BACKEND_URL}/healthz`);
       const data = await res.json();
-      
+
       // Even if degraded (e.g. SITE_URL not set), it should return JSON
       expect(res.status).toBeGreaterThanOrEqual(200);
       expect(data).toHaveProperty("status");

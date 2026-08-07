@@ -14,12 +14,12 @@ export type Package = {
 export async function getPackages(): Promise<Package[]> {
   const supabase = createAdminClient();
   if (!supabase) return [];
-  
+
   const { data, error } = await supabase
     .from("packages")
     .select("*")
     .order("created_at", { ascending: true });
-    
+
   if (error || !data) return [];
   return data as Package[];
 }
@@ -27,19 +27,21 @@ export async function getPackages(): Promise<Package[]> {
 export async function getFeaturedPackages(): Promise<Package[]> {
   const supabase = createAdminClient();
   if (!supabase) return [];
-  
+
   const { data, error } = await supabase
     .from("packages")
     .select("*")
     .eq("is_featured", true)
     .limit(4)
     .order("created_at", { ascending: true });
-    
+
   if (error || !data) return [];
   return data as Package[];
 }
 
-export async function createPackage(pkg: Omit<Package, "id" | "created_at">): Promise<void> {
+export async function createPackage(
+  pkg: Omit<Package, "id" | "created_at">,
+): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");
 
@@ -47,7 +49,10 @@ export async function createPackage(pkg: Omit<Package, "id" | "created_at">): Pr
   if (error) throw new Error(error.message);
 }
 
-export async function updatePackage(id: string, pkg: Partial<Package>): Promise<void> {
+export async function updatePackage(
+  id: string,
+  pkg: Partial<Package>,
+): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");
 

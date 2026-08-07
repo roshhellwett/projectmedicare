@@ -53,7 +53,9 @@ export default function CareersForm() {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-6">
           <CheckCircle2 className="h-8 w-8" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">{t("successTitle")}</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          {t("successTitle")}
+        </h3>
         <p className="text-muted max-w-sm mx-auto">{t("successDesc")}</p>
         <button
           onClick={() => setSuccess(false)}
@@ -83,7 +85,10 @@ export default function CareersForm() {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="phone" className="text-sm font-medium text-foreground">
+          <label
+            htmlFor="phone"
+            className="text-sm font-medium text-foreground"
+          >
             {t("phoneLabel")}
           </label>
           <div className="relative">
@@ -100,7 +105,11 @@ export default function CareersForm() {
               pattern="[0-9]{10}"
               placeholder={t("phonePlaceholder")}
               className="flex h-11 w-full rounded-md border border-line bg-surface pl-11 pr-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity(t("errorPhone"))}
+              onInvalid={(e) =>
+                (e.target as HTMLInputElement).setCustomValidity(
+                  t("errorPhone"),
+                )
+              }
               onInput={(e) => {
                 const target = e.target as HTMLInputElement;
                 target.value = target.value.replace(/\D/g, "").slice(0, 10);
@@ -112,7 +121,10 @@ export default function CareersForm() {
       </div>
 
       <div className="space-y-2 mt-6">
-        <label htmlFor="store_id" className="text-sm font-medium text-foreground">
+        <label
+          htmlFor="store_id"
+          className="text-sm font-medium text-foreground"
+        >
           {t("storeLabel")}
         </label>
         <div className="relative">
@@ -133,8 +145,18 @@ export default function CareersForm() {
             ))}
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -162,9 +184,7 @@ export default function CareersForm() {
             <p className="text-sm font-medium text-foreground">
               {fileName || "Click or drag file to this area to upload"}
             </p>
-            <p className="text-xs text-muted mt-1">
-              Supports PDF up to 2MB
-            </p>
+            <p className="text-xs text-muted mt-1">Supports PDF up to 2MB</p>
           </div>
         </div>
       </div>

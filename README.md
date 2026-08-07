@@ -17,22 +17,29 @@ The project is structured as a monorepo containing multiple apps and packages:
 To run this project locally, you will need **Node.js (v20+)** and **Docker** installed.
 
 ### 1. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 2. Start the Local Supabase Database
+
 Ensure Docker is running, then start the Supabase containers:
+
 ```bash
 npx supabase start
 ```
-*(This will automatically apply all database migrations found in `supabase/migrations`)*
+
+_(This will automatically apply all database migrations found in `supabase/migrations`)_
 
 ### 3. Run the Frontend Development Server
+
 Start the Next.js development server:
+
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## 🧪 Testing
@@ -47,7 +54,7 @@ We take quality seriously! We use Playwright for End-to-End testing and Vitest f
   ```bash
   npm run test:smoke
   ```
-- **Run Integration Tests** *(requires valid Supabase connection strings in `.env`)*:
+- **Run Integration Tests** _(requires valid Supabase connection strings in `.env`)_:
   ```bash
   npm run test:integration
   ```

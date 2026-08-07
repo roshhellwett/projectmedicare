@@ -33,7 +33,7 @@ async function seed() {
       nameLower.includes("seema");
 
     const gender = isFemale ? "female" : "male";
-    
+
     // Check if daily chamber
     const isDaily = doc.name === doctorChamberInfo.name;
 
@@ -46,7 +46,7 @@ async function seed() {
       contact: doc.contact || null,
       is_daily_chamber: isDaily,
       daily_fee: isDaily ? doctorChamberInfo.fee : 300,
-      image_url: null
+      image_url: null,
     };
 
     const { error } = await supabase.from("doctors").insert(payload);

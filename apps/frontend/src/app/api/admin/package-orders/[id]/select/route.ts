@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/auth/guard";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const error = await requireAdmin();
@@ -16,7 +16,7 @@ export async function POST(
     if (!storeId) {
       return NextResponse.json(
         { error: "Store ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

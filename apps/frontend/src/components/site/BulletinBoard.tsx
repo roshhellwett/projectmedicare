@@ -10,7 +10,9 @@ export function BulletinItem({ item }: { item: Bulletin }) {
   const t = useTranslations("BulletinBoard");
   const isOffer = item.kind === "offer";
   return (
-    <li className={`card card-marked !pl-5 ${isOffer ? "is-green" : "is-blue"}`}>
+    <li
+      className={`card card-marked !pl-5 ${isOffer ? "is-green" : "is-blue"}`}
+    >
       <div className="mb-2 flex flex-wrap items-center gap-1.5">
         <span className={`badge ${isOffer ? "badge-green" : "badge-blue"}`}>
           {isOffer ? (
@@ -37,7 +39,11 @@ export function BulletinItem({ item }: { item: Bulletin }) {
       <div className="flex gap-4">
         {item.image_url && (
           <div className="shrink-0">
-            <ZoomableImage src={item.image_url} alt="Product" className="h-24 w-24 rounded-lg object-cover border border-line" />
+            <ZoomableImage
+              src={item.image_url}
+              alt="Product"
+              className="h-24 w-24 rounded-lg object-cover border border-line"
+            />
           </div>
         )}
         <p className="whitespace-pre-line text-sm leading-relaxed text-foreground flex-1">
@@ -64,9 +70,7 @@ export function BulletinEmpty() {
       <p className="mt-2 font-heading text-base font-bold text-primary-deep">
         {t("emptyTitle")}
       </p>
-      <p className="max-w-md text-sm text-muted">
-        {t("emptyDesc")}
-      </p>
+      <p className="max-w-md text-sm text-muted">{t("emptyDesc")}</p>
     </div>
   );
 }
@@ -107,27 +111,28 @@ export default async function BulletinBoard({
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <h3 className="mb-4 text-xl font-bold">{t("latestProducts")}</h3>
-          {items.filter(i => i.kind === "product" || i.kind === "info").length === 0 ? (
+          {items.filter((i) => i.kind === "product" || i.kind === "info")
+            .length === 0 ? (
             <BulletinEmpty />
           ) : (
             <ul className="grid gap-3 max-h-[500px] overflow-y-auto pr-2">
               {items
-                .filter(i => i.kind === "product" || i.kind === "info")
+                .filter((i) => i.kind === "product" || i.kind === "info")
                 .map((item) => (
                   <BulletinItem key={item.id} item={item} />
                 ))}
             </ul>
           )}
         </div>
-        
+
         <div>
           <h3 className="mb-4 text-xl font-bold">{t("latestOffers")}</h3>
-          {items.filter(i => i.kind === "offer").length === 0 ? (
+          {items.filter((i) => i.kind === "offer").length === 0 ? (
             <BulletinEmpty />
           ) : (
             <ul className="grid gap-3 max-h-[500px] overflow-y-auto pr-2">
               {items
-                .filter(i => i.kind === "offer")
+                .filter((i) => i.kind === "offer")
                 .map((item) => (
                   <BulletinItem key={item.id} item={item} />
                 ))}

@@ -29,7 +29,7 @@ export default async function AdminFeedbacksPage() {
         title={t("title")}
         sub={t("desc")}
       />
-      
+
       <div className="card mt-8 !p-0 overflow-hidden">
         <FeedbacksTable initialData={feedbacks} />
       </div>

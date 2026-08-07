@@ -54,24 +54,54 @@ export default function Navbar() {
       : pathname.startsWith(`/${locale}${href}`);
 
   return (
-    <header suppressHydrationWarning className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur">
+    <header
+      suppressHydrationWarning
+      className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur"
+    >
       {/* Utility strip */}
       <div className="border-b border-line bg-surface-muted">
         <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5">
-          <div suppressHydrationWarning className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges">
-            <a href="tel:+916290745327" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+          <div
+            suppressHydrationWarning
+            className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges"
+          >
+            <a
+              href="tel:+916290745327"
+              className="flex items-center gap-1.5 transition-colors hover:text-primary"
+            >
               <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>{t("tramDepot")} <span className="font-semibold text-foreground">+91 62907 45327</span></span>
+              <span>
+                {t("tramDepot")}{" "}
+                <span className="font-semibold text-foreground">
+                  +91 62907 45327
+                </span>
+              </span>
             </a>
             <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
-            <a href="tel:+918240804490" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+            <a
+              href="tel:+918240804490"
+              className="flex items-center gap-1.5 transition-colors hover:text-primary"
+            >
               <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>{t("vivekVihar")} <span className="font-semibold text-foreground">+91 82408 04490</span></span>
+              <span>
+                {t("vivekVihar")}{" "}
+                <span className="font-semibold text-foreground">
+                  +91 82408 04490
+                </span>
+              </span>
             </a>
             <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
-            <a href="tel:+919123899472" className="flex items-center gap-1.5 transition-colors hover:text-primary">
+            <a
+              href="tel:+919123899472"
+              className="flex items-center gap-1.5 transition-colors hover:text-primary"
+            >
               <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>{t("pilkhana")} <span className="font-semibold text-foreground">+91 91238 99472</span></span>
+              <span>
+                {t("pilkhana")}{" "}
+                <span className="font-semibold text-foreground">
+                  +91 91238 99472
+                </span>
+              </span>
             </a>
           </div>
 
@@ -196,16 +226,34 @@ export default function Navbar() {
                 Book consultation
               </Link>
               <div className="flex flex-col gap-2 rounded-lg bg-surface-muted p-3">
-                <a href="tel:+916290745327" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
-                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("tramDepot")}</span>
+                <a
+                  href="tel:+916290745327"
+                  className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary"
+                >
+                  <span className="flex items-center gap-2 text-muted">
+                    <Phone className="h-3.5 w-3.5 text-secondary" />{" "}
+                    {t("tramDepot")}
+                  </span>
                   <span className="text-foreground">+91 62907 45327</span>
                 </a>
-                <a href="tel:+918240804490" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
-                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("vivekVihar")}</span>
+                <a
+                  href="tel:+918240804490"
+                  className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary"
+                >
+                  <span className="flex items-center gap-2 text-muted">
+                    <Phone className="h-3.5 w-3.5 text-secondary" />{" "}
+                    {t("vivekVihar")}
+                  </span>
                   <span className="text-foreground">+91 82408 04490</span>
                 </a>
-                <a href="tel:+919123899472" className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary">
-                  <span className="flex items-center gap-2 text-muted"><Phone className="h-3.5 w-3.5 text-secondary" /> {t("pilkhana")}</span>
+                <a
+                  href="tel:+919123899472"
+                  className="flex items-center justify-between rounded-md border border-line bg-surface p-2 text-[0.8125rem] font-medium shadow-sm transition-colors hover:border-primary"
+                >
+                  <span className="flex items-center gap-2 text-muted">
+                    <Phone className="h-3.5 w-3.5 text-secondary" />{" "}
+                    {t("pilkhana")}
+                  </span>
                   <span className="text-foreground">+91 91238 99472</span>
                 </a>
               </div>

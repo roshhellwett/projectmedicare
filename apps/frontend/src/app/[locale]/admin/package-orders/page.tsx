@@ -39,8 +39,8 @@ export default async function AdminPackageOrdersPage() {
         sub="Manage incoming customer bookings for diagnostic packages."
       />
       <div className="mt-8">
-        <PackageOrdersTable 
-          initialOrders={orders} 
+        <PackageOrdersTable
+          initialOrders={orders}
           currentStoreId={currentStoreId || ""}
           stores={stores}
         />

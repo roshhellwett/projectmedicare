@@ -41,17 +41,18 @@ async function _getMedicines(
     try {
       const supabase = createPublicClient();
       if (!supabase) throw new Error("Supabase is not configured");
-      
+
       const { data, error } = await supabase.rpc("search_medicines", {
         search_query: query,
         sort_col: sort.key,
         sort_dir: sort.dir,
         page_size: PAGE_SIZE,
-        page_offset: (page - 1) * PAGE_SIZE
+        page_offset: (page - 1) * PAGE_SIZE,
       });
 
       if (!error && data) {
-        const total = data.length > 0 ? Number((data[0] as any).total_count) : 0;
+        const total =
+          data.length > 0 ? Number((data[0] as any).total_count) : 0;
         return { items: data as unknown as Medicine[], total };
       }
     } catch (err) {
@@ -65,8 +66,8 @@ async function _getMedicines(
 
 export const getMedicines = unstable_cache(
   _getMedicines,
-  ['medicines-data'],
-  { revalidate: 3600, tags: ['medicines', 'stats'] } // cache for 1 hour
+  ["medicines-data"],
+  { revalidate: 3600, tags: ["medicines", "stats"] }, // cache for 1 hour
 );
 
 async function _getRates(
@@ -78,17 +79,18 @@ async function _getRates(
     try {
       const supabase = createPublicClient();
       if (!supabase) throw new Error("Supabase is not configured");
-      
+
       const { data, error } = await supabase.rpc("search_rates", {
         search_query: query,
         sort_col: sort.key,
         sort_dir: sort.dir,
         page_size: PAGE_SIZE,
-        page_offset: (page - 1) * PAGE_SIZE
+        page_offset: (page - 1) * PAGE_SIZE,
       });
 
       if (!error && data) {
-        const total = data.length > 0 ? Number((data[0] as any).total_count) : 0;
+        const total =
+          data.length > 0 ? Number((data[0] as any).total_count) : 0;
         return { items: data as unknown as RateTest[], total };
       }
     } catch (err) {
@@ -100,11 +102,10 @@ async function _getRates(
   return paginateJson(ratesJson as RateTest[], query, page, sort);
 }
 
-export const getRates = unstable_cache(
-  _getRates,
-  ['rates-data'],
-  { revalidate: 3600, tags: ['rates', 'stats'] }
-);
+export const getRates = unstable_cache(_getRates, ["rates-data"], {
+  revalidate: 3600,
+  tags: ["rates", "stats"],
+});
 
 async function _getStats(): Promise<{
   medicinesCount: number;
@@ -121,7 +122,7 @@ async function _getStats(): Promise<{
         supabase
           .from("patient_rates")
           .select("*", { count: "exact", head: true }),
-        supabase.rpc("get_storage_size_bytes")
+        supabase.rpc("get_storage_size_bytes"),
       ]);
       return {
         medicinesCount: medRes.count ?? 0,
@@ -141,11 +142,10 @@ async function _getStats(): Promise<{
   };
 }
 
-export const getStats = unstable_cache(
-  _getStats,
-  ['stats-data'],
-  { revalidate: 3600, tags: ['stats'] }
-);
+export const getStats = unstable_cache(_getStats, ["stats-data"], {
+  revalidate: 3600,
+  tags: ["stats"],
+});
 
 function paginateJson<T>(
   all: T[],

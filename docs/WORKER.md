@@ -20,7 +20,7 @@ Railway projects in minutes.
 ## Deploy on Railway (free tier)
 
 1. New Project → **Deploy from GitHub repo** → pick this repository.
-2. Under Settings → Build → **Root Directory**: **Leave it completely empty** (or `/`). *This is critical so Railway sees the root `package.json` and workspace definitions.*
+2. Under Settings → Build → **Root Directory**: **Leave it completely empty** (or `/`). _This is critical so Railway sees the root `package.json` and workspace definitions._
 3. Under Settings → Deploy → **Start Command**: Set it to `npm run worker`.
 4. Add variables (Settings → Variables):
 

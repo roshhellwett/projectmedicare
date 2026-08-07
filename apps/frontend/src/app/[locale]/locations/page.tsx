@@ -102,7 +102,7 @@ export default async function LocationsPage() {
                 href={
                   store.mapUrl ||
                   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                    store.mapQuery
+                    store.mapQuery,
                   )}`
                 }
                 target="_blank"
@@ -144,9 +144,7 @@ export default async function LocationsPage() {
             {t("campInfo")}
           </p>
           <div className="mt-5 border-t border-line pt-4">
-            <span className="badge badge-magenta">
-              ₹100/- cost only
-            </span>
+            <span className="badge badge-magenta">₹100/- cost only</span>
           </div>
         </div>
       </div>

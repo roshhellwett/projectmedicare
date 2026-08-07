@@ -11,7 +11,7 @@ import {
   Trash2,
   X,
   Image as ImageIcon,
-  UploadCloud
+  UploadCloud,
 } from "lucide-react";
 import { showToast } from "@/components/Toast";
 import type { Bulletin, BulletinKind } from "@/lib/db/bulletins";
@@ -100,7 +100,8 @@ export default function BulletinManager({
         });
 
         const uploadData = await uploadRes.json();
-        if (!uploadRes.ok) throw new Error(uploadData.error || "Failed to upload image");
+        if (!uploadRes.ok)
+          throw new Error(uploadData.error || "Failed to upload image");
         finalImageUrl = uploadData.url;
       }
 
@@ -190,7 +191,9 @@ export default function BulletinManager({
 
         <label className="block">
           <span className="mb-1.5 block text-xs font-extrabold uppercase tracking-wider text-muted">
-            {form.kind === "product" ? "Product Title / Details" : "Offer Details"}
+            {form.kind === "product"
+              ? "Product Title / Details"
+              : "Offer Details"}
           </span>
           <textarea
             className="input min-h-[110px] resize-y"
@@ -272,7 +275,11 @@ export default function BulletinManager({
             {(form.image_url || form.file) && (
               <div className="mt-3 overflow-hidden rounded-xl border border-line">
                 <img
-                  src={form.file ? URL.createObjectURL(form.file) : form.image_url || ""}
+                  src={
+                    form.file
+                      ? URL.createObjectURL(form.file)
+                      : form.image_url || ""
+                  }
                   alt="Preview"
                   className="h-40 w-full object-cover"
                 />
@@ -390,7 +397,11 @@ export default function BulletinManager({
                   </p>
                   {item.image_url && (
                     <div className="mt-3 overflow-hidden rounded-xl border border-line">
-                      <img src={item.image_url} className="h-40 w-full object-cover" alt="Product" />
+                      <img
+                        src={item.image_url}
+                        className="h-40 w-full object-cover"
+                        alt="Product"
+                      />
                     </div>
                   )}
                   {(item.starts_at || item.ends_at) && (

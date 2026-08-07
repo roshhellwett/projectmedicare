@@ -11,7 +11,7 @@ export type PackageOrder = {
   store_id: string | null;
   selected_at: string | null;
   created_at: string;
-  
+
   // Joined relation
   pkg?: Package;
   store?: PharmacyStore;
@@ -20,15 +20,17 @@ export type PackageOrder = {
 export async function getPackageOrders(): Promise<PackageOrder[]> {
   const supabase = createAdminClient();
   if (!supabase) return [];
-  
+
   const { data, error } = await supabase
     .from("package_orders")
-    .select(`
+    .select(
+      `
       *,
       pkg:packages(*)
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
-    
+
   if (error || !data) return [];
   return data as PackageOrder[];
 }
@@ -37,7 +39,7 @@ export async function createPackageOrder(
   customer_name: string,
   phone_number: string,
   package_id: string,
-  store_id?: string
+  store_id?: string,
 ): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase client not available");
@@ -52,15 +54,18 @@ export async function createPackageOrder(
   if (error) throw new Error(error.message);
 }
 
-export async function selectPackageOrder(orderId: string, storeId: string): Promise<void> {
+export async function selectPackageOrder(
+  orderId: string,
+  storeId: string,
+): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");
 
   // Atomic update: only update if store_id IS NULL
   const { data, error } = await supabase
     .from("package_orders")
-    .update({ 
-      store_id: storeId
+    .update({
+      store_id: storeId,
     })
     .is("store_id", null)
     .eq("id", orderId)

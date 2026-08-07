@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   if (!supabase) {
     return NextResponse.json(
       { error: "Image upload needs SUPABASE_SERVICE_ROLE_KEY on the server." },
-      { status: 503 }
+      { status: 503 },
     );
   }
 
@@ -33,14 +33,14 @@ export async function POST(req: NextRequest) {
   if (!ALLOWED.includes(file.type)) {
     return NextResponse.json(
       { error: "Only JPG, PNG or WebP images are allowed" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (file.size > MAX_BYTES) {
     return NextResponse.json(
       { error: "Image must be smaller than 2 MB" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       : file.type === "image/webp"
         ? "webp"
         : "jpg";
-  
+
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
   // 1. Upload to Storage

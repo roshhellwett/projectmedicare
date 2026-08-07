@@ -24,7 +24,13 @@ import { getDoctors } from "@/lib/db/doctors";
 import { getPackages } from "@/lib/db/packages";
 import { getPackageOrders } from "@/lib/db/package-orders";
 import { formatCampDate } from "@/lib/utils/ist";
-import { FileText, ShoppingBag, Box, ClipboardList, MessageCircle } from "lucide-react";
+import {
+  FileText,
+  ShoppingBag,
+  Box,
+  ClipboardList,
+  MessageCircle,
+} from "lucide-react";
 import { getFeedbacks } from "@/lib/db/feedbacks";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +38,18 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage() {
   const t = await getTranslations("AdminPage");
   const locale = await getLocale();
-  const [stats, camp, bulletins, gallery, applications, orders, doctors, packages, packageOrders, feedbacks] = await Promise.all([
+  const [
+    stats,
+    camp,
+    bulletins,
+    gallery,
+    applications,
+    orders,
+    doctors,
+    packages,
+    packageOrders,
+    feedbacks,
+  ] = await Promise.all([
     getStats(),
     getActiveCamp(),
     getVisibleBulletins(50),
@@ -204,7 +221,10 @@ export default async function AdminPage() {
             icon: HardDrive,
             value: `${(stats.storageSizeBytes / (1024 * 1024)).toFixed(1)} MB`,
             label: "Storage used (500 MB max)",
-            tone: (stats.storageSizeBytes / (1024 * 1024)) > 400 ? "is-accent" : "is-green",
+            tone:
+              stats.storageSizeBytes / (1024 * 1024) > 400
+                ? "is-accent"
+                : "is-green",
           },
         ].map((s) => (
           <div

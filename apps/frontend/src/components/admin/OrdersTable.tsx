@@ -6,14 +6,14 @@ import type { MedicineOrder } from "@/lib/db/orders";
 import type { PharmacyStore } from "@/lib/db/stores";
 import { showToast } from "../Toast";
 
-export default function OrdersTable({ 
-  initialData, 
+export default function OrdersTable({
+  initialData,
   currentStoreId,
-  stores 
-}: { 
-  initialData: MedicineOrder[],
-  currentStoreId: string,
-  stores: PharmacyStore[]
+  stores,
+}: {
+  initialData: MedicineOrder[];
+  currentStoreId: string;
+  stores: PharmacyStore[];
 }) {
   const [items, setItems] = useState<MedicineOrder[]>(initialData);
   const [processingId, setProcessingId] = useState<string | null>(null);
@@ -21,29 +21,31 @@ export default function OrdersTable({
   const handleSelect = async (id: string) => {
     setProcessingId(id);
     try {
-      const res = await fetch(`/api/admin/orders/${id}/select`, { 
+      const res = await fetch(`/api/admin/orders/${id}/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ storeId: currentStoreId })
+        body: JSON.stringify({ storeId: currentStoreId }),
       });
       if (!res.ok) {
         const json = await res.json();
         throw new Error(json.error || "Failed to select order");
       }
-      
-      const currentStore = stores.find(s => s.id === currentStoreId);
-      
-      setItems((prev) => prev.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            assigned_store_id: currentStoreId,
-            selected_at: new Date().toISOString(),
-            store: currentStore
-          };
-        }
-        return item;
-      }));
+
+      const currentStore = stores.find((s) => s.id === currentStoreId);
+
+      setItems((prev) =>
+        prev.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              assigned_store_id: currentStoreId,
+              selected_at: new Date().toISOString(),
+              store: currentStore,
+            };
+          }
+          return item;
+        }),
+      );
       showToast("Order claimed successfully", "success");
     } catch (err: any) {
       showToast(err.message, "error");
@@ -53,7 +55,12 @@ export default function OrdersTable({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this order? The prescription image will also be deleted to free up space.")) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete this order? The prescription image will also be deleted to free up space.",
+      )
+    )
+      return;
     setProcessingId(id);
     try {
       const res = await fetch(`/api/admin/orders/${id}`, { method: "DELETE" });
@@ -75,11 +82,17 @@ export default function OrdersTable({
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-line bg-surface">
-            <th className="p-4 font-semibold text-secondary-dark">Customer Info</th>
-            <th className="p-4 font-semibold text-secondary-dark">Address & Note</th>
+            <th className="p-4 font-semibold text-secondary-dark">
+              Customer Info
+            </th>
+            <th className="p-4 font-semibold text-secondary-dark">
+              Address & Note
+            </th>
             <th className="p-4 font-semibold text-secondary-dark">Date</th>
             <th className="p-4 font-semibold text-secondary-dark">Status</th>
-            <th className="p-4 text-right font-semibold text-secondary-dark">Actions</th>
+            <th className="p-4 text-right font-semibold text-secondary-dark">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line">
@@ -96,7 +109,10 @@ export default function OrdersTable({
               const isOthers = isAssigned && !isMine;
 
               return (
-                <tr key={item.id} className={`transition-colors ${isMine ? 'bg-primary/5' : 'hover:bg-surface/50'}`}>
+                <tr
+                  key={item.id}
+                  className={`transition-colors ${isMine ? "bg-primary/5" : "hover:bg-surface/50"}`}
+                >
                   <td className="p-4 align-top">
                     {isOthers ? (
                       <div className="flex items-center gap-2 text-muted italic">
@@ -104,7 +120,9 @@ export default function OrdersTable({
                       </div>
                     ) : (
                       <>
-                        <div className="font-medium text-foreground">{item.name}</div>
+                        <div className="font-medium text-foreground">
+                          {item.name}
+                        </div>
                         <div className="text-muted mt-1">{item.phone}</div>
                       </>
                     )}
@@ -132,9 +150,13 @@ export default function OrdersTable({
                   <td className="p-4 align-top">
                     {isAssigned ? (
                       <div>
-                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold ${isMine ? 'bg-green-100 text-green-700' : 'bg-surface-muted text-muted'}`}>
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold ${isMine ? "bg-green-100 text-green-700" : "bg-surface-muted text-muted"}`}
+                        >
                           <CheckCircle2 className="h-3 w-3" />
-                          {isMine ? 'Claimed by you' : `Claimed by ${item.store?.name || 'Another Store'}`}
+                          {isMine
+                            ? "Claimed by you"
+                            : `Claimed by ${item.store?.name || "Another Store"}`}
                         </span>
                         {item.selected_at && (
                           <div className="text-[10px] text-muted mt-1.5 ml-1">
@@ -163,7 +185,7 @@ export default function OrdersTable({
                           )}
                         </button>
                       )}
-                      
+
                       {(!isAssigned || isMine) && (
                         <div className="flex items-center gap-2">
                           <a
@@ -175,7 +197,7 @@ export default function OrdersTable({
                           >
                             <Download className="h-4 w-4 text-blue-500" />
                           </a>
-                          
+
                           {/* Only the store that selected it can delete it (or if unassigned, anyone can delete it just in case it's spam) */}
                           <button
                             onClick={() => handleDelete(item.id)}

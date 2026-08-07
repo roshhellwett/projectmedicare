@@ -33,14 +33,14 @@ export default async function AdminLayout({
   const cookieStore = await cookies();
   const storeCookie = cookieStore.get("admin_store_id");
   const storeId = storeCookie?.value;
-  
+
   const stores = await getPharmacyStores();
   const selectedStore = stores.find((s) => s.id === storeId);
 
   return (
     <div className="bg-background relative min-h-screen">
       {!selectedStore && <AdminStoreSelector stores={stores} />}
-      
+
       <div className="border-b border-line bg-surface/80 backdrop-blur sticky top-0 z-40">
         <div className="container flex flex-wrap items-center justify-between gap-3 py-3">
           <AdminNav />

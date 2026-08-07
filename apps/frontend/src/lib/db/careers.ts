@@ -32,7 +32,10 @@ export async function deleteJobApplication(id: string): Promise<void> {
     .eq("id", id)
     .maybeSingle();
 
-  const { error } = await supabase.from("job_applications").delete().eq("id", id);
+  const { error } = await supabase
+    .from("job_applications")
+    .delete()
+    .eq("id", id);
   if (error) throw new Error(error.message);
 
   const path = (existing as { cv_path?: string | null } | null)?.cv_path;
@@ -45,7 +48,7 @@ export async function createJobApplication(
   name: string,
   phone: string,
   store_id: string,
-  cv_path: string
+  cv_path: string,
 ): Promise<void> {
   const supabase = createPublicClient();
   if (!supabase) throw new Error("Supabase client not available.");
@@ -58,7 +61,8 @@ export async function createJobApplication(
   });
 
   if (error) {
-    if (error.code === "23505") { // unique violation
+    if (error.code === "23505") {
+      // unique violation
       throw new Error("You have already applied using this phone number.");
     }
     throw new Error(error.message);
@@ -68,7 +72,7 @@ export async function createJobApplication(
 export async function getCvDownloadUrl(id: string): Promise<string> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available.");
-  
+
   const { data: appData, error: dbError } = await supabase
     .from("job_applications")
     .select("cv_path, name, phone")
@@ -83,10 +87,11 @@ export async function getCvDownloadUrl(id: string): Promise<string> {
 
   const { data, error } = await supabase.storage
     .from(RESUMES_BUCKET)
-    .createSignedUrl(appData.cv_path, 60 * 60, { 
-      download: filename 
+    .createSignedUrl(appData.cv_path, 60 * 60, {
+      download: filename,
     }); // valid for 1 hour
 
-  if (error || !data) throw new Error(error?.message || "Failed to generate URL");
+  if (error || !data)
+    throw new Error(error?.message || "Failed to generate URL");
   return data.signedUrl;
 }

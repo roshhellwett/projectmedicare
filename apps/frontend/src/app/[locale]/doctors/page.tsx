@@ -15,8 +15,8 @@ export default async function DoctorsPage() {
   const t = await getTranslations("DoctorsPage");
 
   const allDoctors = await getDoctors();
-  const dailyChamberDoctors = allDoctors.filter(d => d.is_daily_chamber);
-  const visitingDoctors = allDoctors.filter(d => !d.is_daily_chamber);
+  const dailyChamberDoctors = allDoctors.filter((d) => d.is_daily_chamber);
+  const visitingDoctors = allDoctors.filter((d) => !d.is_daily_chamber);
 
   return (
     <div className="container py-10 md:py-14">
@@ -35,7 +35,7 @@ export default async function DoctorsPage() {
         >
           {/* Subtle background decoration */}
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl transition-transform duration-500 group-hover:scale-150"></div>
-          
+
           <div className="relative z-10 flex min-w-0 items-start gap-5">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-white shadow-sm ring-1 ring-black/5 dark:border-surface-muted">
               <Image
@@ -72,7 +72,7 @@ export default async function DoctorsPage() {
               </div>
             </div>
           </div>
-          
+
           <div className="relative z-10 mt-6 shrink-0 sm:mt-0">
             <a
               href={`tel:${mainContact.diagnostic}`}

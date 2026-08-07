@@ -5,13 +5,22 @@ import { Trash2, ImageIcon } from "lucide-react";
 import { showToast } from "../Toast";
 import type { Feedback } from "@/lib/db/feedbacks";
 
-export default function FeedbacksTable({ initialData }: { initialData: Feedback[] }) {
+export default function FeedbacksTable({
+  initialData,
+}: {
+  initialData: Feedback[];
+}) {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>(initialData);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this feedback? This will also remove the image to save space.")) return;
-    
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this feedback? This will also remove the image to save space.",
+      )
+    )
+      return;
+
     setDeleting(id);
     try {
       const res = await fetch(`/api/admin/feedbacks/${id}`, {
@@ -33,7 +42,8 @@ export default function FeedbacksTable({ initialData }: { initialData: Feedback[
   };
 
   const getImageUrl = (fileName: string) => {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "http://127.0.0.1:54321";
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "http://127.0.0.1:54321";
     return `${supabaseUrl}/storage/v1/object/public/feedbacks/${fileName}`;
   };
 
@@ -62,24 +72,44 @@ export default function FeedbacksTable({ initialData }: { initialData: Feedback[
             const dateStr = new Date(f.created_at).toLocaleDateString("en-IN", {
               day: "2-digit",
               month: "short",
-              year: "numeric"
+              year: "numeric",
             });
             return (
-              <tr key={f.id} className="transition-colors hover:bg-surface-muted">
-                <td className="whitespace-nowrap font-medium text-muted">{dateStr}</td>
+              <tr
+                key={f.id}
+                className="transition-colors hover:bg-surface-muted"
+              >
+                <td className="whitespace-nowrap font-medium text-muted">
+                  {dateStr}
+                </td>
                 <td>
                   <div className="font-semibold text-foreground">{f.name}</div>
-                  <div className="text-xs text-muted font-mono mt-1">{f.phone}</div>
+                  <div className="text-xs text-muted font-mono mt-1">
+                    {f.phone}
+                  </div>
                 </td>
                 <td className="max-w-md">
                   <p className="whitespace-pre-wrap text-muted break-words">
-                    {f.note || <span className="italic opacity-50">No note provided</span>}
+                    {f.note || (
+                      <span className="italic opacity-50">
+                        No note provided
+                      </span>
+                    )}
                   </p>
                 </td>
                 <td>
                   {f.image_url ? (
-                    <a href={getImageUrl(f.image_url)} target="_blank" rel="noreferrer" className="block relative h-12 w-12 rounded border border-line overflow-hidden hover:opacity-80 transition-opacity">
-                      <img src={getImageUrl(f.image_url)} alt="Feedback image" className="object-cover h-full w-full" />
+                    <a
+                      href={getImageUrl(f.image_url)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block relative h-12 w-12 rounded border border-line overflow-hidden hover:opacity-80 transition-opacity"
+                    >
+                      <img
+                        src={getImageUrl(f.image_url)}
+                        alt="Feedback image"
+                        className="object-cover h-full w-full"
+                      />
                     </a>
                   ) : (
                     <div className="flex h-12 w-12 items-center justify-center rounded bg-surface-muted border border-line text-muted">

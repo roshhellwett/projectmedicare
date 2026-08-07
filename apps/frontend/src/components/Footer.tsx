@@ -56,7 +56,9 @@ export default function Footer() {
                 <span className="block font-semibold text-foreground">
                   Main hub — Vivek Vihar
                 </span>
-                493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. &amp; P.S. Shibpur, Dist. Howrah, Pin: 711101
+                493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar
+                Phase-II, Shop No. 4, P.O. &amp; P.S. Shibpur, Dist. Howrah,
+                Pin: 711101
               </span>
             </p>
 
@@ -141,7 +143,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          
+
           {/* Legal */}
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">

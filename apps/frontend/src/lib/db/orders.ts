@@ -13,7 +13,7 @@ export type MedicineOrder = {
   assigned_store_id: string | null;
   selected_at: string | null;
   created_at: string;
-  
+
   // Joined relation
   store?: PharmacyStore;
 };
@@ -21,15 +21,17 @@ export type MedicineOrder = {
 export async function getMedicineOrders(): Promise<MedicineOrder[]> {
   const supabase = createAdminClient();
   if (!supabase) return [];
-  
+
   const { data, error } = await supabase
     .from("medicine_orders")
-    .select(`
+    .select(
+      `
       *,
       store:pharmacy_stores(*)
-    `)
+    `,
+    )
     .order("created_at", { ascending: false });
-    
+
   if (error || !data) return [];
   return data as MedicineOrder[];
 }
@@ -39,7 +41,7 @@ export async function createMedicineOrder(
   phone: string,
   address: string,
   note: string,
-  prescription_url: string
+  prescription_url: string,
 ): Promise<void> {
   const supabase = createPublicClient();
   if (!supabase) throw new Error("Supabase client not available");
@@ -55,16 +57,19 @@ export async function createMedicineOrder(
   if (error) throw new Error(error.message);
 }
 
-export async function selectMedicineOrder(orderId: string, storeId: string): Promise<void> {
+export async function selectMedicineOrder(
+  orderId: string,
+  storeId: string,
+): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");
 
   // Atomic update: only update if assigned_store_id IS NULL
   const { data, error } = await supabase
     .from("medicine_orders")
-    .update({ 
+    .update({
       assigned_store_id: storeId,
-      selected_at: new Date().toISOString()
+      selected_at: new Date().toISOString(),
     })
     .is("assigned_store_id", null)
     .eq("id", orderId)
@@ -86,23 +91,30 @@ export async function deleteMedicineOrder(id: string): Promise<void> {
     .eq("id", id)
     .maybeSingle();
 
-  const { error } = await supabase.from("medicine_orders").delete().eq("id", id);
+  const { error } = await supabase
+    .from("medicine_orders")
+    .delete()
+    .eq("id", id);
   if (error) throw new Error(error.message);
 
-  const path = (existing as { prescription_url?: string | null } | null)?.prescription_url;
+  const path = (existing as { prescription_url?: string | null } | null)
+    ?.prescription_url;
   if (path) {
     await supabase.storage.from(PRESCRIPTIONS_BUCKET).remove([path]);
   }
 }
 
-export async function getPrescriptionDownloadUrl(path: string): Promise<string> {
+export async function getPrescriptionDownloadUrl(
+  path: string,
+): Promise<string> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");
-  
+
   const { data, error } = await supabase.storage
     .from(PRESCRIPTIONS_BUCKET)
-    .createSignedUrl(path, 60 * 60); 
+    .createSignedUrl(path, 60 * 60);
 
-  if (error || !data) throw new Error(error?.message || "Failed to generate URL");
+  if (error || !data)
+    throw new Error(error?.message || "Failed to generate URL");
   return data.signedUrl;
 }

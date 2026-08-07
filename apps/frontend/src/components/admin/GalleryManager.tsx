@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Image as ImageIcon, Loader2, Trash2, Upload, AlertCircle } from "lucide-react";
+import {
+  Image as ImageIcon,
+  Loader2,
+  Trash2,
+  Upload,
+  AlertCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { type GalleryImage } from "@/lib/db/gallery";
@@ -56,7 +62,7 @@ export default function GalleryManager({ initialImages }: Props) {
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this photo?")) return;
-    
+
     setDeletingId(id);
     setError(null);
 
@@ -81,10 +87,13 @@ export default function GalleryManager({ initialImages }: Props) {
     <div className="space-y-8">
       {/* Upload Box */}
       <div className="card p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-foreground">Upload New Photo</h2>
+        <h2 className="text-lg font-semibold text-foreground">
+          Upload New Photo
+        </h2>
         <p className="mt-1 text-sm text-muted">
-          Add a new photo to the public gallery. Supported formats: JPG, PNG, WebP. Max size: 5MB.
-          For the best look, try to upload images with a 4:3 or 16:9 ratio.
+          Add a new photo to the public gallery. Supported formats: JPG, PNG,
+          WebP. Max size: 5MB. For the best look, try to upload images with a
+          4:3 or 16:9 ratio.
         </p>
 
         {error && (
@@ -98,7 +107,10 @@ export default function GalleryManager({ initialImages }: Props) {
           <div className="mt-6 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-red-500/20 bg-red-500/5 p-12 text-center text-red-500 transition-colors">
             <AlertCircle className="h-8 w-8 mb-3 opacity-80" />
             <p className="font-semibold text-lg">Maximum limit reached</p>
-            <p className="text-sm mt-1 opacity-80">You can only have 8 photos in the gallery. Delete an older photo below to upload a new one.</p>
+            <p className="text-sm mt-1 opacity-80">
+              You can only have 8 photos in the gallery. Delete an older photo
+              below to upload a new one.
+            </p>
           </div>
         ) : (
           <div className="mt-6 flex items-center justify-center rounded-xl border-2 border-dashed border-line bg-surface p-12 transition-colors hover:bg-surface-hover">
@@ -128,8 +140,10 @@ export default function GalleryManager({ initialImages }: Props) {
 
       {/* Grid of Photos */}
       <div className="card p-6 md:p-8">
-        <h2 className="text-lg font-semibold text-foreground mb-6">Manage Existing Photos</h2>
-        
+        <h2 className="text-lg font-semibold text-foreground mb-6">
+          Manage Existing Photos
+        </h2>
+
         {images.length === 0 ? (
           <div className="text-center py-12 text-muted">
             <ImageIcon className="mx-auto h-12 w-12 opacity-20 mb-3" />
@@ -138,7 +152,10 @@ export default function GalleryManager({ initialImages }: Props) {
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {images.map((image) => (
-              <div key={image.id} className="group relative h-48 w-full sm:h-56 overflow-hidden rounded-xl border border-line bg-surface">
+              <div
+                key={image.id}
+                className="group relative h-48 w-full sm:h-56 overflow-hidden rounded-xl border border-line bg-surface"
+              >
                 <Image
                   src={image.url}
                   alt="Gallery image"
@@ -146,7 +163,7 @@ export default function GalleryManager({ initialImages }: Props) {
                   className="object-cover transition-transform group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 33vw"
                 />
-                
+
                 {/* Overlay actions */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
                   <button

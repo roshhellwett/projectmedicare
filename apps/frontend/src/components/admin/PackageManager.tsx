@@ -4,7 +4,11 @@ import { useState } from "react";
 import type { Package } from "@/lib/db/packages";
 import { Plus, Edit2, Trash2, CheckCircle2, X } from "lucide-react";
 
-export default function PackageManager({ initialPackages }: { initialPackages: Package[] }) {
+export default function PackageManager({
+  initialPackages,
+}: {
+  initialPackages: Package[];
+}) {
   const [packages, setPackages] = useState(initialPackages);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -29,7 +33,9 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this package?")) return;
     try {
-      const res = await fetch(`/api/admin/packages/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/packages/${id}`, {
+        method: "DELETE",
+      });
       if (res.ok) setPackages((prev) => prev.filter((p) => p.id !== id));
       else alert("Failed to delete package.");
     } catch (e) {
@@ -57,7 +63,9 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
         });
         if (res.ok) {
           setPackages((prev) =>
-            prev.map((p) => (p.id === currentPkg.id ? { ...p, ...payload } as Package : p))
+            prev.map((p) =>
+              p.id === currentPkg.id ? ({ ...p, ...payload } as Package) : p,
+            ),
           );
           setIsOpen(false);
         }
@@ -87,7 +95,10 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
 
         {isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setIsOpen(false)} />
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+              onClick={() => setIsOpen(false)}
+            />
             <div className="relative w-full max-w-lg rounded-xl bg-surface p-6 shadow-xl max-h-[90vh] overflow-y-auto">
               <button
                 onClick={() => setIsOpen(false)}
@@ -96,56 +107,85 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
                 <X className="h-5 w-5" />
                 <span className="sr-only">Close</span>
               </button>
-              
-              <h2 className="text-xl font-bold text-foreground mb-6">{isEditing ? "Edit Package" : "New Package"}</h2>
-              
+
+              <h2 className="text-xl font-bold text-foreground mb-6">
+                {isEditing ? "Edit Package" : "New Package"}
+              </h2>
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Package Name</label>
+                  <label className="text-sm font-medium text-foreground">
+                    Package Name
+                  </label>
                   <input
                     type="text"
                     className="flex h-11 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                     value={currentPkg.name || ""}
-                    onChange={(e) => setCurrentPkg({ ...currentPkg, name: e.target.value })}
+                    onChange={(e) =>
+                      setCurrentPkg({ ...currentPkg, name: e.target.value })
+                    }
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Description (Optional)</label>
+                  <label className="text-sm font-medium text-foreground">
+                    Description (Optional)
+                  </label>
                   <input
                     type="text"
                     className="flex h-11 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                     value={currentPkg.description || ""}
-                    onChange={(e) => setCurrentPkg({ ...currentPkg, description: e.target.value })}
+                    onChange={(e) =>
+                      setCurrentPkg({
+                        ...currentPkg,
+                        description: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Market Price (₹)</label>
+                    <label className="text-sm font-medium text-foreground">
+                      Market Price (₹)
+                    </label>
                     <input
                       type="number"
                       className="flex h-11 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                       value={currentPkg.market_price || ""}
-                      onChange={(e) => setCurrentPkg({ ...currentPkg, market_price: Number(e.target.value) })}
+                      onChange={(e) =>
+                        setCurrentPkg({
+                          ...currentPkg,
+                          market_price: Number(e.target.value),
+                        })
+                      }
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Janta Price (₹)</label>
+                    <label className="text-sm font-medium text-foreground">
+                      Janta Price (₹)
+                    </label>
                     <input
                       type="number"
                       className="flex h-11 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                       value={currentPkg.janta_price || ""}
-                      onChange={(e) => setCurrentPkg({ ...currentPkg, janta_price: Number(e.target.value) })}
+                      onChange={(e) =>
+                        setCurrentPkg({
+                          ...currentPkg,
+                          janta_price: Number(e.target.value),
+                        })
+                      }
                       required
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Tests (One per line)</label>
+                  <label className="text-sm font-medium text-foreground">
+                    Tests (One per line)
+                  </label>
                   <textarea
                     className="flex min-h-[150px] w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary resize-y"
                     value={testsInput}
@@ -154,22 +194,34 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
                     required
                   />
                 </div>
-                
+
                 <div className="flex items-center gap-2 mt-4 bg-surface-muted p-3 rounded border border-line">
                   <input
                     type="checkbox"
                     id="is_featured"
                     checked={currentPkg.is_featured || false}
-                    onChange={(e) => setCurrentPkg({ ...currentPkg, is_featured: e.target.checked })}
+                    onChange={(e) =>
+                      setCurrentPkg({
+                        ...currentPkg,
+                        is_featured: e.target.checked,
+                      })
+                    }
                     className="h-4 w-4 rounded border-line text-primary focus:ring-primary"
                   />
-                  <label htmlFor="is_featured" className="text-sm font-medium text-foreground cursor-pointer">
+                  <label
+                    htmlFor="is_featured"
+                    className="text-sm font-medium text-foreground cursor-pointer"
+                  >
                     Feature on Homepage (Max 4 recommended)
                   </label>
                 </div>
-                
+
                 <div className="pt-4 mt-4 border-t border-line">
-                  <button type="submit" className="btn btn-primary w-full" disabled={isSubmitting}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary w-full"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? "Saving..." : "Save Package"}
                   </button>
                 </div>
@@ -188,7 +240,9 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
               </span>
             )}
             <div className="flex justify-between items-start pr-16">
-              <h3 className="font-bold text-lg text-primary-deep leading-tight">{pkg.name}</h3>
+              <h3 className="font-bold text-lg text-primary-deep leading-tight">
+                {pkg.name}
+              </h3>
               <div className="absolute right-4 top-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={() => openEdit(pkg)}
@@ -206,10 +260,14 @@ export default function PackageManager({ initialPackages }: { initialPackages: P
                 </button>
               </div>
             </div>
-            
+
             <div className="mt-3 flex items-end gap-3 text-sm font-medium">
-              <span className="text-primary text-xl font-bold leading-none">₹{pkg.janta_price}</span>
-              <span className="text-muted line-through text-xs mb-0.5">₹{pkg.market_price}</span>
+              <span className="text-primary text-xl font-bold leading-none">
+                ₹{pkg.janta_price}
+              </span>
+              <span className="text-muted line-through text-xs mb-0.5">
+                ₹{pkg.market_price}
+              </span>
             </div>
 
             <div className="mt-5 pt-4 border-t border-line">

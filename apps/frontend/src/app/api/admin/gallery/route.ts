@@ -40,10 +40,13 @@ export async function POST(req: NextRequest) {
   const { count } = await supabase
     .from("gallery_images")
     .select("*", { count: "exact", head: true });
-    
+
   if (count !== null && count >= 8) {
     return NextResponse.json(
-      { error: "Maximum limit of 8 photos reached. Please delete an older photo first." },
+      {
+        error:
+          "Maximum limit of 8 photos reached. Please delete an older photo first.",
+      },
       { status: 400 },
     );
   }
@@ -60,7 +63,7 @@ export async function POST(req: NextRequest) {
       : file.type === "image/webp"
         ? "webp"
         : "jpg";
-  
+
   // Use a clean path format
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
@@ -78,7 +81,7 @@ export async function POST(req: NextRequest) {
 
   // 2. Get Public URL
   const { data } = supabase.storage.from(GALLERY_BUCKET).getPublicUrl(path);
-  
+
   // 3. Save to database
   const { data: dbData, error: dbError } = await supabase
     .from("gallery_images")

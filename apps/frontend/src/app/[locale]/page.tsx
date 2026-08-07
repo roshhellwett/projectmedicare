@@ -101,9 +101,12 @@ export default async function HomePage() {
             <p className="section-sub mt-4 text-base">{t("welcome")}</p>
 
             <div className="mt-7 flex flex-wrap gap-2.5">
-              <Link href={`/${locale}/order`} className="btn btn-green relative overflow-hidden group">
+              <Link
+                href={`/${locale}/order`}
+                className="btn btn-green relative overflow-hidden group"
+              >
                 <span className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full skew-x-[30deg] transition-transform duration-500 group-hover:translate-x-full"></span>
-                <ShoppingBag className="h-4 w-4 relative z-10" /> 
+                <ShoppingBag className="h-4 w-4 relative z-10" />
                 <span className="relative z-10">{t("hero.order")}</span>
               </Link>
               <Link href={`/${locale}/medicines`} className="btn btn-primary">
@@ -117,7 +120,11 @@ export default async function HomePage() {
             <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-line pt-6 sm:grid-cols-3">
               {[
                 { icon: Clock, k: t("hero.timeKey"), v: t("hero.timeVal") },
-                { icon: ShieldCheck, k: t("hero.trustKey"), v: t("hero.trustVal") },
+                {
+                  icon: ShieldCheck,
+                  k: t("hero.trustKey"),
+                  v: t("hero.trustVal"),
+                },
                 {
                   icon: Phone,
                   k: t("hero.tramDepot"),
@@ -245,7 +252,9 @@ export default async function HomePage() {
               <span className={`icon-tile ${service.tone}`}>
                 <service.icon className="h-5 w-5" />
               </span>
-              <h3 className="mt-4 text-lg">{t(`services.list.${service.key}.title`)}</h3>
+              <h3 className="mt-4 text-lg">
+                {t(`services.list.${service.key}.title`)}
+              </h3>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
                 {t(`services.list.${service.key}.desc`)}
               </p>

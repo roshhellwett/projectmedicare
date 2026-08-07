@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { Loader2, Store } from "lucide-react";
 import type { PharmacyStore } from "@/lib/db/stores";
 
-export default function AdminStoreSelector({ stores }: { stores: PharmacyStore[] }) {
+export default function AdminStoreSelector({
+  stores,
+}: {
+  stores: PharmacyStore[];
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -23,9 +27,12 @@ export default function AdminStoreSelector({ stores }: { stores: PharmacyStore[]
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-4">
             <Store className="h-6 w-6" />
           </div>
-          <h2 className="text-xl font-bold text-foreground">Select Active Store</h2>
+          <h2 className="text-xl font-bold text-foreground">
+            Select Active Store
+          </h2>
           <p className="text-sm text-muted mt-2">
-            You must select which store you are currently operating from to manage medicine orders.
+            You must select which store you are currently operating from to
+            manage medicine orders.
           </p>
         </div>
 
@@ -38,7 +45,9 @@ export default function AdminStoreSelector({ stores }: { stores: PharmacyStore[]
               className="flex items-center justify-between rounded-lg border border-line bg-surface p-4 text-left transition-colors hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
             >
               <span className="font-medium text-foreground">{store.name}</span>
-              {loading && <Loader2 className="h-4 w-4 animate-spin text-muted" />}
+              {loading && (
+                <Loader2 className="h-4 w-4 animate-spin text-muted" />
+              )}
             </button>
           ))}
           {stores.length === 0 && (

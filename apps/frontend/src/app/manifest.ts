@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Janta Medicare",
     short_name: "Janta Medicare",
-    description: "Sirf Janta Kay Liye - Pharmacy, Pathology & Doctor Consultations in Howrah, West Bengal.",
+    description:
+      "Sirf Janta Kay Liye - Pharmacy, Pathology & Doctor Consultations in Howrah, West Bengal.",
     start_url: "/en",
     display: "standalone",
     background_color: "#fbfcfd",

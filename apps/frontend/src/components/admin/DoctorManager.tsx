@@ -6,7 +6,11 @@ import { Plus, Pencil, Trash2, ShieldAlert } from "lucide-react";
 import DoctorModal from "./DoctorModal";
 import Image from "next/image";
 
-export default function DoctorManager({ initialDoctors }: { initialDoctors: Doctor[] }) {
+export default function DoctorManager({
+  initialDoctors,
+}: {
+  initialDoctors: Doctor[];
+}) {
   const [doctors, setDoctors] = useState<Doctor[]>(initialDoctors);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
@@ -23,8 +27,13 @@ export default function DoctorManager({ initialDoctors }: { initialDoctors: Doct
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to completely remove this doctor? This cannot be undone.")) return;
-    
+    if (
+      !confirm(
+        "Are you sure you want to completely remove this doctor? This cannot be undone.",
+      )
+    )
+      return;
+
     setIsDeleting(id);
     try {
       const res = await fetch(`/api/admin/doctors/${id}`, {
@@ -74,16 +83,31 @@ export default function DoctorManager({ initialDoctors }: { initialDoctors: Doct
                 </div>
                 <div className="min-w-0">
                   <h3 className="truncate font-semibold">{doctor.name}</h3>
-                  <p className="truncate text-xs text-muted">{doctor.department}</p>
+                  <p className="truncate text-xs text-muted">
+                    {doctor.department}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="space-y-1 text-sm text-muted">
-                <p><strong className="font-medium text-foreground">Specialty:</strong> {doctor.specialty}</p>
-                {doctor.contact && <p><strong className="font-medium text-foreground">Contact:</strong> {doctor.contact}</p>}
+                <p>
+                  <strong className="font-medium text-foreground">
+                    Specialty:
+                  </strong>{" "}
+                  {doctor.specialty}
+                </p>
+                {doctor.contact && (
+                  <p>
+                    <strong className="font-medium text-foreground">
+                      Contact:
+                    </strong>{" "}
+                    {doctor.contact}
+                  </p>
+                )}
                 {doctor.is_daily_chamber && (
                   <p className="mt-2 inline-flex items-center gap-1 rounded bg-green-500/10 px-2 py-0.5 text-xs font-semibold text-green-700 dark:bg-green-500/20 dark:text-green-400">
-                    <ShieldAlert className="h-3 w-3" /> Daily Chamber (₹{doctor.daily_fee})
+                    <ShieldAlert className="h-3 w-3" /> Daily Chamber (₹
+                    {doctor.daily_fee})
                   </p>
                 )}
               </div>
@@ -101,7 +125,8 @@ export default function DoctorManager({ initialDoctors }: { initialDoctors: Doct
                 disabled={isDeleting === doctor.id}
                 className="btn btn-outline btn-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
               >
-                <Trash2 className="h-3 w-3" /> {isDeleting === doctor.id ? "..." : "Delete"}
+                <Trash2 className="h-3 w-3" />{" "}
+                {isDeleting === doctor.id ? "..." : "Delete"}
               </button>
             </div>
           </div>

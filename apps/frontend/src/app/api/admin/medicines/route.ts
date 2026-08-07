@@ -79,8 +79,8 @@ export async function POST(req: NextRequest) {
       .single();
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
-    revalidateTag("medicines", 'max');
-    revalidateTag("stats", 'max');
+    revalidateTag("medicines", "max");
+    revalidateTag("stats", "max");
     return NextResponse.json({ item: data });
   } catch (err) {
     return fail(err);
@@ -101,8 +101,8 @@ export async function PUT(req: NextRequest) {
       .single();
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
-    revalidateTag("medicines", 'max');
-    revalidateTag("stats", 'max');
+    revalidateTag("medicines", "max");
+    revalidateTag("stats", "max");
     return NextResponse.json({ item: data });
   } catch (err) {
     return fail(err);
@@ -120,8 +120,8 @@ export async function DELETE(req: NextRequest) {
     const { error } = await db(true).from("medicines").delete().in("id", ids);
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
-    revalidateTag("medicines", 'max');
-    revalidateTag("stats", 'max');
+    revalidateTag("medicines", "max");
+    revalidateTag("stats", "max");
     return NextResponse.json({ ok: true, deleted: ids.length });
   } catch (err) {
     return fail(err);

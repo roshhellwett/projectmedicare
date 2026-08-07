@@ -4,7 +4,7 @@ import { deletePackageOrder } from "@/lib/db/package-orders";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const error = await requireAdmin();
@@ -12,7 +12,7 @@ export async function DELETE(
 
     const { id } = await params;
     await deletePackageOrder(id);
-    
+
     return NextResponse.json({ ok: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });

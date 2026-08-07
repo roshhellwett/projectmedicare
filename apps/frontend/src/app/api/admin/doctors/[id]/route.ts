@@ -4,7 +4,7 @@ import { adminUpdateDoctor, adminDeleteDoctor } from "@/lib/db/doctors";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const denied = await requireAdmin();
   if (denied) return denied;
@@ -21,7 +21,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const denied = await requireAdmin();
   if (denied) return denied;

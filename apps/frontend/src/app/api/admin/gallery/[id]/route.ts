@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const denied = await requireAdmin();
   if (denied) return denied;

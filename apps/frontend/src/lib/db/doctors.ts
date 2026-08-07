@@ -46,7 +46,7 @@ export async function adminCreateDoctor(input: DoctorInput) {
   if (error) {
     throw new Error(error.message);
   }
-  
+
   revalidatePath("/[locale]/doctors", "page");
   revalidatePath("/[locale]/admin/doctors", "page");
 }
@@ -62,7 +62,7 @@ export async function adminUpdateDoctor(id: string, input: DoctorInput) {
   if (error) {
     throw new Error(error.message);
   }
-  
+
   revalidatePath("/[locale]/doctors", "page");
   revalidatePath("/[locale]/admin/doctors", "page");
 }
@@ -70,7 +70,7 @@ export async function adminUpdateDoctor(id: string, input: DoctorInput) {
 export async function adminDeleteDoctor(id: string) {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin not configured");
-  
+
   // First, get the doctor to see if they have a custom image
   const { data: doctor } = await supabase
     .from("doctors")
@@ -79,7 +79,10 @@ export async function adminDeleteDoctor(id: string) {
     .single();
 
   // If they have a custom image in the doctor_images bucket, delete it
-  if (doctor?.image_url && doctor.image_url.includes("/storage/v1/object/public/doctor_images/")) {
+  if (
+    doctor?.image_url &&
+    doctor.image_url.includes("/storage/v1/object/public/doctor_images/")
+  ) {
     try {
       // Extract the object path from the public URL
       const urlParts = doctor.image_url.split("/doctor_images/");
@@ -98,7 +101,7 @@ export async function adminDeleteDoctor(id: string) {
   if (error) {
     throw new Error(error.message);
   }
-  
+
   revalidatePath("/[locale]/doctors", "page");
   revalidatePath("/[locale]/admin/doctors", "page");
 }
