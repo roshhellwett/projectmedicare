@@ -207,24 +207,27 @@
     "getDirections": "Get directions"
   },
   "BulletinsPage": {
-    "metaTitle": "Notices & Offers — Janta Medicare Bulletin Board",
-    "metaDesc": "Live bulletin board from Janta Medicare: current offers, camp announcements and pharmacy notices with exact Indian Standard Time dates.",
-    "metaOgDesc": "Current offers, camp announcements and notices from Janta Medicare.",
-    "eyebrow": "Live Bulletin Board",
-    "title": "Notices & Offers",
+    "eyebrow": "Products & Offers",
+    "metaTitle": "Products & Offers — Janta Medicare",
+    "metaDesc": "Latest products and current offers from Janta Medicare.",
+    "metaOgDesc": "Latest products and current offers from Janta Medicare.",
+    "ogImage": "/og-default.png",
+    "title": "Products & Offers",
     "sub": "Everything currently active, newest first. Offers disappear automatically once they expire."
   },
   "BulletinBoard": {
     "offer": "Offer",
-    "notice": "Notice",
+    "product": "Product",
     "pinned": "Pinned",
     "validTill": "Valid till {date}",
-    "emptyTitle": "No notices right now",
-    "emptyDesc": "New offers and announcements appear here as soon as they are published.",
-    "eyebrow": "Live bulletin board",
-    "title": "Latest notices & offers",
-    "sub": "Updated by our team — every notice carries its exact Indian Standard Time date.",
-    "viewAll": "View all notices"
+    "emptyTitle": "Nothing to show right now",
+    "emptyDesc": "New products and offers will appear here as soon as they are published.",
+    "eyebrow": "Live Updates",
+    "title": "Latest Products & Offers",
+    "sub": "Stay updated with our newest arrivals and current discounts.",
+    "viewAll": "View all",
+    "latestProducts": "Latest Products",
+    "latestOffers": "Latest Offers"
   },
   "CareersPage": {
     "metaTitle": "Careers — Join Janta Medicare",

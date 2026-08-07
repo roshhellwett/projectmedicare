@@ -17,9 +17,10 @@ import {
 } from "@/lib/utils/validation";
 
 function parseInput(body: Record<string, unknown>): BulletinInput {
-  const kind = oneOf(body.kind, "Type", ["info", "offer"] as const);
+  const kind = oneOf(body.kind, "Type", ["product", "offer", "info"] as const);
   const starts_at = isoOrNull(body.starts_at, "Start date");
   const ends_at = isoOrNull(body.ends_at, "End date");
+  const image_url = typeof body.image_url === "string" ? body.image_url : null;
 
   if (kind === "offer" && !ends_at) {
     throw new ValidationError(
@@ -33,6 +34,7 @@ function parseInput(body: Record<string, unknown>): BulletinInput {
   return {
     body: str(body.body, "Message", { max: 600 }),
     kind,
+    image_url,
     starts_at,
     ends_at,
     pinned: bool(body.pinned),

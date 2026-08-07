@@ -8,6 +8,21 @@ test.describe("public site", () => {
     await expect(page).toHaveTitle(/Janta Medicare/i);
     await expect(page.locator("#sunday-camp")).toBeVisible();
     await expect(page.locator("#bulletin-board")).toBeVisible();
+
+    // Verify Latest Products & Offers are visible from our seed data
+    await expect(page.getByRole('heading', { name: 'Latest Products', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Latest Offers', exact: true })).toBeVisible();
+    
+    // Test the Image Zoom functionality
+    const productImages = page.locator("#bulletin-board img.cursor-pointer");
+    if (await productImages.count() > 0) {
+      await productImages.first().click();
+      // Zoom modal should appear with a close button
+      await expect(page.locator('button[title="Close"]')).toBeVisible({ timeout: 5000 });
+      await page.locator('button[title="Close"]').click();
+      // Modal should disappear
+      await expect(page.locator('button[title="Close"]')).toBeHidden({ timeout: 5000 });
+    }
   });
 
   test("navigation reaches every public page", async ({ page }) => {

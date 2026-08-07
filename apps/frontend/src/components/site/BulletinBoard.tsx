@@ -4,12 +4,13 @@ import { getTranslations } from "next-intl/server";
 import { ArrowRight, Megaphone, Pin, Tag, Timer } from "lucide-react";
 import { getVisibleBulletins, type Bulletin } from "@/lib/db/bulletins";
 import { formatDateTime, formatShortDate } from "@/lib/utils/ist";
+import { ZoomableImage } from "./ZoomableImage";
 
 export function BulletinItem({ item }: { item: Bulletin }) {
   const t = useTranslations("BulletinBoard");
   const isOffer = item.kind === "offer";
   return (
-    <li className={`card card-marked !pl-5 ${isOffer ? "is-green" : ""}`}>
+    <li className={`card card-marked !pl-5 ${isOffer ? "is-green" : "is-blue"}`}>
       <div className="mb-2 flex flex-wrap items-center gap-1.5">
         <span className={`badge ${isOffer ? "badge-green" : "badge-blue"}`}>
           {isOffer ? (
@@ -20,7 +21,7 @@ export function BulletinItem({ item }: { item: Bulletin }) {
           ) : (
             <>
               <span className="live-dot mr-1" aria-hidden />
-              <Megaphone className="h-3 w-3" /> {t("notice")}
+              <Megaphone className="h-3 w-3" /> {t("product")}
             </>
           )}
         </span>
@@ -33,9 +34,16 @@ export function BulletinItem({ item }: { item: Bulletin }) {
           {formatDateTime(item.created_at)}
         </span>
       </div>
-      <p className="whitespace-pre-line text-sm leading-relaxed text-foreground">
-        {item.body}
-      </p>
+      <div className="flex gap-4">
+        {item.image_url && (
+          <div className="shrink-0">
+            <ZoomableImage src={item.image_url} alt="Product" className="h-24 w-24 rounded-lg object-cover border border-line" />
+          </div>
+        )}
+        <p className="whitespace-pre-line text-sm leading-relaxed text-foreground flex-1">
+          {item.body}
+        </p>
+      </div>
       {isOffer && item.ends_at && (
         <p className="mt-3 inline-flex items-center gap-1.5 border-t border-line pt-3 text-xs font-semibold text-accent">
           <Timer className="h-3.5 w-3.5" />
@@ -96,15 +104,37 @@ export default async function BulletinBoard({
         )}
       </div>
 
-      {items.length === 0 ? (
-        <BulletinEmpty />
-      ) : (
-        <ul className="grid gap-3 md:grid-cols-2">
-          {items.map((item) => (
-            <BulletinItem key={item.id} item={item} />
-          ))}
-        </ul>
-      )}
+      <div className="grid gap-8 md:grid-cols-2">
+        <div>
+          <h3 className="mb-4 text-xl font-bold">{t("latestProducts")}</h3>
+          {items.filter(i => i.kind === "product" || i.kind === "info").length === 0 ? (
+            <BulletinEmpty />
+          ) : (
+            <ul className="grid gap-3 max-h-[500px] overflow-y-auto pr-2">
+              {items
+                .filter(i => i.kind === "product" || i.kind === "info")
+                .map((item) => (
+                  <BulletinItem key={item.id} item={item} />
+                ))}
+            </ul>
+          )}
+        </div>
+        
+        <div>
+          <h3 className="mb-4 text-xl font-bold">{t("latestOffers")}</h3>
+          {items.filter(i => i.kind === "offer").length === 0 ? (
+            <BulletinEmpty />
+          ) : (
+            <ul className="grid gap-3 max-h-[500px] overflow-y-auto pr-2">
+              {items
+                .filter(i => i.kind === "offer")
+                .map((item) => (
+                  <BulletinItem key={item.id} item={item} />
+                ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </section>
   );
 }

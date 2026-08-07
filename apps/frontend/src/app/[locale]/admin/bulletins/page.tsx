@@ -30,13 +30,22 @@ export default async function AdminBulletinsPage() {
           <ArrowLeft className="h-4 w-4" /> Back to Dashboard
         </Link>
       </div>
-      <PageHeader
-        eyebrow="Admin"
-        eyebrowIcon={<Megaphone className="h-4 w-4" />}
-        title="Live Bulletin Board"
-        sub="Notices stay until you delete them. Offers hide automatically after their end time and are cleaned up by the worker."
-      />
-      <BulletinManager initialItems={items} />
+      <div className="mx-auto max-w-4xl space-y-9">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <Megaphone className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-extrabold text-foreground">
+              Products & Offers
+            </h1>
+            <p className="text-sm font-medium text-muted">
+              Manage latest products, offers, and store announcements
+            </p>
+          </div>
+        </div>
+        <BulletinManager initialItems={items} />
+      </div>
     </div>
   );
 }

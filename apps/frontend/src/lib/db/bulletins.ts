@@ -1,11 +1,12 @@
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
 
-export type BulletinKind = "info" | "offer";
+export type BulletinKind = "product" | "offer" | "info";
 
 export type Bulletin = {
   id: string;
   body: string;
   kind: BulletinKind;
+  image_url: string | null;
   starts_at: string | null;
   ends_at: string | null;
   pinned: boolean;
@@ -15,6 +16,7 @@ export type Bulletin = {
 export type BulletinInput = {
   body: string;
   kind: BulletinKind;
+  image_url: string | null;
   starts_at: string | null;
   ends_at: string | null;
   pinned: boolean;

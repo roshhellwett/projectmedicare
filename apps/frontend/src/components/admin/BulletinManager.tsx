@@ -10,10 +10,13 @@ import {
   Tag,
   Trash2,
   X,
+  Image as ImageIcon,
+  UploadCloud
 } from "lucide-react";
 import { showToast } from "@/components/Toast";
 import type { Bulletin, BulletinKind } from "@/lib/db/bulletins";
 import { formatDateTime, windowStatus } from "@/lib/utils/ist";
+import { compressImage } from "@/lib/imageCompression";
 
 type FormState = {
   id: string | null;
@@ -22,15 +25,19 @@ type FormState = {
   starts_at: string;
   ends_at: string;
   pinned: boolean;
+  image_url: string | null;
+  file: File | null;
 };
 
 const emptyForm = (): FormState => ({
   id: null,
   body: "",
-  kind: "info",
+  kind: "product",
   starts_at: "",
   ends_at: "",
   pinned: false,
+  image_url: null,
+  file: null,
 });
 
 /** Converts an ISO timestamp to the value a datetime-local input expects, in IST. */
@@ -79,6 +86,24 @@ export default function BulletinManager({
     }
     setSaving(true);
     try {
+      let finalImageUrl = form.image_url;
+
+      // Upload image if a new one is selected
+      if (form.file) {
+        const compressed = await compressImage(form.file);
+        const uploadForm = new FormData();
+        uploadForm.append("file", compressed);
+
+        const uploadRes = await fetch("/api/admin/bulletins/upload", {
+          method: "POST",
+          body: uploadForm,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadData.error || "Failed to upload image");
+        finalImageUrl = uploadData.url;
+      }
+
       const res = await fetch("/api/admin/bulletins", {
         method: form.id ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -86,6 +111,7 @@ export default function BulletinManager({
           id: form.id,
           body: form.body,
           kind: form.kind,
+          image_url: finalImageUrl,
           starts_at: form.starts_at || null,
           ends_at: form.ends_at || null,
           pinned: form.pinned,
@@ -103,7 +129,7 @@ export default function BulletinManager({
         );
       });
       setForm(emptyForm());
-      showToast(form.id ? "Bulletin updated" : "Bulletin published");
+      showToast(form.id ? "Updated successfully" : "Published successfully");
     } catch (err) {
       showToast(err instanceof Error ? err.message : "Save failed", "error");
     } finally {
@@ -119,12 +145,14 @@ export default function BulletinManager({
       starts_at: toLocalInput(item.starts_at),
       ends_at: toLocalInput(item.ends_at),
       pinned: item.pinned,
+      image_url: item.image_url,
+      file: null,
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm("Delete this bulletin permanently?")) return;
+    if (!window.confirm("Delete this permanently?")) return;
     const previous = items;
     setItems((prev) => prev.filter((i) => i.id !== id));
     if (form.id === id) setForm(emptyForm());
@@ -135,7 +163,7 @@ export default function BulletinManager({
         body: JSON.stringify({ id }),
       });
       if (!res.ok) throw new Error((await res.json()).error || "Delete failed");
-      showToast("Bulletin deleted");
+      showToast("Deleted successfully");
     } catch (err) {
       setItems(previous);
       showToast(err instanceof Error ? err.message : "Delete failed", "error");
@@ -147,7 +175,7 @@ export default function BulletinManager({
       <form onSubmit={submit} className="card space-y-5">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl font-extrabold">
-            {form.id ? "Edit bulletin" : "New bulletin"}
+            {form.id ? "Edit Item" : "New Item"}
           </h2>
           {form.id && (
             <button
@@ -162,7 +190,7 @@ export default function BulletinManager({
 
         <label className="block">
           <span className="mb-1.5 block text-xs font-extrabold uppercase tracking-wider text-muted">
-            Message
+            {form.kind === "product" ? "Product Title / Details" : "Offer Details"}
           </span>
           <textarea
             className="input min-h-[110px] resize-y"
@@ -179,11 +207,17 @@ export default function BulletinManager({
 
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex rounded-full border border-line bg-white p-1">
-            {(["info", "offer"] as const).map((kind) => (
+            {(["product", "offer"] as const).map((kind) => (
               <button
                 key={kind}
                 type="button"
-                onClick={() => set("kind", kind)}
+                onClick={() => {
+                  set("kind", kind);
+                  if (kind !== "product") {
+                    set("file", null);
+                    set("image_url", null);
+                  }
+                }}
                 className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-extrabold transition-all ${
                   form.kind === kind
                     ? "bg-primary text-white"
@@ -195,7 +229,7 @@ export default function BulletinManager({
                 ) : (
                   <Megaphone className="h-3.5 w-3.5" />
                 )}
-                {kind === "offer" ? "Offer" : "Notice"}
+                {kind === "offer" ? "Offer" : "Product"}
               </button>
             ))}
           </div>
@@ -210,6 +244,42 @@ export default function BulletinManager({
             <Pin className="h-4 w-4 text-primary" /> Pin to top
           </label>
         </div>
+
+        {form.kind === "product" && (
+          <div className="block">
+            <span className="mb-1.5 block text-xs font-extrabold uppercase tracking-wider text-muted">
+              Product Image
+            </span>
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-line bg-white p-6 text-center transition-colors hover:border-primary">
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    set("file", e.target.files[0]);
+                  }
+                }}
+              />
+              <UploadCloud className="mb-3 h-8 w-8 text-muted transition-colors group-hover:text-primary" />
+              <span className="text-sm font-bold text-foreground">
+                {form.file ? form.file.name : "Click or tap to upload an image"}
+              </span>
+              <span className="mt-1 text-xs text-muted">
+                Images are automatically optimized and compressed to save space.
+              </span>
+            </label>
+            {(form.image_url || form.file) && (
+              <div className="mt-3 overflow-hidden rounded-xl border border-line">
+                <img
+                  src={form.file ? URL.createObjectURL(form.file) : form.image_url || ""}
+                  alt="Preview"
+                  className="h-40 w-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="block">
@@ -248,7 +318,7 @@ export default function BulletinManager({
           ) : (
             <Plus className="h-4 w-4" />
           )}
-          {form.id ? "Save changes" : "Publish bulletin"}
+          {form.id ? "Save changes" : "Publish"}
         </button>
       </form>
 
@@ -285,7 +355,7 @@ export default function BulletinManager({
                     <span
                       className={`badge ${item.kind === "offer" ? "badge-green" : "badge-blue"}`}
                     >
-                      {item.kind === "offer" ? "Offer" : "Notice"}
+                      {item.kind === "offer" ? "Offer" : "Product"}
                     </span>
                     <span className={`badge ${statusStyles[status]}`}>
                       {status}
@@ -300,7 +370,7 @@ export default function BulletinManager({
                       <button
                         type="button"
                         onClick={() => startEdit(item)}
-                        aria-label="Edit bulletin"
+                        aria-label="Edit"
                         className="rounded-xl p-2 text-primary transition-colors hover:bg-primary-soft"
                       >
                         <Pencil className="h-4 w-4" />
@@ -308,7 +378,7 @@ export default function BulletinManager({
                       <button
                         type="button"
                         onClick={() => remove(item.id)}
-                        aria-label="Delete bulletin"
+                        aria-label="Delete"
                         className="rounded-xl p-2 text-accent transition-colors hover:bg-accent-soft"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -318,6 +388,11 @@ export default function BulletinManager({
                   <p className="whitespace-pre-line text-sm font-medium leading-relaxed">
                     {item.body}
                   </p>
+                  {item.image_url && (
+                    <div className="mt-3 overflow-hidden rounded-xl border border-line">
+                      <img src={item.image_url} className="h-40 w-full object-cover" alt="Product" />
+                    </div>
+                  )}
                   {(item.starts_at || item.ends_at) && (
                     <p className="mt-3 text-xs font-bold text-muted">
                       {item.starts_at

@@ -34,7 +34,7 @@ export default async function GalleryPage() {
         </div>
       ) : (
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {images.map((image) => (
+          {images.map((image, index) => (
             <div
               key={image.id}
               className="group relative h-48 w-full sm:h-56 md:h-64 overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition-all hover:shadow-md"
@@ -43,6 +43,7 @@ export default async function GalleryPage() {
                 src={image.url}
                 alt={t("altText")}
                 fill
+                priority={index < 4}
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />

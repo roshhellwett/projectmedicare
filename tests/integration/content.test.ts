@@ -15,6 +15,9 @@ describe("Content Tables Tests (Camp Posts & Bulletins)", () => {
   let expiredBulletin = null;
 
   beforeAll(async () => {
+    // 0. Clean up existing active camps (from seed data)
+    await adminSupabase.from("camp_posts").delete().eq("is_active", true);
+
     // 1. Create one active camp
     const c1 = await adminSupabase.from("camp_posts").insert({
       title: "Active Camp",
