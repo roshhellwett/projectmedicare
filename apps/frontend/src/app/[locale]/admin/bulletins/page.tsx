@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Bulletin Board Manager — Janta Medicare Admin",
   description:
-    "Publish, edit and remove notices and time-limited offers on the live bulletin board.",
+    "Publish, edit and remove products and time-limited offers on the live bulletin board.",
   robots: { index: false, follow: false },
 };
 

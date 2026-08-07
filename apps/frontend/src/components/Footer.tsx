@@ -14,7 +14,7 @@ export default function Footer() {
     { label: "Pharmacy", href: `/${locale}/medicines` },
     { label: "Pathology & Diagnostics", href: `/${locale}/patient-rate-chart` },
     { label: "Doctor Chambers", href: `/${locale}/doctors` },
-    { label: "Notices & Offers", href: `/${locale}/bulletins` },
+    { label: "Products & Offers", href: `/${locale}/bulletins` },
   ];
 
   const links = [

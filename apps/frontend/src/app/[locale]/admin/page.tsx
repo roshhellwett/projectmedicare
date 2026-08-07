@@ -122,8 +122,8 @@ export default async function AdminPage() {
       icon: Megaphone,
       tone: "is-green",
       title: "Live bulletin board",
-      desc: "Post notices and time-limited offers. Offers expire on their own and are cleaned up by the worker.",
-      status: `${bulletins.length} notice(s) currently visible`,
+      desc: "Post products and time-limited offers. Offers expire on their own and are cleaned up by the worker.",
+      status: `${bulletins.length} product(s) currently visible`,
       cta: "Open bulletin manager",
     },
     {
