@@ -4,11 +4,29 @@ import { createClient } from "@supabase/supabase-js";
 // The local supabase URL and service key
 // These are standard defaults for local supabase
 const SUPABASE_URL = process.env.SUPABASE_URL || "http://127.0.0.1:54321";
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlZmF1bHQiLCJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjQ0MzU4MjYwLCJleHAiOjE5NTk5MzQyNjB9.x5f9Uo743_G3mK50z16sL8l5w810hG6f990k9y70i_g";
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const anonSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 describe("Database Integration Tests", () => {
+  describe("RLS Tests", () => {
+    it("should allow public to read packages but not modify them", async () => {
+      // 1. Can read packages
+      const { error: readError } = await anonSupabase.from("packages").select("*").limit(1);
+      expect(readError).toBeNull();
+      
+      // 2. Cannot insert packages
+      const { error: insertError } = await anonSupabase.from("packages").insert({
+        name: "Hacker Package",
+        market_price: 10,
+        janta_price: 10
+      });
+      expect(insertError).not.toBeNull();
+    });
+  });
+
   describe("Package Orders Race Condition", () => {
     let testOrder = null;
     let testPackage = null;
