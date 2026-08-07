@@ -41,20 +41,21 @@ async function _getMedicines(
     try {
       const supabase = createPublicClient();
       if (!supabase) throw new Error("Supabase is not configured");
-      const q = supabase
-        .from("medicines")
-        .select("*", { count: "exact" })
-        .ilike("medicine_name", `%${query}%`)
-        .order(sort.key, { ascending: sort.dir === "asc" });
+      
+      const { data, error } = await supabase.rpc("search_medicines", {
+        search_query: query,
+        sort_col: sort.key,
+        sort_dir: sort.dir,
+        page_size: PAGE_SIZE,
+        page_offset: (page - 1) * PAGE_SIZE
+      });
 
-      const { data, error, count } = await q.range(
-        (page - 1) * PAGE_SIZE,
-        page * PAGE_SIZE - 1,
-      );
       if (!error && data) {
-        return { items: data as Medicine[], total: count ?? data.length };
+        const total = data.length > 0 ? Number((data[0] as any).total_count) : 0;
+        return { items: data as unknown as Medicine[], total };
       }
-    } catch {
+    } catch (err) {
+      console.error("Search error:", err);
       // fall through to JSON
     }
   }
@@ -77,20 +78,21 @@ async function _getRates(
     try {
       const supabase = createPublicClient();
       if (!supabase) throw new Error("Supabase is not configured");
-      const q = supabase
-        .from("patient_rates")
-        .select("*", { count: "exact" })
-        .ilike("test_name", `%${query}%`)
-        .order(sort.key, { ascending: sort.dir === "asc" });
+      
+      const { data, error } = await supabase.rpc("search_rates", {
+        search_query: query,
+        sort_col: sort.key,
+        sort_dir: sort.dir,
+        page_size: PAGE_SIZE,
+        page_offset: (page - 1) * PAGE_SIZE
+      });
 
-      const { data, error, count } = await q.range(
-        (page - 1) * PAGE_SIZE,
-        page * PAGE_SIZE - 1,
-      );
       if (!error && data) {
-        return { items: data as RateTest[], total: count ?? data.length };
+        const total = data.length > 0 ? Number((data[0] as any).total_count) : 0;
+        return { items: data as unknown as RateTest[], total };
       }
-    } catch {
+    } catch (err) {
+      console.error("Search error:", err);
       // fall through to JSON
     }
   }
