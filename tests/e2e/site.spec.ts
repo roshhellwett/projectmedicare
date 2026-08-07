@@ -21,6 +21,7 @@ test.describe("public site", () => {
       "/en/order",
       "/en/gallery",
       "/en/packages",
+      "/en/feedback",
     ]) {
       const response = await page.goto(path);
       expect(response?.status(), `${path} status`).toBe(200);
@@ -63,5 +64,82 @@ test.describe("admin", () => {
   test("admin API is locked without a session", async ({ request }) => {
     const res = await request.get("/api/admin/camp");
     expect(res.status()).toBe(401);
+  });
+
+  test("admin feedbacks API is locked without a session", async ({ request }) => {
+    const res = await request.delete("/api/admin/feedbacks/123");
+    expect(res.status()).toBe(401);
+  });
+});
+
+test.describe("feedback", () => {
+  test("submits a feedback successfully and shows toast", async ({ page }) => {
+    await page.goto("/en/feedback");
+    
+    // Fill the form
+    await page.locator('input[name="name"]').fill("E2E Test User");
+    // Use a unique phone for each test run if possible, or just a static one that we clean up
+    const randomPhone = `999${Math.floor(Math.random() * 10000000).toString().padStart(7, '0')}`;
+    await page.locator('input[name="phone"]').fill(randomPhone);
+    await page.locator('textarea[name="note"]').fill("This is an E2E test feedback.");
+    
+    // Submit
+    await page.getByRole("button", { name: /submit|send/i }).click();
+    
+    // Expect success message card instead of a toast
+    await expect(page.getByText("Feedback Submitted!")).toBeVisible({ timeout: 10000 });
+    
+    // Click button to show form again
+    await page.getByRole("button", { name: /submit another feedback/i }).click();
+
+    // Try to submit with the same phone again to test the duplicate phone error toast
+    await page.locator('input[name="name"]').fill("E2E Test User 2");
+    await page.locator('input[name="phone"]').fill(randomPhone);
+    await page.locator('textarea[name="note"]').fill("Another note");
+    await page.getByRole("button", { name: /submit|send/i }).click();
+    
+    // Expect error toast (we use showToast for errors)
+    await expect(page.locator("text=✕")).toBeVisible({ timeout: 10000 });
+  });
+});
+
+test.describe("forms", () => {
+  const randomPhone = () => `999${Math.floor(Math.random() * 10000000).toString().padStart(7, '0')}`;
+
+  test("submits a job application successfully", async ({ page }) => {
+    await page.goto("/en/careers");
+    await page.locator('input[name="name"]').fill("E2E Applicant");
+    await page.locator('input[name="phone"]').fill(randomPhone());
+    await page.locator('select[name="store_id"]').selectOption({ index: 1 });
+    await page.locator('input[type="file"]').setInputFiles("fixtures/dummy.pdf");
+    
+    await page.getByRole("button", { name: /submit/i }).click();
+    await expect(page.getByText("Application Submitted!")).toBeVisible({ timeout: 10000 });
+  });
+
+  test("submits a medicine order successfully", async ({ page }) => {
+    await page.goto("/en/order");
+    await page.locator('input[name="name"]').fill("E2E Order");
+    await page.locator('input[name="phone"]').fill(randomPhone());
+    await page.locator('textarea[name="address"]').fill("E2E Test Address");
+    await page.locator('input[name="note"]').fill("E2E Test Note");
+    await page.locator('input[type="file"]').setInputFiles("fixtures/dummy.png");
+    
+    await page.getByRole("button", { name: /submit/i }).click();
+    await expect(page.getByText("Order Received!")).toBeVisible({ timeout: 10000 });
+  });
+
+  test("submits a package booking successfully", async ({ page }) => {
+    await page.goto("/en/packages");
+    await page.getByRole("button", { name: /book package/i }).first().click();
+    
+    // Modal is open
+    await expect(page.getByText("Total Payable")).toBeVisible({ timeout: 5000 });
+    await page.locator('input[name="customer_name"]').fill("E2E Patient");
+    await page.locator('input[name="phone_number"]').fill(randomPhone());
+    await page.locator('select[name="store_id"]').selectOption({ index: 1 });
+    
+    await page.getByRole("button", { name: /confirm booking/i }).click();
+    await expect(page.getByText("Booking Confirmed!")).toBeVisible({ timeout: 10000 });
   });
 });

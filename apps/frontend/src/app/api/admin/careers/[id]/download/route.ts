@@ -6,8 +6,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: path } = await params;
-    const signedUrl = await getCvDownloadUrl(path);
+    const { id } = await params;
+    const signedUrl = await getCvDownloadUrl(id);
     return NextResponse.redirect(signedUrl);
   } catch (error: any) {
     console.error("Download CV error:", error);

@@ -21,6 +21,7 @@ export default function Footer() {
     { label: "Store Locations", href: `/${locale}/locations` },
     { label: "Our Doctors", href: `/${locale}/doctors` },
     { label: "Patient Rate Chart", href: `/${locale}/patient-rate-chart` },
+    { label: "Leave Feedback", href: `/${locale}/feedback` },
   ];
 
   return (

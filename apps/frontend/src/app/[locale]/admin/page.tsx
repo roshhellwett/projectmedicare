@@ -24,14 +24,15 @@ import { getDoctors } from "@/lib/db/doctors";
 import { getPackages } from "@/lib/db/packages";
 import { getPackageOrders } from "@/lib/db/package-orders";
 import { formatCampDate } from "@/lib/utils/ist";
-import { FileText, ShoppingBag, Box, ClipboardList } from "lucide-react";
+import { FileText, ShoppingBag, Box, ClipboardList, MessageCircle } from "lucide-react";
+import { getFeedbacks } from "@/lib/db/feedbacks";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const t = await getTranslations("AdminPage");
   const locale = await getLocale();
-  const [stats, camp, bulletins, gallery, applications, orders, doctors, packages, packageOrders] = await Promise.all([
+  const [stats, camp, bulletins, gallery, applications, orders, doctors, packages, packageOrders, feedbacks] = await Promise.all([
     getStats(),
     getActiveCamp(),
     getVisibleBulletins(50),
@@ -41,6 +42,7 @@ export default async function AdminPage() {
     getDoctors(),
     getPackages(),
     getPackageOrders(),
+    getFeedbacks(),
   ]);
 
   const tiles = [
@@ -135,6 +137,15 @@ export default async function AdminPage() {
       desc: t("careers.desc"),
       status: `${applications.length} application(s) received`,
       cta: t("careers.button"),
+    },
+    {
+      href: `/${locale}/admin/feedbacks`,
+      icon: MessageCircle,
+      tone: "is-green",
+      title: t("feedbacks.title"),
+      desc: t("feedbacks.desc"),
+      status: `${feedbacks.length} feedback(s) received`,
+      cta: t("feedbacks.button"),
     },
   ];
 

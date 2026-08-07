@@ -77,6 +77,9 @@ async function main() {
   await check("notices page renders", () =>
     expectPage("/en/bulletins", "notice"),
   );
+  await check("feedback page renders", () =>
+    expectPage("/en/feedback", "feedback"),
+  );
 
   await check("root redirects to a locale", async () => {
     const res = await get("/");
@@ -100,6 +103,16 @@ async function main() {
     assert(
       res.status === 401,
       `/api/admin/packages responded ${res.status}, expected 401`,
+    );
+  });
+
+  await check("admin feedbacks API rejects anonymous deletes", async () => {
+    const res = await fetch(`${BASE}/api/admin/feedbacks/123`, {
+      method: "DELETE",
+    });
+    assert(
+      res.status === 401,
+      `/api/admin/feedbacks/123 responded ${res.status}, expected 401`,
     );
   });
 

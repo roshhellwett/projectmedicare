@@ -53,6 +53,7 @@
       "title1": "Healthcare for every citizen,",
       "title2": "at honest prices.",
       "browse": "Browse medicines",
+      "order": "Order Medicines",
       "stores": "Find our stores",
       "timeKey": "8 AM – 10 PM",
       "timeVal": "Open daily",
@@ -178,6 +179,11 @@
       "title": "Medicine Orders",
       "desc": "Manage and fulfill prescription orders across all stores.",
       "button": "Manage Orders"
+    },
+    "feedbacks": {
+      "title": "User Feedbacks",
+      "desc": "Manage user feedback and suggestions.",
+      "button": "View Feedbacks"
     }
   },
   "Footer": {
@@ -264,6 +270,28 @@
       "successTitle": "Order Received!",
       "successDesc": "Your prescription has been uploaded successfully. Our pharmacist will check the availability and contact you shortly.",
       "errorPhone": "Please enter exactly 10 digits."
+    }
+  },
+  "FeedbackPage": {
+    "metaTitle": "Feedback — Janta Medicare",
+    "metaDesc": "Leave us your feedback or suggestions.",
+    "eyebrow": "We value your voice",
+    "title": "Leave Feedback",
+    "sub": "Help us improve our services by leaving your feedback.",
+    "form": {
+      "nameLabel": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "10-digit mobile number",
+      "noteLabel": "Your Feedback",
+      "notePlaceholder": "Write a short note...",
+      "imageLabel": "Upload Image (Optional)",
+      "submit": "Submit Feedback",
+      "submitting": "Submitting...",
+      "successTitle": "Feedback Submitted!",
+      "successDesc": "Thank you for your valuable feedback.",
+      "errorPhone": "Please enter exactly 10 digits.",
+      "errorDuplicate": "You have already submitted feedback from this number."
     }
   }
 }

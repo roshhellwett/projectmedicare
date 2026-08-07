@@ -65,13 +65,27 @@ export async function createJobApplication(
   }
 }
 
-export async function getCvDownloadUrl(path: string): Promise<string> {
+export async function getCvDownloadUrl(id: string): Promise<string> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available.");
   
+  const { data: appData, error: dbError } = await supabase
+    .from("job_applications")
+    .select("cv_path, name, phone")
+    .eq("id", id)
+    .single();
+
+  if (dbError || !appData?.cv_path) throw new Error("CV not found");
+
+  // Format filename, e.g. "John Doe - 9876543210.pdf"
+  const cleanName = appData.name.replace(/[^a-zA-Z0-9 ]/g, "").trim();
+  const filename = `${cleanName}-${appData.phone}.pdf`;
+
   const { data, error } = await supabase.storage
     .from(RESUMES_BUCKET)
-    .createSignedUrl(path, 60 * 60); // valid for 1 hour
+    .createSignedUrl(appData.cv_path, 60 * 60, { 
+      download: filename 
+    }); // valid for 1 hour
 
   if (error || !data) throw new Error(error?.message || "Failed to generate URL");
   return data.signedUrl;

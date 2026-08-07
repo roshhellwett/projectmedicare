@@ -8,6 +8,7 @@ import { routing } from "@/i18n/routing";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JantaChat from "@/components/chat/JantaChat";
+import ToastProvider from "@/components/Toast";
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -161,6 +162,7 @@ export default async function RootLayout({
             </main>
             <Footer />
             <JantaChat />
+            <ToastProvider />
           </div>
         </NextIntlClientProvider>
       </body>

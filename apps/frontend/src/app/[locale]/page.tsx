@@ -16,6 +16,7 @@ import {
   Stethoscope,
   Store,
   Users,
+  ShoppingBag,
 } from "lucide-react";
 import CampSection from "@/components/site/CampSection";
 import BulletinBoard from "@/components/site/BulletinBoard";
@@ -100,6 +101,11 @@ export default async function HomePage() {
             <p className="section-sub mt-4 text-base">{t("welcome")}</p>
 
             <div className="mt-7 flex flex-wrap gap-2.5">
+              <Link href={`/${locale}/order`} className="btn btn-green relative overflow-hidden group">
+                <span className="absolute inset-0 w-full h-full bg-white/20 -translate-x-full skew-x-[30deg] transition-transform duration-500 group-hover:translate-x-full"></span>
+                <ShoppingBag className="h-4 w-4 relative z-10" /> 
+                <span className="relative z-10">{t("hero.order")}</span>
+              </Link>
               <Link href={`/${locale}/medicines`} className="btn btn-primary">
                 <Pill className="h-4 w-4" /> {t("hero.browse")}
               </Link>

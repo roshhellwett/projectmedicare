@@ -3,7 +3,6 @@ import { isAdminPasswordConfigured } from "@/lib/auth/session";
 import AdminLogin from "@/components/admin/AdminLogin";
 import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 import AdminNav from "@/components/admin/AdminNav";
-import ToastProvider from "@/components/Toast";
 import AdminStoreSelector from "@/components/admin/AdminStoreSelector";
 import { cookies } from "next/headers";
 import { getPharmacyStores } from "@/lib/db/stores";
@@ -27,7 +26,6 @@ export default async function AdminLayout({
             Boolean(process.env.ADMIN_SESSION_SECRET)
           }
         />
-        <ToastProvider />
       </>
     );
   }
@@ -74,7 +72,6 @@ export default async function AdminLayout({
         </div>
       </div>
       {children}
-      <ToastProvider />
     </div>
   );
 }
