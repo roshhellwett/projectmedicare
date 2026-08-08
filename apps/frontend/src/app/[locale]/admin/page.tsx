@@ -14,6 +14,7 @@ import {
   Image as ImageIcon,
   HardDrive,
   Stethoscope,
+  Settings,
 } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
@@ -163,6 +164,15 @@ export default async function AdminPage() {
       desc: t("feedbacks.desc"),
       status: `${feedbacks.length} feedback(s) received`,
       cta: t("feedbacks.button"),
+    },
+    {
+      href: `/${locale}/admin/settings`,
+      icon: Settings,
+      tone: "is-accent",
+      title: "Settings & API Keys",
+      desc: "Manage encrypted environment variables and third-party API keys.",
+      status: "Secure Storage",
+      cta: "Open settings",
     },
   ];
 
