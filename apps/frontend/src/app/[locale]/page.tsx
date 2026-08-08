@@ -100,18 +100,6 @@ export default async function HomePage() {
       <section className="border-b border-line bg-surface">
         <div className="container grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-14">
           <div className="min-w-0">
-            <div className="mb-8 rounded-2xl border border-blue-200 bg-blue-50/50 p-4 sm:flex sm:items-center sm:justify-between sm:gap-4">
-              <p className="text-sm font-medium text-blue-900">
-                If you are unhappy or satisfied with our services, please leave a message for us... because customer satisfaction matters a lot.
-              </p>
-              <Link
-                href={`/${locale}/feedback`}
-                className="mt-3 sm:mt-0 shrink-0 btn btn-primary btn-sm bg-blue-600 hover:bg-blue-700 hover:text-white border-none text-white shadow-sm"
-              >
-                Submit feedback
-              </Link>
-            </div>
-
             <span className="eyebrow">
               <span className="live-dot" aria-hidden />
               {t("hero.eyebrow")}
@@ -346,6 +334,24 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ---------- Feedback CTA ---------- */}
+      <section className="border-t border-blue-100 bg-blue-50/50 py-10">
+        <div className="container flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
+          <div className="max-w-2xl">
+            <h3 className="text-xl font-bold text-blue-950">We value your experience</h3>
+            <p className="mt-2 text-sm leading-relaxed text-blue-900/80">
+              If you are unhappy or satisfied with our services, please leave a message for us... because customer satisfaction matters a lot.
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/feedback`}
+            className="btn btn-primary shrink-0 bg-blue-600 shadow-sm hover:bg-blue-700 hover:text-white border-none text-white"
+          >
+            Submit feedback
+          </Link>
         </div>
       </section>
 
