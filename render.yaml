@@ -2,6 +2,7 @@ services:
   - type: web
     name: jm-backend-worker
     env: node
+    plan: free
     buildCommand: npm install
     startCommand: npm start --workspace @jm/backend
     healthCheckPath: /healthz
