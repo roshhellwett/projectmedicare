@@ -14,10 +14,13 @@ type ToolCall = {
 };
 import { getDoctors } from "@/lib/db/doctors";
 import { stores, mainContact } from "@/data/stores";
+import { getDecryptedKey } from "@/lib/actions/settings";
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.GROQ_API_KEY) {
+    const groqApiKey = (await getDecryptedKey("GROQ_API_KEY")) || process.env.GROQ_API_KEY;
+
+    if (!groqApiKey) {
       return new Response(
         JSON.stringify({
           error: "AI chat is not configured. Please contact the administrator.",
@@ -133,7 +136,7 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            Authorization: `Bearer ${groqApiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
