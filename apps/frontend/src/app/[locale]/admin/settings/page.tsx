@@ -22,7 +22,7 @@ export default async function SettingsPage({
   try {
     keys = await getEnvKeys();
   } catch (err) {
-    console.error("Failed to load keys:", err);
+    // Expected to throw "Unauthorized" during testing or if unauthenticated
   }
 
   return (
