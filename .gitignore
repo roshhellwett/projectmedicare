@@ -51,3 +51,4 @@ next-env.d.ts
 # local agents/tooling
 .lovable/
 .env.test
+.env.local
