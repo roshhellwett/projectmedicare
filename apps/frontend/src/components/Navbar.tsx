@@ -185,36 +185,38 @@ export default function Navbar() {
       </div>
 
       {/* Main bar */}
-      <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-3 lg:flex lg:justify-between">
-        <Link href={`/${locale}`} className="flex min-w-0 items-center gap-2.5">
-          <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-line bg-white sm:h-11 sm:w-11">
-            <Image
-              src="/websitelogo/jantamedicarelogo.webp"
-              alt="Janta Medicare LLP"
-              fill
-              sizes="44px"
-              className="object-contain p-0.5"
-              priority
-            />
-          </span>
-          <span className="min-w-0">
-            <span className="block truncate font-heading text-base font-bold leading-tight text-primary-deep sm:text-lg">
-              Janta Medicare LLP
+      <div className="container flex items-center justify-between gap-4 py-3 xl:gap-8">
+        <div className="flex shrink-0 justify-start min-w-0">
+          <Link href={`/${locale}`} className="flex min-w-0 items-center gap-2.5">
+            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-line bg-white sm:h-11 sm:w-11">
+              <Image
+                src="/websitelogo/jantamedicarelogo.webp"
+                alt="Janta Medicare LLP"
+                fill
+                sizes="44px"
+                className="object-contain p-0.5"
+                priority
+              />
             </span>
-            <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary-dark">
-              Sirf Janta Kay Liye
+            <span className="min-w-0">
+              <span className="block truncate font-heading text-base font-bold leading-tight text-primary-deep sm:text-lg">
+                Janta Medicare LLP
+              </span>
+              <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary-dark">
+                Sirf Janta Kay Liye
+              </span>
             </span>
-          </span>
-        </Link>
+          </Link>
+        </div>
 
-        <nav className="hidden lg:flex lg:items-center lg:gap-1">
+        <nav className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center lg:gap-0.5 xl:gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.key}
               href={`/${locale}${link.href}`}
-              className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+              className={`relative whitespace-nowrap px-2.5 py-2 text-[13px] xl:text-sm font-medium transition-colors ${
                 isActive(link.href)
-                  ? "text-primary after:absolute after:inset-x-3 after:-bottom-px after:h-0.5 after:bg-primary"
+                  ? "text-primary after:absolute after:inset-x-2.5 after:-bottom-px after:h-0.5 after:bg-primary"
                   : "text-muted hover:text-foreground"
               }`}
             >
@@ -223,21 +225,22 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <Link href={`/${locale}/doctors`} className="btn btn-primary btn-sm">
-            Book consultation
-          </Link>
+        <div className="flex shrink-0 items-center justify-end gap-3">
+          <div className="hidden lg:block">
+            <Link href={`/${locale}/doctors`} className="btn btn-primary btn-sm">
+              Book consultation
+            </Link>
+          </div>
+          <button
+            type="button"
+            className="btn btn-outline btn-sm shrink-0 !px-2.5 lg:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="btn btn-outline btn-sm shrink-0 !px-2.5 lg:hidden"
-          onClick={() => setMenuOpen((v) => !v)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
       </div>
 
       {/* Mobile sheet */}
