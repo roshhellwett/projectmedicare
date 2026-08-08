@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Bulletin Board Manager — Janta Medicare Admin",
+  title: "Bulletin Board Manager — Janta Medicare LLP Admin",
   description:
     "Publish, edit and remove products and time-limited offers on the live bulletin board.",
   robots: { index: false, follow: false },

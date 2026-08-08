@@ -57,13 +57,13 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      siteName: "Janta Medicare",
+      siteName: "Janta Medicare LLP",
       images: [
         {
           url: "/websitelogo/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Janta Medicare Logo",
+          alt: "Janta Medicare LLP Logo",
         },
       ],
     },
@@ -95,7 +95,7 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "MedicalOrganization",
-    name: "Janta Medicare",
+    name: "Janta Medicare LLP",
     url:
       process.env.NEXT_PUBLIC_SITE_URL ||
       "https://projectmedicare.roshhellwett.workers.dev",
@@ -103,7 +103,7 @@ export default async function RootLayout({
     department: [
       {
         "@type": "Pharmacy",
-        name: "Janta Medicare - Vivek Vihar Main Hub",
+        name: "Janta Medicare LLP - Vivek Vihar Main Hub",
         address: {
           "@type": "PostalAddress",
           streetAddress:
@@ -117,7 +117,7 @@ export default async function RootLayout({
       },
       {
         "@type": "Pharmacy",
-        name: "Janta Medicare - Shibpur Store",
+        name: "Janta Medicare LLP - Shibpur Store",
         address: {
           "@type": "PostalAddress",
           streetAddress: "53, Kalikumar Mukharjee Lane, Tram Depot More",
@@ -130,7 +130,7 @@ export default async function RootLayout({
       },
       {
         "@type": "Pharmacy",
-        name: "Janta Medicare - Pilkhana Store",
+        name: "Janta Medicare LLP - Pilkhana Store",
         address: {
           "@type": "PostalAddress",
           streetAddress: "67/A, G. T. Road (North), Oriya Para More, Pilkhana",

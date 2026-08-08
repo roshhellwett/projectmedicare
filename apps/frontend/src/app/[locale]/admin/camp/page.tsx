@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Sunday Camp Manager — Janta Medicare Admin",
+  title: "Sunday Camp Manager — Janta Medicare LLP Admin",
   description:
     "Publish and update the weekly Sunday free health camp post shown on the website.",
   robots: { index: false, follow: false },

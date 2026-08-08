@@ -2,8 +2,8 @@ import { setRequestLocale } from "next-intl/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Janta Medicare",
-  description: "Privacy Policy for Janta Medicare",
+  title: "Privacy Policy | Janta Medicare LLP",
+  description: "Privacy Policy for Janta Medicare LLP",
 };
 
 export default async function PrivacyPolicyPage({
@@ -21,7 +21,7 @@ export default async function PrivacyPolicyPage({
         <p className="text-sm text-muted">Last Updated: August 2026</p>
 
         <p>
-          Welcome to Janta Medicare. We value your privacy and are committed to
+          Welcome to Janta Medicare LLP. We value your privacy and are committed to
           protecting your personal data in compliance with the Digital Personal
           Data Protection (DPDP) Act, 2023, and the Information Technology
           (Intermediary Guidelines) Rules, 2021 of India.

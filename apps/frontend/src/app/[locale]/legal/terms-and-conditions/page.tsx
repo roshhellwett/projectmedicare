@@ -2,8 +2,8 @@ import { setRequestLocale } from "next-intl/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Janta Medicare",
-  description: "Terms and Conditions for Janta Medicare",
+  title: "Terms & Conditions | Janta Medicare LLP",
+  description: "Terms and Conditions for Janta Medicare LLP",
 };
 
 export default async function TermsAndConditionsPage({
@@ -21,7 +21,7 @@ export default async function TermsAndConditionsPage({
         <p className="text-sm text-muted">Last Updated: August 2026</p>
 
         <p>
-          Welcome to Janta Medicare. By accessing or using our website, you
+          Welcome to Janta Medicare LLP. By accessing or using our website, you
           agree to comply with and be bound by the following terms and
           conditions.
         </p>

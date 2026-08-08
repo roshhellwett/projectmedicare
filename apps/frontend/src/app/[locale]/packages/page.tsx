@@ -13,7 +13,7 @@ import Link from "next/link";
 import { getLocale } from "next-intl/server";
 
 export const metadata = {
-  title: "Health Packages — Janta Medicare",
+  title: "Health Packages — Janta Medicare LLP",
   description:
     "Comprehensive diagnostic health packages with transparent Janta pricing.",
 };

@@ -5,7 +5,7 @@ test.describe("public site", () => {
     page,
   }) => {
     await page.goto("/en");
-    await expect(page).toHaveTitle(/Janta Medicare/i);
+    await expect(page).toHaveTitle(/Janta Medicare LLP/i);
     await expect(page.locator("#sunday-camp")).toBeVisible();
     await expect(page.locator("#bulletin-board")).toBeVisible();
 

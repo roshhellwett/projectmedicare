@@ -58,8 +58,8 @@ export async function POST(req: Request) {
       contact: d.contact,
     }));
 
-    const systemPrompt = `You are the official Janta Medicare AI Assistant.
-Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare.
+    const systemPrompt = `You are the official Janta Medicare LLP AI Assistant.
+Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare LLP.
 Always be polite, helpful, and concise.
 
 IMPORTANT RULES:

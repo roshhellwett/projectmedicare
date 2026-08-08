@@ -1,5 +1,5 @@
 -- ============================================================================
--- Janta Medicare — Sunday camp posts + live bulletin board
+-- Janta Medicare LLP — Sunday camp posts + live bulletin board
 -- Run this once in the Supabase SQL editor (Dashboard → SQL → New query).
 -- Safe to re-run: every statement is guarded.
 -- ============================================================================

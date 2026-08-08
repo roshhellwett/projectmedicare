@@ -57,7 +57,7 @@ export function formatErrorReport({
 
 /** mailto: link pre-filled with the report so the user only has to press send. */
 export function supportMailto(report, code) {
-  const subject = `Janta Medicare website error ${code ?? ""}`.trim();
+  const subject = `Janta Medicare LLP website error ${code ?? ""}`.trim();
   return `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
     `Hello,\n\nI hit an error on the website.\n\n${report}\n\nWhat I was doing:\n`,
   )}`;

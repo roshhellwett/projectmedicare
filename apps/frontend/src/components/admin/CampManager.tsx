@@ -28,7 +28,7 @@ function emptyForm(): FormState {
   return {
     title: "Sunday Free Health Camp",
     description: "",
-    venue: "Janta Medicare — Shibpur",
+    venue: "Janta Medicare LLP — Shibpur",
     address: "",
     camp_date: nextSundayIST(),
     fee: "Cost ₹100 only",

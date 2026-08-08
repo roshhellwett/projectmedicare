@@ -1,4 +1,4 @@
-# Janta Medicare — Bulletin Cleanup Worker
+# Janta Medicare LLP — Bulletin Cleanup Worker
 
 A tiny standalone Node worker that deletes **expired offers** from the
 `bulletins` table. It is intentionally dependency-free (uses `fetch` + the

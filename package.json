@@ -2,7 +2,7 @@
   "name": "jantamedicare",
   "version": "1.0.0",
   "private": true,
-  "description": "Janta Medicare — monorepo: frontend (Cloudflare), backend worker + health (Railway), Supabase, tests.",
+  "description": "Janta Medicare LLP — monorepo: frontend (Cloudflare), backend worker + health (Railway), Supabase, tests.",
   "workspaces": [
     "apps/*",
     "packages/*",

@@ -2,8 +2,8 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Janta Medicare",
-    short_name: "Janta Medicare",
+    name: "Janta Medicare LLP",
+    short_name: "Janta Medicare LLP",
     description:
       "Sirf Janta Kay Liye - Pharmacy, Pathology & Doctor Consultations in Howrah, West Bengal.",
     start_url: "/en",

@@ -57,8 +57,8 @@ async function expectPage(path, needle) {
 async function main() {
   console.log(`Smoke testing ${BASE}\n`);
 
-  await check("home (en) renders", () => expectPage("/en", "Janta Medicare"));
-  await check("home (hi) renders", () => expectPage("/hi", "Janta Medicare"));
+  await check("home (en) renders", () => expectPage("/en", "Janta Medicare LLP"));
+  await check("home (hi) renders", () => expectPage("/hi", "Janta Medicare LLP"));
   await check("medicines page renders", () =>
     expectPage("/en/medicines", "medicine"),
   );

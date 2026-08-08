@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Gallery Manager — Janta Medicare Admin",
+  title: "Gallery Manager — Janta Medicare LLP Admin",
   description: "Upload and manage photos for the public gallery page.",
   robots: { index: false, follow: false },
 };

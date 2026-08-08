@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "title": "Janta Medicare - Healthcare Portal",
+    "title": "Janta Medicare LLP - Healthcare Portal",
     "description": "Official healthcare portal for checkups, camps, and medical information."
   },
   "Navbar": {
@@ -64,10 +64,10 @@
       "tramDepot": "Shibpur Store",
       "vivekVihar": "Vivek Vihar Store",
       "pilkhana": "Pilkhana Store",
-      "imgAlt1": "Janta Medicare pharmacy counter",
-      "imgAlt2": "Janta Medicare diagnostics desk",
-      "imgAlt3": "Janta Medicare storefront",
-      "imgAlt4": "Janta Medicare doctor chamber"
+      "imgAlt1": "Janta Medicare LLP pharmacy counter",
+      "imgAlt2": "Janta Medicare LLP diagnostics desk",
+      "imgAlt3": "Janta Medicare LLP storefront",
+      "imgAlt4": "Janta Medicare LLP doctor chamber"
     },
     "trust": {
       "eyebrow": "Why choose us",
@@ -190,13 +190,13 @@
     "rights": "© 2026 Janta Medicare LLP. All rights reserved."
   },
   "GalleryPage": {
-    "metaTitle": "Photo Gallery — Janta Medicare",
+    "metaTitle": "Photo Gallery — Janta Medicare LLP",
     "metaDesc": "View photos from our recent health camps and community activities.",
     "eyebrow": "Gallery",
     "title": "Our Activities",
     "sub": "A glimpse into our recent health camps, events, and community services.",
     "empty": "No photos available at the moment. Check back soon!",
-    "altText": "Janta Medicare activity"
+    "altText": "Janta Medicare LLP activity"
   },
   "CampSection": {
     "eyebrow": "Latest post",
@@ -208,9 +208,9 @@
   },
   "BulletinsPage": {
     "eyebrow": "Products & Offers",
-    "metaTitle": "Products & Offers — Janta Medicare",
-    "metaDesc": "Latest products and current offers from Janta Medicare.",
-    "metaOgDesc": "Latest products and current offers from Janta Medicare.",
+    "metaTitle": "Products & Offers — Janta Medicare LLP",
+    "metaDesc": "Latest products and current offers from Janta Medicare LLP.",
+    "metaOgDesc": "Latest products and current offers from Janta Medicare LLP.",
     "ogImage": "/og-default.png",
     "title": "Products & Offers",
     "sub": "Everything currently active, newest first. Offers disappear automatically once they expire."
@@ -230,10 +230,10 @@
     "latestOffers": "Latest Offers"
   },
   "CareersPage": {
-    "metaTitle": "Careers — Join Janta Medicare",
-    "metaDesc": "Apply for a job at Janta Medicare. Upload your CV and join our team.",
+    "metaTitle": "Careers — Join Janta Medicare LLP",
+    "metaDesc": "Apply for a job at Janta Medicare LLP. Upload your CV and join our team.",
     "eyebrow": "Join Us",
-    "title": "Careers at Janta Medicare",
+    "title": "Careers at Janta Medicare LLP",
     "sub": "We are always looking for passionate individuals. Submit your application below.",
     "form": {
       "nameLabel": "Full Name",
@@ -253,8 +253,8 @@
     }
   },
   "OrderPage": {
-    "metaTitle": "Order Medicine Online — Janta Medicare",
-    "metaDesc": "Upload your prescription and order medicines from your nearest Janta Medicare branch.",
+    "metaTitle": "Order Medicine Online — Janta Medicare LLP",
+    "metaDesc": "Upload your prescription and order medicines from your nearest Janta Medicare LLP branch.",
     "eyebrow": "Home Delivery",
     "title": "Order Medicines Online",
     "sub": "Upload your prescription and get medicines delivered right to your door.",
@@ -276,7 +276,7 @@
     }
   },
   "FeedbackPage": {
-    "metaTitle": "Feedback — Janta Medicare",
+    "metaTitle": "Feedback — Janta Medicare LLP",
     "metaDesc": "Leave us your feedback or suggestions.",
     "eyebrow": "We value your voice",
     "title": "Leave Feedback",

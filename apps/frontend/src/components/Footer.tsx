@@ -34,7 +34,7 @@ export default function Footer() {
               <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-line bg-white">
                 <Image
                   src="/websitelogo/jantamedicarelogo.webp"
-                  alt="Janta Medicare"
+                  alt="Janta Medicare LLP"
                   fill
                   sizes="44px"
                   className="object-contain p-0.5"
@@ -42,7 +42,7 @@ export default function Footer() {
               </span>
               <span className="min-w-0">
                 <span className="block truncate font-heading text-lg font-bold text-primary-deep">
-                  Janta Medicare
+                  Janta Medicare LLP
                 </span>
                 <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary-dark">
                   Sirf Janta Kay Liye

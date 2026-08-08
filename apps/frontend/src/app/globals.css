@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 /* =========================================================
-   Janta Medicare — Design System
+   Janta Medicare LLP — Design System
    Colour taken directly from the logo:
    blue #1B6FB3 (cross, hands, ring) · green #4E9A22 (wordmark, helix)
    Minimal · flat surfaces · hairlines · calm motion
@@ -811,6 +811,19 @@
     100% {
       background-position: 0 50%;
     }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 15s linear infinite;
   }
 
   .animate-fade-up,

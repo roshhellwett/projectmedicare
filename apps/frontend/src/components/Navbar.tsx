@@ -63,46 +63,92 @@ export default function Navbar() {
         <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5">
           <div
             suppressHydrationWarning
-            className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap pb-1 sm:pb-0 scrollbar-hide text-xs text-muted mask-edges"
+            className="flex min-w-0 items-center overflow-hidden whitespace-nowrap pb-1 sm:pb-0 text-xs text-muted mask-edges"
           >
-            <a
-              href="tel:+916290745327"
-              className="flex items-center gap-1.5 transition-colors hover:text-primary"
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>
-                {t("tramDepot")}{" "}
-                <span className="font-semibold text-foreground">
-                  +91 62907 45327
-                </span>
-              </span>
-            </a>
-            <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
-            <a
-              href="tel:+918240804490"
-              className="flex items-center gap-1.5 transition-colors hover:text-primary"
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>
-                {t("vivekVihar")}{" "}
-                <span className="font-semibold text-foreground">
-                  +91 82408 04490
-                </span>
-              </span>
-            </a>
-            <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
-            <a
-              href="tel:+919123899472"
-              className="flex items-center gap-1.5 transition-colors hover:text-primary"
-            >
-              <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
-              <span>
-                {t("pilkhana")}{" "}
-                <span className="font-semibold text-foreground">
-                  +91 91238 99472
-                </span>
-              </span>
-            </a>
+            <div className="flex w-max animate-marquee sm:animate-none">
+              <div className="flex items-center gap-3 pr-3">
+                <a
+                  href="tel:+916290745327"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("tramDepot")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 62907 45327
+                    </span>
+                  </span>
+                </a>
+                <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+                <a
+                  href="tel:+918240804490"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("vivekVihar")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 82408 04490
+                    </span>
+                  </span>
+                </a>
+                <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+                <a
+                  href="tel:+919123899472"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("pilkhana")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 91238 99472
+                    </span>
+                  </span>
+                </a>
+              </div>
+              
+              {/* Duplicated items for seamless marquee on mobile */}
+              <div aria-hidden="true" className="flex items-center gap-3 pr-3 sm:hidden">
+                <a
+                  href="tel:+916290745327"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("tramDepot")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 62907 45327
+                    </span>
+                  </span>
+                </a>
+                <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+                <a
+                  href="tel:+918240804490"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("vivekVihar")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 82408 04490
+                    </span>
+                  </span>
+                </a>
+                <span className="hidden h-3 w-px shrink-0 bg-line sm:block" />
+                <a
+                  href="tel:+919123899472"
+                  className="flex items-center gap-1.5 transition-colors hover:text-primary"
+                >
+                  <Phone className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span>
+                    {t("pilkhana")}{" "}
+                    <span className="font-semibold text-foreground">
+                      +91 91238 99472
+                    </span>
+                  </span>
+                </a>
+              </div>
+            </div>
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
@@ -144,7 +190,7 @@ export default function Navbar() {
           <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-line bg-white sm:h-11 sm:w-11">
             <Image
               src="/websitelogo/jantamedicarelogo.webp"
-              alt="Janta Medicare"
+              alt="Janta Medicare LLP"
               fill
               sizes="44px"
               className="object-contain p-0.5"
@@ -153,7 +199,7 @@ export default function Navbar() {
           </span>
           <span className="min-w-0">
             <span className="block truncate font-heading text-base font-bold leading-tight text-primary-deep sm:text-lg">
-              Janta Medicare
+              Janta Medicare LLP
             </span>
             <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary-dark">
               Sirf Janta Kay Liye

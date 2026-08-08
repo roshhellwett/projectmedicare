@@ -1,6 +1,6 @@
 # Supabase Local Development
 
-This directory contains the database schema, migrations, and seed data for **Janta Medicare**.
+This directory contains the database schema, migrations, and seed data for **Janta Medicare LLP**.
 
 ## Directory Structure
 

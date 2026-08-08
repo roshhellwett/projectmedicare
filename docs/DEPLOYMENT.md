@@ -1,4 +1,4 @@
-# Janta Medicare — deployment
+# Janta Medicare LLP — deployment
 
 One repo, three deploy targets. Nothing is shared at runtime except Supabase.
 

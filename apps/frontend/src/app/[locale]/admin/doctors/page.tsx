@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Doctor Manager — Janta Medicare Admin",
+  title: "Doctor Manager — Janta Medicare LLP Admin",
   description: "Manage doctor profiles and chamber schedules.",
   robots: { index: false, follow: false },
 };
