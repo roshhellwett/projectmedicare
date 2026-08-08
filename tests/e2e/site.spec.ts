@@ -84,6 +84,11 @@ test.describe("admin", () => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
+  test("admin settings page is locked without a session", async ({ page }) => {
+    await page.goto("/en/admin/settings");
+    await expect(page.locator('input[type="password"]')).toBeVisible();
+  });
+
   test("admin API is locked without a session", async ({ request }) => {
     const res = await request.get("/api/admin/camp");
     expect(res.status()).toBe(401);
