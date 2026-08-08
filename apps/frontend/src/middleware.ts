@@ -7,8 +7,25 @@ import { routing } from "./i18n/routing";
 const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT = 20; // Max requests per window
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute window
+const RATE_LIMIT_MAX_ENTRIES = 5000; // Prevent unbounded memory growth
 
 const intlMiddleware = createMiddleware(routing);
+
+function cleanupRateLimitMap(now: number) {
+  // Only cleanup when the map gets large enough to matter
+  if (rateLimitMap.size <= RATE_LIMIT_MAX_ENTRIES) return;
+
+  for (const [key, info] of rateLimitMap) {
+    if (now - info.timestamp > RATE_LIMIT_WINDOW_MS) {
+      rateLimitMap.delete(key);
+    }
+  }
+
+  // If still too large after cleanup, clear everything (emergency valve)
+  if (rateLimitMap.size > RATE_LIMIT_MAX_ENTRIES) {
+    rateLimitMap.clear();
+  }
+}
 
 export default function proxy(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "anonymous";
@@ -17,6 +34,10 @@ export default function proxy(request: NextRequest) {
   // 1. Rate Limiting for API routes (especially /api/chat)
   if (path.startsWith("/api/chat")) {
     const now = Date.now();
+
+    // Periodic cleanup to prevent memory leaks
+    cleanupRateLimitMap(now);
+
     const rateLimitInfo = rateLimitMap.get(ip);
 
     if (rateLimitInfo) {

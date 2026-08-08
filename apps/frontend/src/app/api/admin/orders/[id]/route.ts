@@ -1,10 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/guard";
 import { deleteMedicineOrder } from "@/lib/db/orders";
 
 export async function DELETE(
-  request: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { id } = await params;
     await deleteMedicineOrder(id);

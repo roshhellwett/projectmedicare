@@ -17,7 +17,35 @@ import { stores, mainContact } from "@/data/stores";
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    if (!process.env.GROQ_API_KEY) {
+      return new Response(
+        JSON.stringify({
+          error: "AI chat is not configured. Please contact the administrator.",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const body = await req.json();
+    const rawMessages = body.messages;
+
+    if (!Array.isArray(rawMessages) || rawMessages.length === 0) {
+      return new Response(
+        JSON.stringify({ error: "No messages provided." }),
+        { status: 400, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    // Sanitize: only allow user/assistant roles, strip everything else
+    const messages = rawMessages
+      .filter(
+        (m: any) =>
+          typeof m === "object" &&
+          m !== null &&
+          (m.role === "user" || m.role === "assistant") &&
+          typeof m.content === "string",
+      )
+      .slice(-20); // Limit conversation history to prevent abuse
 
     const allDoctors = await getDoctors();
     const chamberDoctors = allDoctors
@@ -86,10 +114,10 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
       },
     ];
 
-    // Filter out UI-only fields or unsupported fields from messages before sending to Groq
-    const cleanMessages = messages.map((m: Message) => ({
-      role: m.role,
-      content: m.content,
+    // Messages are already sanitized above — map to clean format
+    const cleanMessages = messages.map((m: any) => ({
+      role: m.role as string,
+      content: String(m.content || ""),
     }));
 
     const currentMessages: Message[] = [

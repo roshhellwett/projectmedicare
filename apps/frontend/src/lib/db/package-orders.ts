@@ -41,7 +41,7 @@ export async function createPackageOrder(
   package_id: string,
   store_id?: string,
 ): Promise<void> {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   if (!supabase) throw new Error("Supabase client not available");
 
   const { error } = await supabase.from("package_orders").insert({

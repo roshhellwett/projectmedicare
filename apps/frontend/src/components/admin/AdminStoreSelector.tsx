@@ -16,6 +16,7 @@ export default function AdminStoreSelector({
   const handleSelect = async (storeId: string) => {
     setLoading(true);
     // Set cookie using a quick fetch to a small API route or just document.cookie
+    // eslint-disable-next-line
     document.cookie = `admin_store_id=${storeId}; path=/; max-age=86400`;
     router.refresh();
   };

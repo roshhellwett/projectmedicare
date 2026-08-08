@@ -3,6 +3,7 @@ import {
   createPublicClient,
   CAMP_BUCKET,
 } from "@/lib/supabase/admin";
+import { revalidatePath } from "next/cache";
 
 export type CampPost = {
   id: string;
@@ -49,7 +50,11 @@ export async function getCampArchive(limit = 12): Promise<CampPost[]> {
   return data as CampPost[];
 }
 
-/** Publish a new camp post; the previous active one is archived atomically enough. */
+/**
+ * Publish a new camp post atomically via RPC.
+ * The previous active one is archived in the same transaction,
+ * so there's no window where zero camps are active.
+ */
 export async function publishCamp(input: CampInput): Promise<CampPost> {
   const supabase = createAdminClient();
   if (!supabase)
@@ -57,19 +62,33 @@ export async function publishCamp(input: CampInput): Promise<CampPost> {
       "Supabase service role key is not configured on the server.",
     );
 
-  const { error: archiveError } = await supabase
-    .from("camp_posts")
-    .update({ is_active: false })
-    .eq("is_active", true);
-  if (archiveError) throw new Error(archiveError.message);
+  const { data, error } = await supabase.rpc("publish_camp", {
+    p_title: input.title,
+    p_description: input.description,
+    p_venue: input.venue,
+    p_address: input.address,
+    p_camp_date: input.camp_date,
+    p_fee: input.fee,
+    p_image_url: input.image_url,
+    p_image_path: input.image_path,
+  });
 
-  const { data, error } = await supabase
-    .from("camp_posts")
-    .insert({ ...input, is_active: true })
-    .select("*")
-    .single();
   if (error) throw new Error(error.message);
-  return data as CampPost;
+
+  // Fetch the newly created camp to return the full object
+  const newId = data as string;
+  const { data: camp, error: fetchError } = await supabase
+    .from("camp_posts")
+    .select("*")
+    .eq("id", newId)
+    .single();
+  if (fetchError || !camp) throw new Error("Camp published but could not be fetched");
+
+  revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/admin/camp", "page");
+  revalidatePath("/[locale]/admin", "page");
+
+  return camp as CampPost;
 }
 
 export async function updateCamp(
@@ -88,6 +107,11 @@ export async function updateCamp(
     .select("*")
     .single();
   if (error) throw new Error(error.message);
+
+  revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/admin/camp", "page");
+  revalidatePath("/[locale]/admin", "page");
+
   return data as CampPost;
 }
 
@@ -109,4 +133,8 @@ export async function deleteCamp(id: string): Promise<void> {
 
   const path = (existing as { image_path?: string | null } | null)?.image_path;
   if (path) await supabase.storage.from(CAMP_BUCKET).remove([path]);
+
+  revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/admin/camp", "page");
+  revalidatePath("/[locale]/admin", "page");
 }

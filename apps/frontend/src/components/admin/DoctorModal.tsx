@@ -358,7 +358,7 @@ export default function DoctorModal({
                 placeholder="+91 9876543210"
               />
               <p className="mt-1 text-xs text-muted">
-                If left blank, the "Book Appointment" button will NOT be shown
+                If left blank, the &quot;Book Appointment&quot; button will NOT be shown
                 for this doctor.
               </p>
             </div>

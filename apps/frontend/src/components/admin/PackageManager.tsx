@@ -290,7 +290,7 @@ export default function PackageManager({
         ))}
         {packages.length === 0 && (
           <div className="col-span-full py-12 text-center text-muted border-2 border-dashed border-line rounded-xl bg-surface/50">
-            No packages created yet. Click "Add Package" to create one.
+            No packages created yet. Click &quot;Add Package&quot; to create one.
           </div>
         )}
       </div>

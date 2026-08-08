@@ -26,6 +26,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (imgFile.size > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "Image must be smaller than 5 MB" },
+        { status: 400 },
+      );
+    }
+
     // Standardize phone
     const cleanPhone = phone.replace(/\D/g, "");
     if (cleanPhone.length !== 10) {

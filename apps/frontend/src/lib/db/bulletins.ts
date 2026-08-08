@@ -1,4 +1,5 @@
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
+import { revalidatePath } from "next/cache";
 
 export type BulletinKind = "product" | "offer" | "info";
 
@@ -65,6 +66,13 @@ function client() {
   return supabase;
 }
 
+function revalidateBulletins() {
+  revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/bulletins", "page");
+  revalidatePath("/[locale]/admin/bulletins", "page");
+  revalidatePath("/[locale]/admin", "page");
+}
+
 export async function createBulletin(input: BulletinInput): Promise<Bulletin> {
   const { data, error } = await client()
     .from("bulletins")
@@ -72,6 +80,8 @@ export async function createBulletin(input: BulletinInput): Promise<Bulletin> {
     .select("*")
     .single();
   if (error) throw new Error(error.message);
+
+  revalidateBulletins();
   return data as Bulletin;
 }
 
@@ -86,10 +96,14 @@ export async function updateBulletin(
     .select("*")
     .single();
   if (error) throw new Error(error.message);
+
+  revalidateBulletins();
   return data as Bulletin;
 }
 
 export async function deleteBulletin(id: string): Promise<void> {
   const { error } = await client().from("bulletins").delete().eq("id", id);
   if (error) throw new Error(error.message);
+
+  revalidateBulletins();
 }

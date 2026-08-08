@@ -1,16 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPackageOrder } from "@/lib/db/package-orders";
+import { str, uuid as validateUuid, ValidationError } from "@/lib/utils/validation";
 
 export async function POST(req: NextRequest) {
   try {
-    const { customer_name, phone_number, package_id, store_id } =
-      await req.json();
+    const body = await req.json();
 
-    if (!customer_name || !phone_number || !package_id) {
+    // Validate required fields
+    let customer_name: string;
+    let phone_number: string;
+    let package_id: string;
+    try {
+      customer_name = str(body.customer_name, "Name", { max: 120 });
+      package_id = validateUuid(body.package_id, "Package");
+
+      // Validate and standardize phone
+      const rawPhone = str(body.phone_number, "Phone number", { max: 15 });
+      const cleanPhone = rawPhone.replace(/\D/g, "");
+      if (cleanPhone.length !== 10) {
+        throw new ValidationError("Phone number must be exactly 10 digits");
+      }
+      phone_number = "+91" + cleanPhone;
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        return NextResponse.json({ error: err.message }, { status: 400 });
+      }
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 },
       );
+    }
+
+    // store_id is optional — validate if provided
+    let store_id: string | undefined;
+    if (body.store_id) {
+      try {
+        store_id = validateUuid(body.store_id, "Store");
+      } catch {
+        // Ignore invalid store_id — it's optional
+      }
     }
 
     await createPackageOrder(customer_name, phone_number, package_id, store_id);

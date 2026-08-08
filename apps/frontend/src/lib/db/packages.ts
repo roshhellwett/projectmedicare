@@ -1,4 +1,5 @@
-import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { revalidatePath } from "next/cache";
 
 export type Package = {
   id: string;
@@ -10,6 +11,13 @@ export type Package = {
   is_featured: boolean;
   created_at: string;
 };
+
+function revalidatePackages() {
+  revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/packages", "page");
+  revalidatePath("/[locale]/admin/packages", "page");
+  revalidatePath("/[locale]/admin", "page");
+}
 
 export async function getPackages(): Promise<Package[]> {
   const supabase = createAdminClient();
@@ -47,6 +55,8 @@ export async function createPackage(
 
   const { error } = await supabase.from("packages").insert(pkg);
   if (error) throw new Error(error.message);
+
+  revalidatePackages();
 }
 
 export async function updatePackage(
@@ -58,6 +68,8 @@ export async function updatePackage(
 
   const { error } = await supabase.from("packages").update(pkg).eq("id", id);
   if (error) throw new Error(error.message);
+
+  revalidatePackages();
 }
 
 export async function deletePackage(id: string): Promise<void> {
@@ -66,4 +78,6 @@ export async function deletePackage(id: string): Promise<void> {
 
   const { error } = await supabase.from("packages").delete().eq("id", id);
   if (error) throw new Error(error.message);
+
+  revalidatePackages();
 }

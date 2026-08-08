@@ -79,10 +79,20 @@ export default async function HomePage() {
   const locale = await getLocale();
   const gallery = await getGalleryImages();
 
-  // Mix uploaded gallery images with static ones, always keeping exactly 4
-  const finalImages = [
-    ...gallery.map((g, i) => ({ src: g.url, altKey: `imgAlt${(i % 4) + 1}` })),
-  ].slice(0, 4);
+  // Mix uploaded gallery images with static fallbacks, always keeping exactly 4
+  const fallbackImages = [
+    { src: "/images/hero-1.webp", altKey: "imgAlt1" },
+    { src: "/images/hero-2.webp", altKey: "imgAlt2" },
+    { src: "/images/hero-3.webp", altKey: "imgAlt3" },
+    { src: "/images/hero-4.webp", altKey: "imgAlt4" },
+  ];
+  const galleryImages = gallery.map((g, i) => ({
+    src: g.url,
+    altKey: `imgAlt${(i % 4) + 1}`,
+  }));
+  const finalImages = galleryImages.length > 0
+    ? galleryImages.slice(0, 4)
+    : fallbackImages;
 
   return (
     <div>
