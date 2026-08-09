@@ -122,7 +122,7 @@ export default function DoctorModal({
       is_daily_chamber: formData.get("is_daily_chamber") === "on",
       daily_fee: Number(formData.get("daily_fee")) || 300,
       display_order: Number(formData.get("display_order")) || 999,
-      image_url: doctor?.image_url || null,
+      image_url: imagePreview,
     };
 
     try {
