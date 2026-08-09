@@ -24,7 +24,7 @@ export const stores: Store[] = [
     services: ["Pharmacy", "Pathology"],
     isMainHub: true,
     mapQuery:
-      "493 G T Road South Fazir Bazar More Vivek Vihar Phase II Howrah 711101",
+      "Janta Medicare LLP (Generic Aadhaar), BLOCK-F, GT Rd, Fazir Bazar, Choura Bustee, Shibpur, Howrah, West Bengal 711102",
     mapUrl: "https://maps.app.goo.gl/zHZvuowxANBXK5rQ9?g_st=iw",
   },
   {
@@ -54,7 +54,7 @@ export const stores: Store[] = [
     services: ["Pharmacy", "Pathology"],
     isMainHub: false,
     mapQuery:
-      "67A G T Road North Oriya Para More Pilkhana Salkia Howrah 711106",
+      "Janta Medicare LLP - Generic Aadhaar, 67/A, Grand Trunk Rd, Babudanga, Pilkhana, Bandhaghat, Mali Panchghara, Howrah, West Bengal 711106",
     mapUrl: "https://maps.app.goo.gl/XsZcrW8Yd2SgkMEv8?g_st=iw",
   },
 ];
