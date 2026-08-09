@@ -54,6 +54,14 @@ export async function adminCreateDoctor(input: DoctorInput) {
 export async function adminUpdateDoctor(id: string, input: DoctorInput) {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin not configured");
+
+  // First, get the old doctor to check if the image is being replaced or removed
+  const { data: oldDoctor } = await supabase
+    .from("doctors")
+    .select("image_url")
+    .eq("id", id)
+    .single();
+
   const { error } = await supabase
     .from("doctors")
     .update({ ...input, updated_at: new Date().toISOString() })
@@ -61,6 +69,23 @@ export async function adminUpdateDoctor(id: string, input: DoctorInput) {
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  // If the image was changed or removed, delete the old image from the bucket
+  if (
+    oldDoctor?.image_url &&
+    oldDoctor.image_url !== input.image_url &&
+    oldDoctor.image_url.includes("/storage/v1/object/public/doctor_images/")
+  ) {
+    try {
+      const urlParts = oldDoctor.image_url.split("/doctor_images/");
+      if (urlParts.length > 1) {
+        const objectPath = urlParts[1];
+        await supabase.storage.from("doctor_images").remove([objectPath]);
+      }
+    } catch (err) {
+      console.error("Failed to delete old doctor image from storage:", err);
+    }
   }
 
   revalidatePath("/[locale]/doctors", "page");

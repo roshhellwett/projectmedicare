@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       : file.type === "image/webp"
         ? "webp"
         : "jpg";
-  const path = `camps/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
   const { error } = await supabase.storage
     .from(CAMP_BUCKET)

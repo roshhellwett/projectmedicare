@@ -89,7 +89,16 @@ export async function updateBulletin(
   id: string,
   input: Partial<BulletinInput>,
 ): Promise<Bulletin> {
-  const { data, error } = await client()
+  const supabase = client();
+
+  // Fetch the old bulletin to check if the image URL is changing
+  const { data: oldBulletin } = await supabase
+    .from("bulletins")
+    .select("image_url")
+    .eq("id", id)
+    .single();
+
+  const { data, error } = await supabase
     .from("bulletins")
     .update(input)
     .eq("id", id)
@@ -97,12 +106,56 @@ export async function updateBulletin(
     .single();
   if (error) throw new Error(error.message);
 
+  // If the update was successful, and the old image_url is different from the new input.image_url,
+  // and the old image was in the products bucket, delete it.
+  if (
+    oldBulletin?.image_url &&
+    input.image_url !== undefined &&
+    oldBulletin.image_url !== input.image_url &&
+    oldBulletin.image_url.includes("/storage/v1/object/public/products/")
+  ) {
+    try {
+      const urlParts = oldBulletin.image_url.split("/products/");
+      if (urlParts.length > 1) {
+        const objectPath = urlParts[1];
+        await supabase.storage.from("products").remove([objectPath]);
+      }
+    } catch (err) {
+      console.error("Failed to delete old bulletin image from storage:", err);
+    }
+  }
+
   revalidateBulletins();
   return data as Bulletin;
 }
 
 export async function deleteBulletin(id: string): Promise<void> {
-  const { error } = await client().from("bulletins").delete().eq("id", id);
+  const supabase = client();
+
+  // First, get the bulletin to see if they have a custom image
+  const { data: bulletin } = await supabase
+    .from("bulletins")
+    .select("image_url")
+    .eq("id", id)
+    .single();
+
+  // If they have a custom image in the products bucket, delete it
+  if (
+    bulletin?.image_url &&
+    bulletin.image_url.includes("/storage/v1/object/public/products/")
+  ) {
+    try {
+      const urlParts = bulletin.image_url.split("/products/");
+      if (urlParts.length > 1) {
+        const objectPath = urlParts[1];
+        await supabase.storage.from("products").remove([objectPath]);
+      }
+    } catch (err) {
+      console.error("Failed to delete bulletin image from storage:", err);
+    }
+  }
+
+  const { error } = await supabase.from("bulletins").delete().eq("id", id);
   if (error) throw new Error(error.message);
 
   revalidateBulletins();

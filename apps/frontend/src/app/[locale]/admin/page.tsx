@@ -15,6 +15,7 @@ import {
   HardDrive,
   Stethoscope,
   Settings,
+  RefreshCw,
 } from "lucide-react";
 import { getActiveCamp } from "@/lib/db/camp";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
@@ -33,6 +34,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { getFeedbacks } from "@/lib/db/feedbacks";
+import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -204,6 +206,21 @@ export default async function AdminPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Stats Header with Refresh */}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-bold">System Status</h2>
+        <form
+          action={async () => {
+            "use server";
+            revalidateTag("stats", "max");
+          }}
+        >
+          <button type="submit" className="btn btn-outline btn-sm">
+            <RefreshCw className="mr-2 h-3.5 w-3.5" /> Refresh Stats
+          </button>
+        </form>
       </div>
 
       {/* Stats */}

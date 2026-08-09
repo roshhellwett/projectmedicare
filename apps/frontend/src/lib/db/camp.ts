@@ -100,6 +100,13 @@ export async function updateCamp(
     throw new Error(
       "Supabase service role key is not configured on the server.",
     );
+
+  const { data: existing } = await supabase
+    .from("camp_posts")
+    .select("image_path")
+    .eq("id", id)
+    .maybeSingle();
+
   const { data, error } = await supabase
     .from("camp_posts")
     .update(input)
@@ -107,6 +114,18 @@ export async function updateCamp(
     .select("*")
     .single();
   if (error) throw new Error(error.message);
+
+  if (
+    existing?.image_path &&
+    input.image_path !== undefined &&
+    existing.image_path !== input.image_path
+  ) {
+    try {
+      await supabase.storage.from(CAMP_BUCKET).remove([existing.image_path]);
+    } catch (err) {
+      console.error("Failed to delete old camp image from storage:", err);
+    }
+  }
 
   revalidatePath("/[locale]", "page");
   revalidatePath("/[locale]/admin/camp", "page");

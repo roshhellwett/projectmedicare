@@ -46,7 +46,7 @@ export default async function AdminLayout({
           <AdminNav />
           <div className="flex items-center gap-4">
             {selectedStore && (
-              <div className="hidden sm:flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                   <Store className="h-3.5 w-3.5" />
                   {selectedStore.name}
