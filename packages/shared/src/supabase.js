@@ -31,23 +31,32 @@ export function resolveServiceKey(env = process.env) {
 
 const options = { auth: { persistSession: false, autoRefreshToken: false } };
 
+// Module-level singletons — avoids re-creating clients on every query.
+// Safe on Workers (single-threaded isolates) and Node (same process).
+let _adminClient = null;
+let _publicClient = null;
+
 /**
  * Service-role client. SERVER ONLY — bypasses RLS. Returns null when the
  * environment is not configured so callers can degrade gracefully.
  */
 export function createAdminClient(env = process.env) {
+  if (_adminClient) return _adminClient;
   const url = resolveSupabaseUrl(env);
   const key = resolveServiceKey(env);
   if (!url || !key) return null;
-  return createClient(url, key, options);
+  _adminClient = createClient(url, key, options);
+  return _adminClient;
 }
 
 /** Anon/publishable client for public reads (RLS applies). */
 export function createPublicClient(env = process.env) {
+  if (_publicClient) return _publicClient;
   const url = resolveSupabaseUrl(env);
   const key = resolveAnonKey(env);
   if (!url || !key) return null;
-  return createClient(url, key, options);
+  _publicClient = createClient(url, key, options);
+  return _publicClient;
 }
 
 /** True when public reads are possible at all. */

@@ -23,6 +23,8 @@ import BulletinBoard from "@/components/site/BulletinBoard";
 import FeaturedPackages from "@/components/site/FeaturedPackages";
 import { getGalleryImages } from "@/lib/db/gallery";
 
+export const revalidate = 60;
+
 const stats = [
   { value: "3", label: "stores", icon: Store },
   { value: "12+", label: "doctors", icon: Users },

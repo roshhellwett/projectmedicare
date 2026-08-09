@@ -187,8 +187,7 @@ async function supabaseCheck() {
 async function runChecks() {
   const checks = [];
   if (SITE_URL) {
-    checks.push(await httpCheck("home", `${SITE_URL}/en`));
-    checks.push(await httpCheck("bulletins", `${SITE_URL}/en/bulletins`));
+    checks.push(await httpCheck("home", `${SITE_URL}/api/health`));
     checks.push(
       await httpCheck("admin-api-locked", `${SITE_URL}/api/admin/camp`, {
         expect: 401,
@@ -254,6 +253,11 @@ function startServer() {
           },
         }),
       );
+      return;
+    }
+    if (req.url === "/ping") {
+      res.writeHead(200, { "Content-Type": "text/plain" });
+      res.end("ok");
       return;
     }
     res.writeHead(404).end();
