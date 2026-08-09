@@ -56,7 +56,7 @@ export default async function MedicinesPage({
         sub={t("sub")}
         actions={
           <a href="tel:+919007013572" className="btn btn-primary btn-sm">
-            <Phone className="h-4 w-4" /> Contact Pharmacy
+            <Phone className="h-4 w-4" /> {t("contactPharmacy")}
           </a>
         }
       />
@@ -64,8 +64,7 @@ export default async function MedicinesPage({
       {/* Trust indicator */}
       <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-secondary-dark animate-fade-up">
         <ShieldCheck className="h-4 w-4" />
-        All medicines are 100% genuine and sourced from verified pharmaceutical
-        companies.
+        {t("trustIndicator")}
       </div>
 
       <div className="mb-8 animate-fade-up" style={{ animationDelay: "0.1s" }}>
@@ -138,7 +137,7 @@ export default async function MedicinesPage({
                       <span
                         className={`badge ${off >= 50 ? "badge-magenta" : "badge-green"}`}
                       >
-                        <Tag className="h-3 w-3" /> {off}% off
+                        <Tag className="h-3 w-3" /> {t("offFormat", { percentage: off })}
                       </span>
                     )}
                   </span>

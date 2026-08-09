@@ -22,6 +22,7 @@ const serviceIcons: Record<string, typeof Pill> = {
 
 export default async function LocationsPage() {
   const t = await getTranslations("LocationsPage");
+  const ts = await getTranslations("Stores");
 
   return (
     <div className="container py-10 md:py-14">
@@ -44,29 +45,30 @@ export default async function LocationsPage() {
               </span>
               {store.isMainHub ? (
                 <span className="badge badge-green">
-                  <Stethoscope className="h-3 w-3" /> Main hub
+                  <Stethoscope className="h-3 w-3" /> {t("mainHubBadge")}
                 </span>
               ) : (
                 <span className="badge badge-blue">
-                  <Clock className="h-3 w-3" /> 8 AM – 10 PM
+                  <Clock className="h-3 w-3" /> {t("timeBadge")}
                 </span>
               )}
             </div>
 
-            <h2 className="text-lg leading-snug">{store.name}</h2>
+            <h2 className="text-lg leading-snug">{ts(`${store.id}.name`)}</h2>
             <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-secondary-dark">
-              {store.tagline}
+              {ts(`${store.id}.tagline`)}
             </p>
             <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
-              {store.address}
+              {ts(`${store.id}.address`)}
             </p>
 
             <div className="mt-4 flex flex-wrap gap-1.5">
               {store.services.map((service) => {
                 const Icon = serviceIcons[service] ?? Pill;
+                const serviceKey = service === "Doctor Chambers" ? "doctorChambers" : service.toLowerCase();
                 return (
                   <span key={service} className="badge">
-                    <Icon className="h-3 w-3" /> {service}
+                    <Icon className="h-3 w-3" /> {t(`services.${serviceKey}`)}
                   </span>
                 );
               })}
@@ -127,10 +129,10 @@ export default async function LocationsPage() {
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
             <span className="badge badge-green">
-              ₹{doctorChamberInfo.fee}/- per checkup
+              ₹{doctorChamberInfo.fee}/- {t("perCheckup")}
             </span>
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted">
-              <Clock className="h-3.5 w-3.5 text-secondary" /> Daily
+              <Clock className="h-3.5 w-3.5 text-secondary" /> {t("daily")}
             </span>
           </div>
         </div>
@@ -144,7 +146,7 @@ export default async function LocationsPage() {
             {t("campInfo")}
           </p>
           <div className="mt-5 border-t border-line pt-4">
-            <span className="badge badge-magenta">₹100/- cost only</span>
+            <span className="badge badge-magenta">{t("costBadge")}</span>
           </div>
         </div>
       </div>

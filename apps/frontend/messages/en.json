@@ -115,7 +115,10 @@
     "colMrp": "MRP",
     "colPrice": "Janta Selling Price",
     "empty": "No medicines found. Try a different search.",
-    "showing": "Showing {from} to {to} of {total} entries"
+    "showing": "Showing {from} to {to} of {total} entries",
+    "trustIndicator": "All medicines are 100% genuine and sourced from verified pharmaceutical companies.",
+    "contactPharmacy": "Contact Pharmacy",
+    "offFormat": "{percentage}% off"
   },
   "RateChartPage": {
     "eyebrow": "Pathology",
@@ -126,7 +129,11 @@
     "colTest": "Test Name",
     "colRate": "Janta Rate",
     "empty": "No tests found. Try a different search.",
-    "showing": "Showing {from} to {to} of {total} entries"
+    "showing": "Showing {from} to {to} of {total} entries",
+    "trustIndicator": "Transparent pricing — no hidden charges. Same rates across all three stores.",
+    "catBudget": "Budget",
+    "catStandard": "Standard",
+    "catPremium": "Premium"
   },
   "LocationsPage": {
     "eyebrow": "Find Us",
@@ -136,7 +143,17 @@
     "doctorTitle": "Doctor Chamber",
     "drSeema": "Dr. Seema Farhin sits every day at the Shibpur chamber for general checkups.",
     "campTitle": "Sunday Health Camp",
-    "campInfo": "Every Sunday we set up a health checkup camp at Shibpur. Cost is only ₹100."
+    "campInfo": "Every Sunday we set up a health checkup camp at Shibpur. Cost is only ₹100.",
+    "mainHubBadge": "Main hub",
+    "timeBadge": "8 AM – 10 PM",
+    "costBadge": "₹100/- cost only",
+    "perCheckup": "per checkup",
+    "daily": "Daily",
+    "services": {
+      "pharmacy": "Pharmacy",
+      "pathology": "Pathology",
+      "doctorChambers": "Doctor Chambers"
+    }
   },
   "DoctorsPage": {
     "eyebrow": "Our Specialists",
@@ -187,7 +204,26 @@
     }
   },
   "Footer": {
-    "rights": "© 2026 Janta Medicare LLP. All rights reserved."
+    "rights": "© 2026 Janta Medicare LLP. All rights reserved.",
+    "tagline": "Sirf Janta Kay Liye",
+    "mainHubLabel": "Main hub — Vivek Vihar",
+    "mainHubAddress": "493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. & P.S. Shibpur, Dist. Howrah, Pin: 711101",
+    "openDaily": "Open daily 8 AM – 10 PM",
+    "servicesTitle": "Services",
+    "quickLinksTitle": "Quick links",
+    "legalTitle": "Legal",
+    "designBy": "Design and Build By",
+    "pharmacy": "Pharmacy",
+    "pathology": "Pathology & Diagnostics",
+    "doctorChambers": "Doctor Chambers",
+    "productsOffers": "Products & Offers",
+    "storeLocations": "Store Locations",
+    "ourDoctors": "Our Doctors",
+    "rateChart": "Patient Rate Chart",
+    "leaveFeedback": "Leave Feedback",
+    "facebookPage": "Facebook page",
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms & Conditions"
   },
   "GalleryPage": {
     "metaTitle": "Photo Gallery — Janta Medicare LLP",
@@ -296,5 +332,22 @@
       "errorPhone": "Please enter exactly 10 digits.",
       "errorDuplicate": "You have already submitted feedback from this number."
     }
+  },
+  "Stores": {
+    "vivekvihar": {
+      "name": "Vivek Vihar Main Hub",
+      "tagline": "Main Branch · Pharmacy & Pathology",
+      "address": "493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar Phase-II, Shop No. 4, P.O. & P.S. Shibpur, Dist. Howrah, Pin: 711101"
+    },
+    "shibpur": {
+      "name": "Shibpur Store",
+      "tagline": "Pharmacy, Pathology & Doctor Chambers",
+      "address": "53, Kalikumar Mukharjee Lane, Tram Depot More, P.O. & P.S. Shibpur, D.T. Howrah, Pin: 711102"
+    },
+    "pilkhana": {
+      "name": "Pilkhana Store",
+      "tagline": "Pharmacy & Pathology",
+      "address": "67/A, G. T. Road (North), Oriya Para More, Pilkhana, Salkia, Howrah - 711106, West Bengal"
+    }
   }
-}
+}\n

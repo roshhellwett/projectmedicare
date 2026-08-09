@@ -8,20 +8,21 @@ import { stores } from "@/data/stores";
 
 export default function Footer() {
   const t = useTranslations("Footer");
+  const ts = useTranslations("Stores");
   const locale = useLocale();
 
   const services = [
-    { label: "Pharmacy", href: `/${locale}/medicines` },
-    { label: "Pathology & Diagnostics", href: `/${locale}/patient-rate-chart` },
-    { label: "Doctor Chambers", href: `/${locale}/doctors` },
-    { label: "Products & Offers", href: `/${locale}/bulletins` },
+    { label: t("pharmacy"), href: `/${locale}/medicines` },
+    { label: t("pathology"), href: `/${locale}/patient-rate-chart` },
+    { label: t("doctorChambers"), href: `/${locale}/doctors` },
+    { label: t("productsOffers"), href: `/${locale}/bulletins` },
   ];
 
   const links = [
-    { label: "Store Locations", href: `/${locale}/locations` },
-    { label: "Our Doctors", href: `/${locale}/doctors` },
-    { label: "Patient Rate Chart", href: `/${locale}/patient-rate-chart` },
-    { label: "Leave Feedback", href: `/${locale}/feedback` },
+    { label: t("storeLocations"), href: `/${locale}/locations` },
+    { label: t("ourDoctors"), href: `/${locale}/doctors` },
+    { label: t("rateChart"), href: `/${locale}/patient-rate-chart` },
+    { label: t("leaveFeedback"), href: `/${locale}/feedback` },
   ];
 
   return (
@@ -45,7 +46,7 @@ export default function Footer() {
                   Janta Medicare LLP
                 </span>
                 <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-secondary-dark">
-                  Sirf Janta Kay Liye
+                  {t("tagline")}
                 </span>
               </span>
             </div>
@@ -54,11 +55,9 @@ export default function Footer() {
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <span>
                 <span className="block font-semibold text-foreground">
-                  Main hub — Vivek Vihar
+                  {t("mainHubLabel")}
                 </span>
-                493/C/A, G. T. Road (South), Fazir Bazar More, Vivek Vihar
-                Phase-II, Shop No. 4, P.O. &amp; P.S. Shibpur, Dist. Howrah,
-                Pin: 711101
+                {t("mainHubAddress")}
               </span>
             </p>
 
@@ -66,7 +65,7 @@ export default function Footer() {
               {stores.map((store) => (
                 <div key={store.id} className="space-y-1.5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                    {store.name}
+                    {ts(`${store.id}.name`)}
                   </p>
                   {store.phones.map((phone) => (
                     <a
@@ -90,7 +89,7 @@ export default function Footer() {
               <div className="pt-2">
                 <p className="flex items-center gap-2 text-muted">
                   <Clock className="h-4 w-4 shrink-0 text-secondary" />
-                  Open daily 8 AM – 10 PM
+                  {t("openDaily")}
                 </p>
               </div>
             </div>
@@ -99,7 +98,7 @@ export default function Footer() {
           {/* Services */}
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Services
+              {t("servicesTitle")}
             </h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               {services.map((s) => (
@@ -118,7 +117,7 @@ export default function Footer() {
           {/* Links */}
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Quick links
+              {t("quickLinksTitle")}
             </h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               {links.map((l) => (
@@ -138,7 +137,7 @@ export default function Footer() {
                   rel="noreferrer"
                   className="text-muted transition-colors hover:text-primary"
                 >
-                  Facebook page
+                  {t("facebookPage")}
                 </a>
               </li>
             </ul>
@@ -147,7 +146,7 @@ export default function Footer() {
           {/* Legal */}
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Legal
+              {t("legalTitle")}
             </h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
@@ -155,7 +154,7 @@ export default function Footer() {
                   href={`/${locale}/legal/privacy-policy`}
                   className="text-muted transition-colors hover:text-primary"
                 >
-                  Privacy Policy
+                  {t("privacyPolicy")}
                 </Link>
               </li>
               <li>
@@ -163,7 +162,7 @@ export default function Footer() {
                   href={`/${locale}/legal/terms-and-conditions`}
                   className="text-muted transition-colors hover:text-primary"
                 >
-                  Terms & Conditions
+                  {t("termsConditions")}
                 </Link>
               </li>
             </ul>
@@ -174,7 +173,7 @@ export default function Footer() {
           <div className="container flex flex-col gap-1 py-5 text-center text-xs text-muted sm:flex-row sm:justify-between sm:text-left">
             <p>{t("rights")}</p>
             <p className="text-muted-soft">
-              Design and Build By{" "}
+              {t("designBy")}{" "}
               <a
                 href="https://zenithopensourceprojects.vercel.app/site"
                 target="_blank"

@@ -50,9 +50,9 @@ export default async function PatientRateChartPage({
   const getRateCategory = (rate: number | string) => {
     const num = Number(rate);
     if (isNaN(num) || num === 0) return null;
-    if (num <= 200) return { label: "Budget", cls: "badge-green" };
-    if (num <= 800) return { label: "Standard", cls: "badge-blue" };
-    return { label: "Premium", cls: "badge-magenta" };
+    if (num <= 200) return { label: t("catBudget"), cls: "badge-green" };
+    if (num <= 800) return { label: t("catStandard"), cls: "badge-blue" };
+    return { label: t("catPremium"), cls: "badge-magenta" };
   };
 
   return (
@@ -67,8 +67,7 @@ export default async function PatientRateChartPage({
       {/* Trust indicator */}
       <div className="mb-6 flex items-center gap-2 text-sm font-semibold text-secondary-dark animate-fade-up">
         <ShieldCheck className="h-4 w-4" />
-        Transparent pricing — no hidden charges. Same rates across all three
-        stores.
+        {t("trustIndicator")}
       </div>
 
       <div className="mb-8 animate-fade-up" style={{ animationDelay: "0.1s" }}>
