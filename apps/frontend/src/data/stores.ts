@@ -7,6 +7,7 @@ export type Store = {
   services: string[];
   isMainHub: boolean;
   mapQuery: string;
+  mapCid?: string;
   mapUrl?: string;
 };
 
@@ -25,6 +26,7 @@ export const stores: Store[] = [
     isMainHub: true,
     mapQuery:
       "Janta Medicare LLP (Generic Aadhaar), BLOCK-F, GT Rd, Fazir Bazar, Choura Bustee, Shibpur, Howrah, West Bengal 711102",
+    mapCid: "10565345717141520250",
     mapUrl: "https://maps.app.goo.gl/zHZvuowxANBXK5rQ9?g_st=iw",
   },
   {
@@ -55,6 +57,7 @@ export const stores: Store[] = [
     isMainHub: false,
     mapQuery:
       "Janta Medicare LLP - Generic Aadhaar, 67/A, Grand Trunk Rd, Babudanga, Pilkhana, Bandhaghat, Mali Panchghara, Howrah, West Bengal 711106",
+    mapCid: "12928312012028687059",
     mapUrl: "https://maps.app.goo.gl/XsZcrW8Yd2SgkMEv8?g_st=iw",
   },
 ];

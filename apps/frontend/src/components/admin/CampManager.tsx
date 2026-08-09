@@ -22,6 +22,7 @@ type FormState = {
   fee: string;
   image_url: string | null;
   image_path: string | null;
+  file: File | null;
 };
 
 function emptyForm(): FormState {
@@ -34,6 +35,7 @@ function emptyForm(): FormState {
     fee: "Cost ₹100 only",
     image_url: null,
     image_path: null,
+    file: null,
   };
 }
 
@@ -47,6 +49,7 @@ function fromCamp(camp: CampPost): FormState {
     fee: camp.fee,
     image_url: camp.image_url,
     image_path: camp.image_path,
+    file: null,
   };
 }
 
@@ -72,7 +75,7 @@ export default function CampManager({
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
-  const handleUpload = async (file: File) => {
+  const handleFileSelect = async (file: File) => {
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
       showToast("Only JPG, PNG or WebP images are allowed", "error");
       return;
@@ -81,43 +84,55 @@ export default function CampManager({
       showToast("Image must be smaller than 4 MB", "error");
       return;
     }
-    setUploading(true);
-    try {
-      const body = new FormData();
-      body.append("file", file);
-      const res = await fetch("/api/admin/camp/upload", {
-        method: "POST",
-        body,
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload failed");
-      setForm((prev) => ({
-        ...prev,
-        image_url: data.url,
-        image_path: data.path,
-      }));
-      showToast("Image uploaded");
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : "Upload failed", "error");
-    } finally {
-      setUploading(false);
-      if (fileInput.current) fileInput.current.value = "";
-    }
+    setForm((prev) => ({ ...prev, file }));
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    let uploadedPath: string | null = null;
     try {
+      let finalImageUrl = form.image_url;
+      let finalImagePath = form.image_path;
+
+      if (form.file) {
+        const body = new FormData();
+        body.append("file", form.file);
+        const uploadRes = await fetch("/api/admin/camp/upload", {
+          method: "POST",
+          body,
+        });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadData.error || "Upload failed");
+        
+        finalImageUrl = uploadData.url;
+        finalImagePath = uploadData.path;
+        uploadedPath = uploadData.path;
+      }
+
       const isEdit = mode === "edit" && active;
+      const payload = {
+        ...form,
+        image_url: finalImageUrl,
+        image_path: finalImagePath,
+      };
+
       const res = await fetch("/api/admin/camp", {
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(isEdit ? { ...form, id: active.id } : form),
+        body: JSON.stringify(isEdit ? { ...payload, id: active.id } : payload),
       });
       const data = await res.json();
-      if (!res.ok)
+      if (!res.ok) {
+        if (uploadedPath) {
+          await fetch("/api/admin/clean-upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bucket: "camp", path: uploadedPath }),
+          }).catch(() => {});
+        }
         throw new Error(data.error || "Could not save the camp post");
+      }
 
       if (!isEdit && active)
         setArchive((prev) => [{ ...active, is_active: false }, ...prev]);
@@ -265,7 +280,7 @@ export default function CampManager({
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                if (file) handleUpload(file);
+                if (file) handleFileSelect(file);
               }}
             />
             <button
@@ -274,23 +289,18 @@ export default function CampManager({
               disabled={uploading}
               className="btn btn-outline !py-2 !px-4 text-sm"
             >
-              {uploading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <ImagePlus className="h-4 w-4" />
-              )}
-              {uploading
-                ? "Uploading…"
-                : form.image_url
+              <ImagePlus className="h-4 w-4" />
+              {form.file || form.image_url
                   ? "Replace image"
                   : "Upload image"}
             </button>
-            {form.image_url && (
+            {(form.image_url || form.file) && (
               <button
                 type="button"
-                onClick={() =>
-                  setForm((p) => ({ ...p, image_url: null, image_path: null }))
-                }
+                onClick={() => {
+                  setForm((p) => ({ ...p, image_url: null, image_path: null, file: null }));
+                  if (fileInput.current) fileInput.current.value = "";
+                }}
                 className="text-xs font-bold text-accent hover:underline"
               >
                 Remove image
@@ -304,7 +314,7 @@ export default function CampManager({
 
         <button
           type="submit"
-          disabled={saving || uploading}
+          disabled={saving}
           className="btn btn-primary w-full !py-3"
         >
           {saving ? (
@@ -324,7 +334,15 @@ export default function CampManager({
           </h3>
           <div className="card overflow-hidden !p-0">
             <div className="relative h-48 w-full bg-primary-soft">
-              {form.image_url ? (
+              {form.file ? (
+                <Image
+                  src={URL.createObjectURL(form.file)}
+                  alt="Camp preview"
+                  fill
+                  sizes="480px"
+                  className="object-cover"
+                />
+              ) : form.image_url ? (
                 <Image
                   src={form.image_url}
                   alt="Camp preview"

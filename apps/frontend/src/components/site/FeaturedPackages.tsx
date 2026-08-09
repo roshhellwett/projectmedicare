@@ -8,17 +8,16 @@ export default async function FeaturedPackages({ locale }: { locale: string }) {
 
   if (!packages || packages.length === 0) return null;
 
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations("PackagesPage");
 
   return (
     <section className="section bg-surface border-y border-line">
       <div className="container">
         <div className="mb-8 max-w-2xl">
-          <span className="eyebrow">Health Packages</span>
-          <h2 className="section-title mt-2">Comprehensive Preventive Care</h2>
+          <span className="eyebrow">{t("homeEyebrow")}</span>
+          <h2 className="section-title mt-2">{t("homeTitle")}</h2>
           <p className="section-sub mt-2">
-            Get complete peace of mind with our curated health checkup packages
-            at honest Janta prices.
+            {t("homeSub")}
           </p>
         </div>
 
@@ -59,7 +58,7 @@ export default async function FeaturedPackages({ locale }: { locale: string }) {
                   ))}
                   {pkg.tests.length > 4 && (
                     <div className="text-xs font-medium text-primary mt-1">
-                      + {pkg.tests.length - 4} more tests
+                      {t("moreTests", { count: pkg.tests.length - 4 })}
                     </div>
                   )}
                 </div>
@@ -69,7 +68,7 @@ export default async function FeaturedPackages({ locale }: { locale: string }) {
                 href={`/${locale}/packages`}
                 className="btn btn-outline w-full mt-6"
               >
-                View Details <ArrowRight className="h-4 w-4 ml-1" />
+                {t("viewDetails")} <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
             </div>
           ))}

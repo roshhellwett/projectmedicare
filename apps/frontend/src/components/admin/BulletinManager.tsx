@@ -85,6 +85,7 @@ export default function BulletinManager({
       return;
     }
     setSaving(true);
+    let uploadedUrl: string | null = null;
     try {
       let finalImageUrl = form.image_url;
 
@@ -103,6 +104,7 @@ export default function BulletinManager({
         if (!uploadRes.ok)
           throw new Error(uploadData.error || "Failed to upload image");
         finalImageUrl = uploadData.url;
+        uploadedUrl = uploadData.url;
       }
 
       const res = await fetch("/api/admin/bulletins", {
@@ -119,7 +121,19 @@ export default function BulletinManager({
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not save");
+      if (!res.ok) {
+        if (uploadedUrl) {
+          const urlParts = uploadedUrl.split("/products/");
+          if (urlParts.length > 1) {
+            await fetch("/api/admin/clean-upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ bucket: "products", path: urlParts[1] }),
+            }).catch(() => {});
+          }
+        }
+        throw new Error(data.error || "Could not save");
+      }
       const saved = data.bulletin as Bulletin;
       setItems((prev) => {
         const rest = prev.filter((i) => i.id !== saved.id);

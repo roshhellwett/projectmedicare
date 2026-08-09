@@ -135,6 +135,29 @@
     "catStandard": "Standard",
     "catPremium": "Premium"
   },
+  "PackagesPage": {
+    "eyebrow": "Health Packages",
+    "title1": "Complete Checkups at",
+    "title2": "Honest Prices",
+    "sub": "Preventive care is the best care. Choose from our specialized diagnostic packages designed to give you a complete overview of your health. No hidden charges.",
+    "empty": "No health packages available at the moment. Please check back later.",
+    "mrp": "MRP",
+    "save": "Save",
+    "includesParams": "Includes {count} Parameters",
+    "moreTests": "+ {count} more tests",
+    "trustEyebrow": "Trust",
+    "trustTitle": "Why Book With Us?",
+    "feature1Title": "Fast Reports",
+    "feature1Desc": "Get your detailed test reports quickly and securely via WhatsApp or SMS.",
+    "feature2Title": "3 Convenient Locations",
+    "feature2Desc": "Visit Shibpur, Vivek Vihar, or Pilkhana for your sample collection.",
+    "feature3Title": "Transparent Pricing",
+    "feature3Desc": "What you see is what you pay. Honest Janta pricing with zero hidden fees.",
+    "homeEyebrow": "Health Packages",
+    "homeTitle": "Comprehensive Preventive Care",
+    "homeSub": "Get complete peace of mind with our curated health checkup packages at honest Janta prices.",
+    "viewDetails": "View Details"
+  },
   "LocationsPage": {
     "eyebrow": "Find Us",
     "title": "Our Stores & Clinics",
@@ -350,4 +373,4 @@
       "address": "67/A, G. T. Road (North), Oriya Para More, Pilkhana, Salkia, Howrah - 711106, West Bengal"
     }
   }
-}\n
+}

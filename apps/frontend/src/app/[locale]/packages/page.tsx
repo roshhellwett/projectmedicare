@@ -20,7 +20,7 @@ export const metadata = {
 
 export default async function PackagesPage() {
   const packages = await getPackages();
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations("PackagesPage");
   const locale = await getLocale();
 
   return (
@@ -28,15 +28,13 @@ export default async function PackagesPage() {
       {/* Header */}
       <section className="border-b border-line bg-surface-muted py-12 md:py-20">
         <div className="container max-w-4xl text-center">
-          <span className="eyebrow">Health Packages</span>
+          <span className="eyebrow">{t("eyebrow")}</span>
           <h1 className="mt-4 text-[2rem] leading-tight sm:text-5xl">
-            Complete Checkups at{" "}
-            <span className="text-primary">Honest Prices</span>
+            {t("title1")}{" "}
+            <span className="text-primary">{t("title2")}</span>
           </h1>
           <p className="section-sub mx-auto mt-6 max-w-2xl text-base sm:text-lg">
-            Preventive care is the best care. Choose from our specialized
-            diagnostic packages designed to give you a complete overview of your
-            health. No hidden charges.
+            {t("sub")}
           </p>
         </div>
       </section>
@@ -47,10 +45,7 @@ export default async function PackagesPage() {
           {packages.length === 0 ? (
             <div className="col-span-full py-20 text-center text-muted">
               <FlaskConical className="mx-auto h-12 w-12 opacity-20 mb-4" />
-              <p>
-                No health packages available at the moment. Please check back
-                later.
-              </p>
+              <p>{t("empty")}</p>
             </div>
           ) : (
             packages.map((pkg) => (
@@ -72,13 +67,13 @@ export default async function PackagesPage() {
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-sm font-medium text-muted line-through mb-1">
-                        MRP ₹{pkg.market_price}
+                        {t("mrp")} ₹{pkg.market_price}
                       </div>
                       <div className="text-3xl font-bold text-primary">
                         ₹{pkg.janta_price}
                       </div>
                       <div className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-md mt-1 inline-block border border-green-200">
-                        Save ₹{pkg.market_price - pkg.janta_price}
+                        {t("save")} ₹{pkg.market_price - pkg.janta_price}
                       </div>
                     </div>
                   </div>
@@ -86,7 +81,7 @@ export default async function PackagesPage() {
                   <div className="mt-8 border-t border-line pt-6">
                     <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
                       <FlaskConical className="h-4 w-4" />
-                      Includes {pkg.tests.length} Parameters
+                      {t("includesParams", { count: pkg.tests.length })}
                     </h4>
                     <ul className="grid sm:grid-cols-2 gap-y-3 gap-x-4">
                       {pkg.tests.map((test, i) => (
@@ -120,38 +115,29 @@ export default async function PackagesPage() {
         <div className="rounded-2xl border border-line bg-surface-muted p-8 text-center sm:p-12">
           <ShieldCheck className="mx-auto h-12 w-12 text-primary opacity-80" />
           <h2 className="mt-6 text-2xl font-bold text-foreground">
-            Why Book With Us?
+            {t("trustTitle")}
           </h2>
           <div className="mt-8 grid gap-8 sm:grid-cols-3">
             <div className="flex flex-col items-center text-center">
               <span className="icon-tile is-green mb-4">
                 <Clock className="h-5 w-5" />
               </span>
-              <h3 className="font-semibold">Fast Reports</h3>
-              <p className="mt-2 text-sm text-muted">
-                Get your detailed test reports quickly and securely via WhatsApp
-                or SMS.
-              </p>
+              <h3 className="font-semibold">{t("feature1Title")}</h3>
+              <p className="mt-2 text-sm text-muted">{t("feature1Desc")}</p>
             </div>
             <div className="flex flex-col items-center text-center">
               <span className="icon-tile mb-4">
                 <MapPin className="h-5 w-5" />
               </span>
-              <h3 className="font-semibold">3 Convenient Locations</h3>
-              <p className="mt-2 text-sm text-muted">
-                Visit Shibpur, Vivek Vihar, or Pilkhana for your sample
-                collection.
-              </p>
+              <h3 className="font-semibold">{t("feature2Title")}</h3>
+              <p className="mt-2 text-sm text-muted">{t("feature2Desc")}</p>
             </div>
             <div className="flex flex-col items-center text-center">
               <span className="icon-tile is-accent mb-4">
                 <Pill className="h-5 w-5" />
               </span>
-              <h3 className="font-semibold">Transparent Pricing</h3>
-              <p className="mt-2 text-sm text-muted">
-                What you see is what you pay. Honest Janta pricing with zero
-                hidden fees.
-              </p>
+              <h3 className="font-semibold">{t("feature3Title")}</h3>
+              <p className="mt-2 text-sm text-muted">{t("feature3Desc")}</p>
             </div>
           </div>
         </div>

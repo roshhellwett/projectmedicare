@@ -125,6 +125,7 @@ export default function DoctorModal({
       image_url: imagePreview,
     };
 
+    let uploadedUrl: string | null = null;
     try {
       // 1. Upload new image if provided
       if (imageFile) {
@@ -142,6 +143,7 @@ export default function DoctorModal({
           throw new Error(uploadData.error || "Failed to upload image");
 
         input.image_url = uploadData.url;
+        uploadedUrl = uploadData.url;
       }
 
       // 2. Save doctor record
@@ -158,6 +160,16 @@ export default function DoctorModal({
 
       if (!res.ok) {
         const data = await res.json();
+        if (uploadedUrl) {
+          const urlParts = uploadedUrl.split("/doctor_images/");
+          if (urlParts.length > 1) {
+            await fetch("/api/admin/clean-upload", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ bucket: "doctor_images", path: urlParts[1] }),
+            }).catch(() => {});
+          }
+        }
         throw new Error(data.error || "Failed to save doctor");
       }
 

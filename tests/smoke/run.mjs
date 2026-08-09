@@ -74,8 +74,8 @@ async function main() {
   await check("doctors page renders", () =>
     expectPage("/en/doctors", "doctor"),
   );
-  await check("notices page renders", () =>
-    expectPage("/en/bulletins", "notice"),
+  await check("products & offers page renders", () =>
+    expectPage("/en/bulletins", "product"),
   );
   await check("feedback page renders", () =>
     expectPage("/en/feedback", "feedback"),
