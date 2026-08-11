@@ -1,5 +1,5 @@
 {
-  "name": "jantamedicare",
+  "name": "jantamedicarellp",
   "version": "1.0.0",
   "private": true,
   "description": "Janta Medicare LLP — monorepo: frontend (Cloudflare), backend worker + health (Railway), Supabase, tests.",

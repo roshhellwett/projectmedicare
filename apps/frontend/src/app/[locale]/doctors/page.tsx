@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getDoctors } from "@/lib/db/doctors";
 import Image from "next/image";
+import { Link } from "@/i18n/routing";
 import PageHeader from "@/components/PageHeader";
 import {
   BadgeCheck,
@@ -37,7 +38,7 @@ export default async function DoctorsPage() {
           <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl transition-transform duration-500 group-hover:scale-150"></div>
 
           <div className="relative z-10 flex min-w-0 items-start gap-5">
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-white shadow-sm ring-1 ring-black/5 dark:border-surface-muted">
+            <Link href={`/doctors/${doctor.id}`} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-white shadow-sm ring-1 ring-black/5 dark:border-surface-muted block transition-transform duration-500 hover:scale-105">
               <Image
                 src={
                   doctor.image_url ||
@@ -48,14 +49,16 @@ export default async function DoctorsPage() {
                 alt={doctor.name}
                 fill
                 sizes="80px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover"
               />
-            </div>
+            </Link>
             <div className="min-w-0 pt-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
-                  {doctor.name}
-                </h2>
+                <Link href={`/doctors/${doctor.id}`} className="hover:text-primary transition-colors">
+                  <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
+                    {doctor.name}
+                  </h2>
+                </Link>
                 <BadgeCheck className="h-5 w-5 text-primary" />
               </div>
               <p className="mt-1.5 text-sm md:text-base font-medium text-secondary-dark/90">
@@ -103,7 +106,7 @@ export default async function DoctorsPage() {
 
             {/* Middle Section */}
             <div className="flex min-w-0 gap-4 mb-5">
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-line bg-surface-muted shadow-sm">
+              <Link href={`/doctors/${doctor.id}`} className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-line bg-surface-muted shadow-sm block transition-transform duration-300 hover:scale-105">
                 <Image
                   src={
                     doctor.image_url ||
@@ -114,13 +117,15 @@ export default async function DoctorsPage() {
                   alt={doctor.name}
                   fill
                   sizes="64px"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover"
                 />
-              </div>
+              </Link>
               <div className="min-w-0 flex-1 pt-1">
-                <h2 className="text-lg font-bold tracking-tight text-foreground leading-tight">
-                  {doctor.name}
-                </h2>
+                <Link href={`/doctors/${doctor.id}`} className="hover:text-primary transition-colors">
+                  <h2 className="text-lg font-bold tracking-tight text-foreground leading-tight">
+                    {doctor.name}
+                  </h2>
+                </Link>
                 <p className="mt-1.5 text-sm font-medium text-secondary-dark line-clamp-2 leading-relaxed">
                   {doctor.specialty}
                 </p>

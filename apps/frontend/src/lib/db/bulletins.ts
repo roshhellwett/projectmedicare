@@ -43,6 +43,18 @@ export async function getVisibleBulletins(limit = 30): Promise<Bulletin[]> {
   return data as Bulletin[];
 }
 
+export async function getBulletinById(id: string): Promise<Bulletin | null> {
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("bulletins")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error || !data) return null;
+  return data as Bulletin;
+}
+
 /** Everything, including scheduled and expired items (admin view). */
 export async function getAllBulletins(limit = 200): Promise<Bulletin[]> {
   const supabase = createAdminClient() ?? createPublicClient();

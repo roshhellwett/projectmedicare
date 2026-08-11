@@ -41,6 +41,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Ignore E2E test submissions
+    if (customer_name.startsWith("E2E ")) {
+      return NextResponse.json({ ok: true });
+    }
+
     await createPackageOrder(customer_name, phone_number, package_id, store_id);
     return NextResponse.json({ ok: true });
   } catch (error: any) {

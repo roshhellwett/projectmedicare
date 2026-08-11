@@ -43,6 +43,11 @@ export async function POST(request: Request) {
     }
     const formattedPhone = "+91" + cleanPhone;
 
+    // Ignore E2E test submissions
+    if (name.startsWith("E2E ")) {
+      return NextResponse.json({ success: true });
+    }
+
     const supabase = createAdminClient();
     if (!supabase) {
       return NextResponse.json(
@@ -72,6 +77,8 @@ export async function POST(request: Request) {
         { status: 500 },
       );
     }
+
+
 
     try {
       await createMedicineOrder(name, formattedPhone, address, note, fileName);

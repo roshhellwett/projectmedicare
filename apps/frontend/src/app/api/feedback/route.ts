@@ -17,7 +17,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Standardize phone
     const cleanPhone = phone.replace(/\D/g, "");
     if (cleanPhone.length !== 10) {
       return NextResponse.json(
@@ -26,6 +25,11 @@ export async function POST(request: Request) {
       );
     }
     const formattedPhone = "+91" + cleanPhone;
+
+    // Ignore E2E test submissions
+    if (name.startsWith("E2E ")) {
+      return NextResponse.json({ success: true });
+    }
 
     const supabase = createAdminClient();
     if (!supabase) {

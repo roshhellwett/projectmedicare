@@ -46,6 +46,17 @@ export async function generateMetadata({
     metadataBase: new URL(siteUrl),
     title: t("title"),
     description: t("description"),
+    keywords: [
+      "Janta Medicare LLP",
+      "best medical store",
+      "pharmacy in Howrah",
+      "doctor consultation",
+      "health packages",
+      "pathology lab",
+      "genuine medicines",
+      "discount medicines",
+      "health camp"
+    ],
     formatDetection: {
       telephone: false,
     },
@@ -58,6 +69,8 @@ export async function generateMetadata({
       title: t("title"),
       description: t("description"),
       siteName: "Janta Medicare LLP",
+      url: siteUrl,
+      type: "website",
       images: [
         {
           url: "/websitelogo/og-image.png",
@@ -98,8 +111,12 @@ export default async function RootLayout({
     name: "Janta Medicare LLP",
     url:
       process.env.NEXT_PUBLIC_SITE_URL ||
-      "https://projectmedicare.roshhellwett.workers.dev",
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://projectmedicare.roshhellwett.workers.dev"}/websitelogo/jantamedicarelogo.webp`,
+      "https://jantamedicare.com",
+    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/websitelogo/jantamedicarelogo.webp`,
+    sameAs: [
+      "https://www.facebook.com/profile.php?id=61565406085566", // Placeholder, user will update if needed
+      "https://www.instagram.com/jantamedicarellp" // Placeholder
+    ],
     department: [
       {
         "@type": "Pharmacy",

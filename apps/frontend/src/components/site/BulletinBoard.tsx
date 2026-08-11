@@ -36,20 +36,25 @@ export function BulletinItem({ item }: { item: Bulletin }) {
           {formatDateTime(item.created_at)}
         </span>
       </div>
-      <div className="flex gap-4">
+      <Link href={`/bulletins/${item.id}`} className="flex gap-4 group">
         {item.image_url && (
           <div className="shrink-0">
             <ZoomableImage
               src={item.image_url}
               alt="Product"
-              className="h-24 w-24 rounded-lg object-cover border border-line"
+              className="h-24 w-24 rounded-lg object-cover border border-line transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
-        <p className="whitespace-pre-line text-sm leading-relaxed text-foreground flex-1">
-          {item.body}
-        </p>
-      </div>
+        <div className="flex-1 flex flex-col justify-between">
+          <p className="whitespace-pre-line text-sm leading-relaxed text-foreground group-hover:text-primary transition-colors line-clamp-4">
+            {item.body}
+          </p>
+          <span className="text-xs font-semibold text-primary mt-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Read more <ArrowRight className="h-3 w-3" />
+          </span>
+        </div>
+      </Link>
       {isOffer && item.ends_at && (
         <p className="mt-3 inline-flex items-center gap-1.5 border-t border-line pt-3 text-xs font-semibold text-accent">
           <Timer className="h-3.5 w-3.5" />

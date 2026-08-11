@@ -38,6 +38,22 @@ export async function getDoctors() {
   return data as Doctor[];
 }
 
+export async function getDoctorById(id: string) {
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("doctors")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching doctor ${id}:`, error);
+    return null;
+  }
+  return data as Doctor;
+}
+
 export async function adminCreateDoctor(input: DoctorInput) {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin not configured");
