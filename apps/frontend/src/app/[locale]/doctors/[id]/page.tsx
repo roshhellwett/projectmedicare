@@ -72,10 +72,10 @@ export default async function DoctorProfilePage({ params }: Props) {
     image:
       doctor.image_url ||
       (doctor.gender === "female"
-        ? `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/assets/femaledoctor.webp`
-        : `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/assets/maledoctor.webp`),
+        ? "https://jantamedicare.com/assets/femaledoctor.webp"
+        : "https://jantamedicare.com/assets/maledoctor.webp"),
     telephone: doctor.contact || mainContact.diagnostic,
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/${locale}/doctors/${id}`,
+    url: `https://jantamedicare.com/${locale}/doctors/${id}`,
     worksFor: {
       "@type": "MedicalOrganization",
       name: "Janta Medicare LLP",

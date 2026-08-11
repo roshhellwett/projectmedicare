@@ -38,9 +38,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://projectmedicare.roshhellwett.workers.dev";
+  const siteUrl = "https://jantamedicare.com";
 
   return {
     metadataBase: new URL(siteUrl),
@@ -109,10 +107,8 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "MedicalOrganization",
     name: "Janta Medicare LLP",
-    url:
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      "https://jantamedicare.com",
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/websitelogo/jantamedicarelogo.webp`,
+    url: "https://jantamedicare.com",
+    logo: "https://jantamedicare.com/websitelogo/jantamedicarelogo.webp",
     sameAs: [
       "https://www.facebook.com/profile.php?id=61565406085566", // Placeholder, user will update if needed
       "https://www.instagram.com/jantamedicarellp" // Placeholder

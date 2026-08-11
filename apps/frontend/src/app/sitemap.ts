@@ -2,9 +2,7 @@ import { MetadataRoute } from "next";
 import { getDoctors } from "@/lib/db/doctors";
 import { getVisibleBulletins } from "@/lib/db/bulletins";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  "https://jantamedicare.com";
+const siteUrl = "https://jantamedicare.com";
 const locales = ["en", "hi"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

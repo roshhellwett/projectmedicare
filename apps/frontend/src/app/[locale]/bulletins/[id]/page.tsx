@@ -57,15 +57,15 @@ export default async function BulletinDetailPage({ params }: Props) {
     name: titleText,
     headline: titleText,
     description: bulletin.body,
-    image: bulletin.image_url || `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/websitelogo/og-image.png`,
-    url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/${locale}/bulletins/${id}`,
+    image: bulletin.image_url || "https://jantamedicare.com/websitelogo/og-image.png",
+    url: `https://jantamedicare.com/${locale}/bulletins/${id}`,
     datePublished: bulletin.created_at,
     publisher: {
       "@type": "MedicalOrganization",
       name: "Janta Medicare LLP",
       logo: {
         "@type": "ImageObject",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://jantamedicare.com"}/websitelogo/jantamedicarelogo.webp`
+        url: "https://jantamedicare.com/websitelogo/jantamedicarelogo.webp"
       }
     },
     ...(isOffer && bulletin.ends_at ? { priceValidUntil: bulletin.ends_at } : {})
