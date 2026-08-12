@@ -70,9 +70,8 @@ describe("Packages Integration Tests", () => {
     expect(data).toHaveLength(1);
   });
 
-  it("should allow anonymous user to insert a package order (since API uses service_role, wait... direct supabase insert fails)", async () => {
-    // Frontend uses server action which uses admin client to bypass RLS for inserts
-    // So direct anon insert should fail
+  it("should allow anonymous user to insert a package order (RLS allows anon insert)", async () => {
+    // We added RLS policy for public insert to package_orders
     const { error } = await anonSupabase.from("package_orders").insert({
       customer_name: "Test User",
       phone_number: "9999999999",
@@ -80,6 +79,6 @@ describe("Packages Integration Tests", () => {
       store_id: testStore.id,
       status: "pending",
     });
-    expect(error).not.toBeNull();
+    expect(error).toBeNull();
   });
 });

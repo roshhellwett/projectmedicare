@@ -34,6 +34,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { getFeedbacks } from "@/lib/db/feedbacks";
+import { getAllAnnouncements } from "@/lib/db/announcements";
 import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +53,7 @@ export default async function AdminPage() {
     packages,
     packageOrders,
     feedbacks,
+    announcements,
   ] = await Promise.all([
     getStats(),
     getActiveCamp(),
@@ -63,6 +65,7 @@ export default async function AdminPage() {
     getPackages(),
     getPackageOrders(),
     getFeedbacks(),
+    getAllAnnouncements(),
   ]);
 
   const tiles = [
@@ -139,6 +142,15 @@ export default async function AdminPage() {
         ? `Live: ${formatCampDate(camp.camp_date)} · ${camp.venue}`
         : "No camp published yet",
       cta: "Open camp manager",
+    },
+    {
+      href: `/${locale}/admin/announcements`,
+      icon: Megaphone,
+      tone: "is-accent",
+      title: "Announcements",
+      desc: "Post dynamic announcement banners on the homepage.",
+      status: `${announcements.filter(a => a.is_active).length} active announcement(s)`,
+      cta: "Open announcements",
     },
     {
       href: `/${locale}/admin/gallery`,

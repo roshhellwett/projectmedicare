@@ -5,12 +5,14 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2, Loader2, UploadCloud } from "lucide-react";
 import { stores } from "@/data/stores";
 import { showToast } from "./Toast";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function CareersForm() {
   const t = useTranslations("CareersPage.form");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [fileName, setFileName] = useState<string>("");
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +27,10 @@ export default function CareersForm() {
       }
       if (cvFile && cvFile.size > 2 * 1024 * 1024) {
         throw new Error(t("errorSize"));
+      }
+      
+      if (turnstileToken) {
+        formData.append("cf-turnstile-response", turnstileToken);
       }
 
       const res = await fetch("/api/careers", {
@@ -189,10 +195,19 @@ export default function CareersForm() {
         </div>
       </div>
 
+      <div className="mt-8 flex justify-center">
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onError={() => setTurnstileToken("")}
+          onExpire={() => setTurnstileToken("")}
+        />
+      </div>
+
       <button
         type="submit"
-        disabled={submitting}
-        className="btn btn-primary w-full mt-8"
+        disabled={submitting || (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY !== '1x00000000000000000000AA')}
+        className="btn btn-primary w-full mt-4"
       >
         {submitting ? (
           <>

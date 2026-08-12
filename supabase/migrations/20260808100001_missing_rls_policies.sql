@@ -31,13 +31,6 @@ CREATE POLICY "feedbacks public insert"
   TO anon, authenticated
   WITH CHECK (true);
 
--- 5. medicine_orders: ensure anon INSERT has a WITH CHECK
--- Already exists from a previous migration, but let's ensure it's robust
-DROP POLICY IF EXISTS "Anon insert orders" ON public.medicine_orders;
-CREATE POLICY "Anon insert orders"
-  ON public.medicine_orders FOR INSERT
-  TO anon, authenticated
-  WITH CHECK (true);
 
 -- 6. Grant SELECT on pharmacy_stores to anon (needed for the public client)
 GRANT SELECT ON public.pharmacy_stores TO anon, authenticated;

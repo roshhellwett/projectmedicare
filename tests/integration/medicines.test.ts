@@ -25,13 +25,6 @@ describe("Medicines and Patient Rates Tests", () => {
         selling_price: 15.5,
         pack_size: "10 Tabs",
         mrp: 20.0,
-        buying_price: 10.0,
-        purchase: 1,
-        sale: 1,
-        quantity: 100,
-        gst: 12,
-        expiry_date: "30-10-2027",
-        batch_number: "TESTBATCH",
       })
       .select()
       .single();

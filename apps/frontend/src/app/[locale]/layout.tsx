@@ -6,6 +6,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Navbar from "@/components/Navbar";
+import AnnouncementBanner from "@/components/site/AnnouncementBanner";
 import Footer from "@/components/Footer";
 import JantaChat from "@/components/chat/JantaChat";
 import ToastProvider from "@/components/Toast";
@@ -178,6 +179,7 @@ export default async function RootLayout({
               Skip to content
             </a>
             <Navbar />
+            <AnnouncementBanner />
             <main id="main" className="flex-1">
               {children}
             </main>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPackageOrder } from "@/lib/db/package-orders";
 import { str, uuid as validateUuid, ValidationError } from "@/lib/utils/validation";
+import { validateTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,6 +45,20 @@ export async function POST(req: NextRequest) {
     // Ignore E2E test submissions
     if (customer_name.startsWith("E2E ")) {
       return NextResponse.json({ ok: true });
+    }
+
+    if (!body.cf_turnstile_response) {
+      return NextResponse.json(
+        { error: "Captcha verification missing" },
+        { status: 400 },
+      );
+    }
+    const isValid = await validateTurnstileToken(body.cf_turnstile_response);
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "Captcha verification failed" },
+        { status: 400 },
+      );
     }
 
     await createPackageOrder(customer_name, phone_number, package_id, store_id);

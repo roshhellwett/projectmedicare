@@ -9,6 +9,11 @@ test.describe("public site", () => {
     await expect(page.locator("#sunday-camp")).toBeVisible();
     await expect(page.locator("#bulletin-board")).toBeVisible();
 
+    // Verify Announcements are visible
+    await expect(
+      page.getByRole("heading", { name: "Announcements", exact: true }),
+    ).toBeVisible();
+
     // Verify Latest Products & Offers are visible from our seed data
     await expect(
       page.getByRole("heading", { name: "Latest Products", exact: true }),

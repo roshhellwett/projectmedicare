@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { validateTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
   try {
@@ -17,15 +18,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const cleanPhone = phone.replace(/\D/g, "");
-    if (cleanPhone.length !== 10) {
-      return NextResponse.json(
-        { error: "Invalid phone number" },
-        { status: 400 },
-      );
-    }
-    const formattedPhone = "+91" + cleanPhone;
-
+    const turnstileToken = formData.get("cf-turnstile-response") as string;
+    
     // Ignore E2E test submissions
     if (name.startsWith("E2E ")) {
       if (name === "E2E Test User 2") {
@@ -36,6 +30,31 @@ export async function POST(request: Request) {
       }
       return NextResponse.json({ success: true });
     }
+
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: "Captcha verification missing" },
+        { status: 400 },
+      );
+    }
+    const isValid = await validateTurnstileToken(turnstileToken);
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "Captcha verification failed" },
+        { status: 400 },
+      );
+    }
+
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (cleanPhone.length !== 10) {
+      return NextResponse.json(
+        { error: "Invalid phone number" },
+        { status: 400 },
+      );
+    }
+    const formattedPhone = "+91" + cleanPhone;
+
+
 
     const supabase = createAdminClient();
     if (!supabase) {

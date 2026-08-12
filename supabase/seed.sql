@@ -66,3 +66,5 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.camp_posts (id, title, description, venue, address, camp_date, fee, is_active) VALUES
 (gen_random_uuid(), 'Free Heart Checkup Camp', 'Join our free cardiology consultation camp led by senior doctors.', 'Janta Medicare LLP Main Hub', '123 Shibpur Road, Howrah', current_date + interval '3 days', 'Registration ₹100 only', true)
 ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.announcements (title, description, is_active) VALUES ('System Maintenance', 'The system will undergo maintenance tonight at 2 AM.', true);

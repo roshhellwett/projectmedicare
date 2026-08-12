@@ -21,6 +21,7 @@ import {
 import CampSection from "@/components/site/CampSection";
 import BulletinBoard from "@/components/site/BulletinBoard";
 import FeaturedPackages from "@/components/site/FeaturedPackages";
+import AnnouncementSection from "@/components/site/AnnouncementSection";
 import { getGalleryImages } from "@/lib/db/gallery";
 
 export const revalidate = 60;
@@ -339,6 +340,18 @@ export default async function HomePage() {
         </div>
       </section>
 
+
+      {/* ---------- Sunday camp (admin managed) ---------- */}
+      <div className="border-t border-line bg-surface">
+        <CampSection />
+      </div>
+
+      {/* ---------- Announcements Static Section ---------- */}
+      <AnnouncementSection locale={locale} />
+
+      {/* ---------- Live bulletin board (admin managed) ---------- */}
+      <BulletinBoard locale={locale} />
+
       {/* ---------- Feedback CTA ---------- */}
       <section className="border-t border-blue-100 bg-blue-50/50 py-10">
         <div className="container flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
@@ -356,14 +369,6 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* ---------- Sunday camp (admin managed) ---------- */}
-      <div className="border-t border-line bg-surface">
-        <CampSection />
-      </div>
-
-      {/* ---------- Live bulletin board (admin managed) ---------- */}
-      <BulletinBoard locale={locale} />
     </div>
   );
 }

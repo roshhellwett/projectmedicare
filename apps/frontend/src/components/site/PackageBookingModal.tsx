@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CalendarPlus, CheckCircle2, MapPin, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function PackageBookingModal({
   packageId,
@@ -17,6 +18,7 @@ export default function PackageBookingModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const t = useTranslations("Navbar");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,6 +32,7 @@ export default function PackageBookingModal({
       phone_number: formData.get("phone_number") as string,
       store_id: formData.get("store_id") as string,
       package_id: packageId,
+      cf_turnstile_response: turnstileToken,
     };
 
     if (data.phone_number.length !== 10) {
@@ -223,10 +226,19 @@ export default function PackageBookingModal({
                     </div>
                   </div>
 
+                  <div className="mt-6 flex justify-center">
+                    <Turnstile
+                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken("")}
+                      onExpire={() => setTurnstileToken("")}
+                    />
+                  </div>
+
                   <button
                     type="submit"
-                    className="btn btn-primary w-full mt-2"
-                    disabled={isSubmitting}
+                    className="btn btn-primary w-full mt-4"
+                    disabled={isSubmitting || (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY !== '1x00000000000000000000AA')}
                   >
                     {isSubmitting ? "Submitting..." : "Confirm Booking"}
                   </button>

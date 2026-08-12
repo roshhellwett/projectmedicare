@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Loader2, UploadCloud, ImageIcon } from "lucide-react";
 import { showToast } from "./Toast";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 // Helper: compress image client-side before upload to save space
 const compressImage = (file: File): Promise<File> => {
@@ -69,6 +70,7 @@ export default function OrderForm() {
   const [success, setSuccess] = useState(false);
   const [fileName, setFileName] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -103,6 +105,10 @@ export default function OrderForm() {
       formData.append("address", rawFormData.get("address") as string);
       formData.append("note", rawFormData.get("note") as string);
       formData.append("image", compressedFile);
+
+      if (turnstileToken) {
+        formData.append("cf-turnstile-response", turnstileToken);
+      }
 
       const res = await fetch("/api/orders", {
         method: "POST",
@@ -272,10 +278,19 @@ export default function OrderForm() {
         </div>
       </div>
 
+      <div className="mt-8 flex justify-center">
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onError={() => setTurnstileToken("")}
+          onExpire={() => setTurnstileToken("")}
+        />
+      </div>
+
       <button
         type="submit"
-        disabled={submitting}
-        className="btn btn-primary w-full mt-8"
+        disabled={submitting || (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY !== '1x00000000000000000000AA')}
+        className="btn btn-primary w-full mt-4"
       >
         {submitting ? (
           <>

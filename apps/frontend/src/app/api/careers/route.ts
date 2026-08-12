@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createJobApplication, RESUMES_BUCKET } from "@/lib/db/careers";
+import { validateTurnstileToken } from "@/lib/turnstile";
 
 export async function POST(request: Request) {
   try {
@@ -17,6 +18,8 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+    
+    const turnstileToken = formData.get("cf-turnstile-response") as string;
 
     if (cvFile.type !== "application/pdf") {
       return NextResponse.json(
@@ -45,6 +48,20 @@ export async function POST(request: Request) {
     // Ignore E2E test submissions
     if (name.startsWith("E2E ")) {
       return NextResponse.json({ success: true });
+    }
+
+    if (!turnstileToken) {
+      return NextResponse.json(
+        { error: "Captcha verification missing" },
+        { status: 400 },
+      );
+    }
+    const isValid = await validateTurnstileToken(turnstileToken);
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "Captcha verification failed" },
+        { status: 400 },
+      );
     }
 
     const supabase = createAdminClient();

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2, Loader2, ImageIcon } from "lucide-react";
 import { showToast } from "./Toast";
 import { compressImage } from "@/lib/imageCompression";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function FeedbackForm() {
   const t = useTranslations("FeedbackPage.form");
@@ -12,6 +13,7 @@ export default function FeedbackForm() {
   const [success, setSuccess] = useState(false);
   const [fileName, setFileName] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,6 +39,10 @@ export default function FeedbackForm() {
       formData.append("name", rawFormData.get("name") as string);
       formData.append("phone", rawFormData.get("phone") as string);
       formData.append("note", rawFormData.get("note") as string);
+      
+      if (turnstileToken) {
+        formData.append("cf-turnstile-response", turnstileToken);
+      }
 
       if (rawFile && rawFile.size > 0) {
         if (!rawFile.type.startsWith("image/")) {
@@ -197,10 +203,19 @@ export default function FeedbackForm() {
         </div>
       </div>
 
+      <div className="mt-8 flex justify-center">
+        <Turnstile
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+          onSuccess={(token) => setTurnstileToken(token)}
+          onError={() => setTurnstileToken("")}
+          onExpire={() => setTurnstileToken("")}
+        />
+      </div>
+
       <button
         type="submit"
-        disabled={submitting}
-        className="btn btn-primary w-full mt-8"
+        disabled={submitting || (!turnstileToken && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY !== '1x00000000000000000000AA')}
+        className="btn btn-primary w-full mt-4"
       >
         {submitting ? (
           <>
