@@ -8,7 +8,7 @@
  *   SITE_URL=https://jantamedicare.pages.dev npm run test:smoke
  */
 
-const BASE = (process.env.SITE_URL || "http://localhost:3000").replace(
+const BASE = (process.env.SITE_URL || "http://localhost:3001").replace(
   /\/+$/,
   "",
 );

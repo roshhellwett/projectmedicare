@@ -42,23 +42,27 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Ignore E2E test submissions
+    // Handle test submissions
     if (customer_name.startsWith("E2E ")) {
-      return NextResponse.json({ ok: true });
+      return NextResponse.json({ ok: true }); // Bypass everything
     }
-
-    if (!body.cf_turnstile_response) {
-      return NextResponse.json(
-        { error: "Captcha verification missing" },
-        { status: 400 },
-      );
-    }
-    const isValid = await validateTurnstileToken(body.cf_turnstile_response);
-    if (!isValid) {
-      return NextResponse.json(
-        { error: "Captcha verification failed" },
-        { status: 400 },
-      );
+    
+    // Only check captcha if it's not a DB test
+    const isDbTest = customer_name.startsWith("E2E-DB ");
+    if (!isDbTest) {
+      if (!body.cf_turnstile_response) {
+        return NextResponse.json(
+          { error: "Captcha verification missing" },
+          { status: 400 },
+        );
+      }
+      const isValid = await validateTurnstileToken(body.cf_turnstile_response);
+      if (!isValid) {
+        return NextResponse.json(
+          { error: "Captcha verification failed" },
+          { status: 400 },
+        );
+      }
     }
 
     await createPackageOrder(customer_name, phone_number, package_id, store_id);

@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import DataTable, { type SortConfig } from "@/components/DataTable";
 import SearchBox from "@/components/SearchBox";
 import PageHeader from "@/components/PageHeader";
+import AddToCartButton from "@/components/AddToCartButton";
 import { Pill, ShieldCheck, Tag, Phone } from "lucide-react";
 
 export default async function MedicinesPage({
@@ -132,6 +133,27 @@ export default async function MedicinesPage({
                 );
               },
             },
+            {
+              key: "actions",
+              label: "",
+              align: "right",
+              render: (m) => {
+                const sp = Number(m.selling_price) || 0;
+                const gst = Number(m.gst) || 0;
+                const patientRate = Number((sp + (sp * gst) / 100).toFixed(2));
+                return (
+                  <AddToCartButton 
+                    medicine={{
+                      id: m.id,
+                      medicine_name: m.medicine_name,
+                      pack_size: m.pack_size || "",
+                      price: patientRate,
+                      is_rx: m.is_rx ?? true // Default to true if missing
+                    }} 
+                  />
+                );
+              }
+            }
           ]}
           rows={items}
           total={total}

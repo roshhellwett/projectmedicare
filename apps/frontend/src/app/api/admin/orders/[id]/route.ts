@@ -3,13 +3,25 @@ import { requireAdmin } from "@/lib/auth/guard";
 import { deleteMedicineOrder } from "@/lib/db/orders";
 
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const denied = await requireAdmin();
-  if (denied) return denied;
-
   try {
+    const error = await requireAdmin();
+    if (error) return error;
+
+    const body = await request.json().catch(() => ({}));
+    
+    const envPassword = (process.env.SUPER_ADMIN_PASSWORD || "").trim();
+    const providedPassword = (body.superAdminPassword || "").trim();
+
+    if (providedPassword !== envPassword) {
+      return NextResponse.json(
+        { error: "Invalid super admin password" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     await deleteMedicineOrder(id);
     return NextResponse.json({ success: true });

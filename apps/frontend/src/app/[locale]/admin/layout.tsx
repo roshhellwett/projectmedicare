@@ -6,7 +6,9 @@ import AdminNav from "@/components/admin/AdminNav";
 import AdminStoreSelector from "@/components/admin/AdminStoreSelector";
 import { cookies } from "next/headers";
 import { getPharmacyStores } from "@/lib/db/stores";
-import { Store } from "lucide-react";
+import { Store, Menu } from "lucide-react";
+import Link from "next/link";
+import MobileAdminNav from "@/components/admin/MobileAdminNav";
 
 export const dynamic = "force-dynamic";
 
@@ -38,18 +40,33 @@ export default async function AdminLayout({
   const selectedStore = stores.find((s) => s.id === storeId);
 
   return (
-    <div className="bg-background relative min-h-screen">
+    <div className="bg-background relative min-h-screen flex flex-col md:flex-row">
       {!selectedStore && <AdminStoreSelector stores={stores} />}
 
-      <div className="border-b border-line bg-surface/80 backdrop-blur sticky top-0 z-40">
-        <div className="container flex flex-wrap items-center justify-between gap-3 py-3">
-          <AdminNav />
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block w-64 shrink-0 h-screen sticky top-0">
+        <AdminNav />
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 min-w-0 flex flex-col min-h-screen md:h-screen md:overflow-hidden">
+        {/* Top Header */}
+        <header className="border-b border-line bg-surface/80 backdrop-blur sticky top-0 z-30 px-4 py-3 flex items-center justify-between md:justify-end">
+          {/* Mobile Header Left Side */}
+          <div className="md:hidden flex items-center gap-3">
+            <MobileAdminNav />
+            <Link href="/en/admin" className="font-heading font-bold text-lg text-primary">
+              Admin
+            </Link>
+          </div>
+
           <div className="flex items-center gap-4">
             {selectedStore && (
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                <div className="flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                   <Store className="h-3.5 w-3.5" />
-                  {selectedStore.name}
+                  <span className="hidden sm:inline">{selectedStore.name}</span>
+                  <span className="sm:hidden">Store</span>
                 </div>
                 <form
                   action={async () => {
@@ -62,16 +79,20 @@ export default async function AdminLayout({
                     type="submit"
                     className="text-xs text-muted hover:text-primary transition-colors underline underline-offset-2"
                   >
-                    Change Store
+                    Change
                   </button>
                 </form>
               </div>
             )}
             <AdminLogoutButton />
           </div>
-        </div>
+        </header>
+
+        {/* Scrollable Content */}
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
       </div>
-      {children}
     </div>
   );
 }

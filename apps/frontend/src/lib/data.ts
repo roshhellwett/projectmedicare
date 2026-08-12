@@ -21,6 +21,7 @@ export type Medicine = {
   quantity: number;
   hsn_code: string;
   gst: number;
+  is_rx: boolean | null;
 };
 
 export type RateTest = {

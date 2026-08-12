@@ -11,8 +11,10 @@ export type MedicineOrder = {
   note: string | null;
   prescription_url: string;
   assigned_store_id: string | null;
+  status: "pending" | "claimed" | "delivered" | "cancelled";
   selected_at: string | null;
   created_at: string;
+  cart_items: any[] | null;
 
   // Joined relation
   store?: PharmacyStore;
@@ -41,7 +43,8 @@ export async function createMedicineOrder(
   phone: string,
   address: string,
   note: string,
-  prescription_url: string,
+  prescription_url: string | null,
+  cart_items?: any[] | null,
 ): Promise<void> {
   const supabase = createPublicClient();
   if (!supabase) throw new Error("Supabase client not available");
@@ -52,6 +55,7 @@ export async function createMedicineOrder(
     address,
     note: note || null,
     prescription_url,
+    cart_items: cart_items || null,
   });
 
   if (error) throw new Error(error.message);
@@ -70,8 +74,9 @@ export async function selectMedicineOrder(
     .update({
       assigned_store_id: storeId,
       selected_at: new Date().toISOString(),
+      status: "claimed",
     })
-    .is("assigned_store_id", null)
+    .or(`assigned_store_id.is.null,assigned_store_id.eq.${storeId}`)
     .eq("id", orderId)
     .select("id")
     .single();

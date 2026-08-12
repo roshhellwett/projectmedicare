@@ -11,29 +11,32 @@ export async function POST(request: Request) {
     const phone = formData.get("phone") as string;
     const address = formData.get("address") as string;
     const note = formData.get("note") as string;
-    const imgFile = formData.get("image") as File;
+    const imgFile = formData.get("image") as File | null;
+    const cartItemsRaw = formData.get("cart_items") as string | null;
 
-    if (!name || !phone || !address || !imgFile) {
+    if (!name || !phone || !address || (!imgFile && !cartItemsRaw)) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields or order items" },
         { status: 400 },
       );
     }
     
     const turnstileToken = formData.get("cf-turnstile-response") as string;
 
-    if (!imgFile.type.startsWith("image/")) {
-      return NextResponse.json(
-        { error: "Only image files are allowed" },
-        { status: 400 },
-      );
-    }
+    if (imgFile && imgFile.size > 0) {
+      if (!imgFile.type.startsWith("image/")) {
+        return NextResponse.json(
+          { error: "Only image files are allowed" },
+          { status: 400 },
+        );
+      }
 
-    if (imgFile.size > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: "Image must be smaller than 5 MB" },
-        { status: 400 },
-      );
+      if (imgFile.size > 5 * 1024 * 1024) {
+        return NextResponse.json(
+          { error: "Image must be smaller than 5 MB" },
+          { status: 400 },
+        );
+      }
     }
 
     // Standardize phone
@@ -73,34 +76,50 @@ export async function POST(request: Request) {
       );
     }
 
-    const arrayBuffer = await imgFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    let fileName: string | null = null;
+    
+    if (imgFile && imgFile.size > 0) {
+      const arrayBuffer = await imgFile.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
 
-    // Extension from mime type
-    const ext = imgFile.type.split("/")[1] || "jpeg";
-    const fileName = `${crypto.randomUUID()}.${ext}`;
+      // Extension from mime type
+      const ext = imgFile.type.split("/")[1] || "jpeg";
+      fileName = `${crypto.randomUUID()}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from(PRESCRIPTIONS_BUCKET)
-      .upload(fileName, buffer, {
-        contentType: imgFile.type,
-        upsert: false,
-      });
+      const { error: uploadError } = await supabase.storage
+        .from(PRESCRIPTIONS_BUCKET)
+        .upload(fileName, buffer, {
+          contentType: imgFile.type,
+          upsert: false,
+        });
 
-    if (uploadError) {
-      console.error("Upload error:", uploadError);
-      return NextResponse.json(
-        { error: "Failed to upload prescription" },
-        { status: 500 },
-      );
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        return NextResponse.json(
+          { error: "Failed to upload prescription" },
+          { status: 500 },
+        );
+      }
     }
 
-
+    let parsedCartItems = null;
+    if (cartItemsRaw) {
+      try {
+        parsedCartItems = JSON.parse(cartItemsRaw);
+      } catch (e) {
+        return NextResponse.json(
+          { error: "Invalid cart data" },
+          { status: 400 },
+        );
+      }
+    }
 
     try {
-      await createMedicineOrder(name, formattedPhone, address, note, fileName);
+      await createMedicineOrder(name, formattedPhone, address, note, fileName, parsedCartItems);
     } catch (dbError: any) {
-      await supabase.storage.from(PRESCRIPTIONS_BUCKET).remove([fileName]);
+      if (fileName) {
+        await supabase.storage.from(PRESCRIPTIONS_BUCKET).remove([fileName]);
+      }
       return NextResponse.json({ error: dbError.message }, { status: 400 });
     }
 

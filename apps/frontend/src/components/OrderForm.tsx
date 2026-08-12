@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { CheckCircle2, Loader2, UploadCloud, ImageIcon } from "lucide-react";
+import { CheckCircle2, Loader2, UploadCloud, ImageIcon, Trash2, Plus, Minus } from "lucide-react";
 import { showToast } from "./Toast";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useCartStore } from "@/lib/store/cartStore";
+import { useUserStore } from "@/lib/store/userStore";
 
 // Helper: compress image client-side before upload to save space
 const compressImage = (file: File): Promise<File> => {
@@ -72,6 +74,20 @@ export default function OrderForm() {
   const [preview, setPreview] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string>("");
 
+  const cartItems = useCartStore((state) => state.items);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const getTotalPrice = useCartStore((state) => state.getTotalPrice);
+  
+  const { name, phone, address, setUserInfo } = useUserStore();
+
+  // If the cart is empty, a prescription is strictly REQUIRED.
+  // If the cart has items, we make it OPTIONAL. If a restricted medicine is ordered, 
+  // the pharmacy will manually call the patient to ask for the prescription.
+  const needsPrescription = cartItems.length === 0;
+
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -92,38 +108,45 @@ export default function OrderForm() {
       const rawFormData = new FormData(form);
       const rawFile = rawFormData.get("image") as File;
 
-      if (!rawFile || !rawFile.type.startsWith("image/")) {
+      if (needsPrescription && (!rawFile || !rawFile.type.startsWith("image/"))) {
         throw new Error("Please upload a valid image file.");
       }
 
-      // Compress image client-side!
-      const compressedFile = await compressImage(rawFile);
-
       const formData = new FormData();
+      if (rawFile && rawFile.size > 0) {
+        const compressedFile = await compressImage(rawFile);
+        formData.append("image", compressedFile);
+      }
       formData.append("name", rawFormData.get("name") as string);
       formData.append("phone", rawFormData.get("phone") as string);
       formData.append("address", rawFormData.get("address") as string);
       formData.append("note", rawFormData.get("note") as string);
-      formData.append("image", compressedFile);
+
+      if (cartItems.length > 0) {
+        formData.append("cart_items", JSON.stringify(cartItems));
+      }
 
       if (turnstileToken) {
         formData.append("cf-turnstile-response", turnstileToken);
       }
 
-      const res = await fetch("/api/orders", {
+      const dbRes = await fetch("/api/orders", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) {
-        const json = await res.json();
+      if (!dbRes.ok) {
+        const json = await dbRes.json();
         throw new Error(json.error || "Submission failed");
       }
 
       setSuccess(true);
+      // We don't clear the user info from local storage because they might order again
+      // Only clear the file and cart
       form.reset();
       setFileName("");
       setPreview(null);
+      clearCart();
     } catch (err: any) {
       showToast(err.message, "error");
     } finally {
@@ -152,8 +175,58 @@ export default function OrderForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card !p-6 sm:!p-8">
-      <div className="grid gap-6 sm:grid-cols-2">
+    <div className="space-y-8">
+      {cartItems.length > 0 && (
+        <div className="card !p-6 sm:!p-8">
+          <h2 className="text-xl font-bold text-foreground mb-6 border-b border-line pb-4">
+            Order Summary
+          </h2>
+          <div className="space-y-4">
+            {cartItems.map((item) => (
+              <div key={item.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-b border-line last:border-0">
+                <div className="flex-1">
+                  <h4 className="font-semibold text-foreground">{item.medicine_name}</h4>
+                  <p className="text-sm text-muted">{item.pack_size}</p>
+                  <p className="text-sm font-medium text-primary mt-1">₹{item.price.toFixed(2)}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 bg-surface border border-line rounded-md p-1">
+                    <button 
+                      type="button"
+                      onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                      className="p-1 hover:bg-surface-muted rounded"
+                    >
+                      <Minus className="h-4 w-4 text-muted" />
+                    </button>
+                    <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                    <button 
+                      type="button"
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className="p-1 hover:bg-surface-muted rounded"
+                    >
+                      <Plus className="h-4 w-4 text-muted" />
+                    </button>
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => removeItem(item.id)}
+                    className="p-2 text-danger hover:bg-danger/10 rounded-md transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 pt-6 border-t border-line flex justify-between items-center">
+            <span className="font-bold text-lg text-foreground">Total (Est.)</span>
+            <span className="font-bold text-2xl text-secondary-dark">₹{getTotalPrice().toFixed(2)}</span>
+          </div>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="card !p-6 sm:!p-8">
+        <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
           <label htmlFor="name" className="text-sm font-medium text-foreground">
             {t("nameLabel")}
@@ -163,6 +236,8 @@ export default function OrderForm() {
             name="name"
             type="text"
             required
+            value={name}
+            onChange={(e) => setUserInfo({ name: e.target.value })}
             placeholder={t("namePlaceholder")}
             className="flex h-11 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
@@ -187,6 +262,7 @@ export default function OrderForm() {
               minLength={10}
               maxLength={10}
               pattern="[0-9]{10}"
+              value={phone}
               placeholder={t("phonePlaceholder")}
               className="flex h-11 w-full rounded-md border border-line bg-surface pl-11 pr-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               onInvalid={(e) =>
@@ -194,6 +270,7 @@ export default function OrderForm() {
                   t("errorPhone"),
                 )
               }
+              onChange={(e) => setUserInfo({ phone: e.target.value })}
               onInput={(e) => {
                 const target = e.target as HTMLInputElement;
                 target.value = target.value.replace(/\D/g, "").slice(0, 10);
@@ -216,6 +293,8 @@ export default function OrderForm() {
           name="address"
           required
           rows={3}
+          value={address}
+          onChange={(e) => setUserInfo({ address: e.target.value })}
           placeholder={t("addressPlaceholder")}
           className="flex w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground transition-colors placeholder:text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary resize-none"
         />
@@ -236,7 +315,7 @@ export default function OrderForm() {
 
       <div className="space-y-2 mt-6">
         <label className="text-sm font-medium text-foreground">
-          {t("imageLabel")}
+          {t("imageLabel")} {needsPrescription ? "" : "(Optional)"}
         </label>
         <div
           className={`relative group overflow-hidden rounded-lg border-2 border-dashed border-line bg-surface-muted transition-colors hover:border-primary/50 hover:bg-primary/5 ${preview ? "border-primary/50 bg-primary/5" : ""}`}
@@ -245,7 +324,7 @@ export default function OrderForm() {
             type="file"
             name="image"
             id="image"
-            required
+            required={needsPrescription}
             accept="image/*"
             className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
             onChange={handleImageChange}
@@ -300,6 +379,7 @@ export default function OrderForm() {
           t("submit")
         )}
       </button>
-    </form>
+      </form>
+    </div>
   );
 }

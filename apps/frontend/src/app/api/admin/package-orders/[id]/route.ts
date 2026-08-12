@@ -10,6 +10,21 @@ export async function DELETE(
     const error = await requireAdmin();
     if (error) return error;
 
+    const body = await req.json().catch(() => ({}));
+    
+    const envPassword = (process.env.SUPER_ADMIN_PASSWORD || "").trim();
+    const providedPassword = (body.superAdminPassword || "").trim();
+
+    console.log("SUPER_ADMIN_PASSWORD env (trimmed):", envPassword);
+    console.log("Password received (trimmed):", providedPassword);
+    
+    if (providedPassword !== envPassword) {
+      return NextResponse.json(
+        { error: "Invalid super admin password" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     await deletePackageOrder(id);
 

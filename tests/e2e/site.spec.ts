@@ -82,10 +82,14 @@ test.describe("admin", () => {
 
   test("wrong password is rejected", async ({ page }) => {
     await page.goto("/en/admin");
-    await page
-      .locator('input[type="password"]')
-      .fill("definitely-not-the-password");
-    await page.getByRole("button", { name: /sign in|unlock|log in/i }).click();
+    const passwordInput = page.locator('input[type="password"]');
+    await expect(passwordInput).toBeVisible();
+    await passwordInput.fill("definitely-not-the-password");
+    
+    const submitBtn = page.getByRole("button", { name: /sign in|unlock|log in/i });
+    await expect(submitBtn).toBeEnabled();
+    await submitBtn.click();
+    
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
@@ -104,6 +108,79 @@ test.describe("admin", () => {
   }) => {
     const res = await request.delete("/api/admin/feedbacks/123");
     expect(res.status()).toBe(401);
+  });
+  test("super admin password required to delete order", async ({ page }) => {
+    // 1. Create a real order (no 'E2E ' prefix so it goes to DB)
+    await page.goto("/en/packages");
+    const bookBtn = page.getByRole("button", { name: /book package/i }).first();
+    await expect(bookBtn).toBeVisible();
+    await bookBtn.click();
+    await expect(page.getByText("Total Payable")).toBeVisible({ timeout: 5000 });
+    await page.locator('input[name="customer_name"]').fill("E2E-DB Delete Me Package");
+    await page.locator('input[name="phone_number"]').fill("9999999999");
+    await page.locator('select[name="store_id"]').selectOption({ index: 1 });
+    
+    // Capture the API response to see why it fails
+    const [response] = await Promise.all([
+      page.waitForResponse(res => res.url().includes('/api/packages/book')),
+      page.getByRole("button", { name: /confirm booking/i }).click()
+    ]);
+    const responseBody = await response.json().catch(() => ({}));
+    console.log("BOOKING API RESPONSE:", response.status(), responseBody);
+    
+    await expect(page.getByText("Booking Confirmed!")).toBeVisible({ timeout: 10000 });
+
+    // Login
+    await page.goto("/en/admin");
+    const passwordInput = page.locator('input[type="password"]');
+    await expect(passwordInput).toBeVisible();
+    await passwordInput.fill("test-password-123");
+    
+    const submitBtn = page.getByRole("button", { name: /sign in|unlock|log in/i });
+    await expect(submitBtn).toBeEnabled();
+    await submitBtn.click();
+
+    // Verify logged in and wait for the page to reload
+    await expect(page.locator("h2", { hasText: "System Status" })).toBeVisible({ timeout: 15000 });
+
+    // Select store if prompted
+    const storeSelector = page.getByText("Select Active Store");
+    if (await storeSelector.isVisible({ timeout: 5000 }).catch(() => false)) {
+      await page.getByRole("button").filter({ hasText: /store/i }).first().click();
+      await expect(storeSelector).toBeHidden({ timeout: 10000 });
+    }
+
+    // Go to package orders
+    await page.goto("/en/admin/package-orders");
+    
+    // Check the New tab (default) for our newly created order
+    await expect(page.getByRole("button", { name: /delete/i }).first()).toBeVisible({ timeout: 10000 });
+    
+    // Click delete on the first order
+    await page.getByRole("button", { name: /delete/i }).first().click();
+
+    // Expect the Super Admin dialog to appear
+    const dialogTitle = page.getByText("Delete Package Booking");
+    await expect(dialogTitle).toBeVisible();
+
+    // Try with wrong password
+    const superAdminInput = page.locator('input[placeholder*="Enter password" i]');
+    await expect(superAdminInput).toBeVisible();
+    await superAdminInput.fill("wrong-super-password");
+
+    const confirmBtn = page.getByRole("button", { name: /confirm/i });
+    await expect(confirmBtn).toBeEnabled();
+    await confirmBtn.click();
+
+    // Should see error
+    await expect(page.getByText(/Invalid super admin password/i)).toBeVisible();
+
+    // Try with right password
+    await superAdminInput.fill("janta@123");
+    await confirmBtn.click();
+
+    // Should succeed and show toast
+    await expect(page.getByText(/Booking deleted successfully|Order deleted successfully/i)).toBeVisible();
   });
 });
 

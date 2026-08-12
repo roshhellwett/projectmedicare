@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = (process.env.SITE_URL || "http://localhost:3000").replace(
+const baseURL = (process.env.SITE_URL || "http://localhost:3001").replace(
   /\/+$/,
   "",
 );
@@ -26,4 +26,15 @@ export default defineConfig({
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
+  webServer: {
+    command: "npm run dev --workspace @jm/frontend -- -p 3001",
+    url: "http://localhost:3001",
+    reuseExistingServer: !process.env.CI,
+    env: {
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
+      TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+      ADMIN_PASSWORD: "test-password-123",
+      SUPER_ADMIN_PASSWORD: "janta@123",
+    },
+  },
 });

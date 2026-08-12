@@ -66,14 +66,18 @@ export async function selectPackageOrder(
     .from("package_orders")
     .update({
       store_id: storeId,
+      selected_at: new Date().toISOString(),
+      status: "confirmed",
     })
-    .is("store_id", null)
+    // Atomic update: only update if store_id IS NULL or already belongs to this store
+    .or(`store_id.is.null,store_id.eq.${storeId}`)
     .eq("id", orderId)
     .select("id")
     .single();
 
   if (error || !data) {
-    throw new Error("Order was already selected by another store.");
+    console.error("selectPackageOrder error:", error);
+    throw new Error(error?.message || "Order was already selected by another store.");
   }
 }
 
@@ -82,5 +86,22 @@ export async function deletePackageOrder(id: string): Promise<void> {
   if (!supabase) throw new Error("Supabase admin client not available");
 
   const { error } = await supabase.from("package_orders").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function updatePackageOrderStatus(
+  orderId: string,
+  storeId: string,
+  status: "pending" | "confirmed" | "completed" | "cancelled"
+): Promise<void> {
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error("Supabase admin client not available");
+
+  const { error } = await supabase
+    .from("package_orders")
+    .update({ status })
+    .eq("id", orderId)
+    .eq("store_id", storeId);
+
   if (error) throw new Error(error.message);
 }

@@ -10,6 +10,7 @@ import AnnouncementBanner from "@/components/site/AnnouncementBanner";
 import Footer from "@/components/Footer";
 import JantaChat from "@/components/chat/JantaChat";
 import ToastProvider from "@/components/Toast";
+import FloatingCart from "@/components/FloatingCart";
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -185,6 +186,7 @@ export default async function RootLayout({
             </main>
             <Footer />
             <JantaChat />
+            <FloatingCart />
             <ToastProvider />
           </div>
         </NextIntlClientProvider>
