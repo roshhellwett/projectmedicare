@@ -45,7 +45,7 @@ export default function SearchBox({
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder ?? "Search"}
-        className="input !pl-10 !pr-10"
+        className="input !pl-10 !pr-10 [&::-webkit-search-cancel-button]:appearance-none"
       />
       {value && (
         <button
