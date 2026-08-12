@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 
+
+
 // Simple in-memory rate limiter for edge isolates
 const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT = 20; // Max requests per window

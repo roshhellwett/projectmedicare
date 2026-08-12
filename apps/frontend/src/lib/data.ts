@@ -10,9 +10,17 @@ export type Medicine = {
   id: number;
   s_no: number;
   medicine_name: string;
+  expiry_date: string;
+  buying_price: number;
   selling_price: number;
   pack_size: string;
+  batch_number: string;
   mrp: number;
+  purchase: number;
+  sale: number;
+  quantity: number;
+  hsn_code: string;
+  gst: number;
 };
 
 export type RateTest = {

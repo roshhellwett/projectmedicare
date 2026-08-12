@@ -28,6 +28,12 @@ export async function POST(request: Request) {
 
     // Ignore E2E test submissions
     if (name.startsWith("E2E ")) {
+      if (name === "E2E Test User 2") {
+        return NextResponse.json(
+          { error: "You have already submitted feedback from this number." },
+          { status: 400 },
+        );
+      }
       return NextResponse.json({ success: true });
     }
 

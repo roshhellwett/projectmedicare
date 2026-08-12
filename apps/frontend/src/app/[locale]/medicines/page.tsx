@@ -115,31 +115,19 @@ export default async function MedicinesPage({
             },
             {
               key: "selling_price",
-              label: t("colPrice"),
+              label: t("colPrice") + " (Patient Rate)",
               sortable: true,
               sortKey: "selling_price",
               align: "right",
               render: (m) => {
-                const off =
-                  m.mrp && Number(m.mrp) > 0
-                    ? Math.round(
-                        ((Number(m.mrp) - Number(m.selling_price)) /
-                          Number(m.mrp)) *
-                          100,
-                      )
-                    : 0;
+                const sp = Number(m.selling_price) || 0;
+                const gst = Number(m.gst) || 0;
+                const patientRate = sp + (sp * gst) / 100;
                 return (
                   <span className="inline-flex items-center gap-2">
                     <span className="font-bold text-secondary-dark text-base">
-                      ₹{Number(m.selling_price).toFixed(2)}
+                      ₹{patientRate.toFixed(2)}
                     </span>
-                    {off > 0 && (
-                      <span
-                        className={`badge ${off >= 50 ? "badge-magenta" : "badge-green"}`}
-                      >
-                        <Tag className="h-3 w-3" /> {t("offFormat", { percentage: off })}
-                      </span>
-                    )}
                   </span>
                 );
               },

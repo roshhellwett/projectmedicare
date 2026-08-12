@@ -25,6 +25,13 @@ describe("Medicines and Patient Rates Tests", () => {
         selling_price: 15.5,
         pack_size: "10 Tabs",
         mrp: 20.0,
+        buying_price: 10.0,
+        purchase: 1,
+        sale: 1,
+        quantity: 100,
+        gst: 12,
+        expiry_date: "30-10-2027",
+        batch_number: "TESTBATCH",
       })
       .select()
       .single();
@@ -73,6 +80,13 @@ describe("Medicines and Patient Rates Tests", () => {
         selling_price: 10,
         pack_size: "1",
         mrp: 10,
+        buying_price: 10.0,
+        purchase: 1,
+        sale: 1,
+        quantity: 100,
+        gst: 12,
+        expiry_date: "30-10-2027",
+        batch_number: "TESTBATCH2",
       });
       // RLS should deny this (either returns empty/no rows affected or explicit RLS error)
       expect(error).not.toBeNull();
