@@ -4,16 +4,18 @@ import { useCartStore } from "@/lib/store/cartStore";
 import { Link } from "@/i18n/routing";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function FloatingCart() {
   const items = useCartStore((state) => state.items);
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
+  const pathname = usePathname();
   
   // To avoid hydration mismatch, only render after mount
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  if (!mounted || totalItems === 0) return null;
+  if (!mounted || totalItems === 0 || pathname?.includes("/admin")) return null;
 
   return (
     <Link
