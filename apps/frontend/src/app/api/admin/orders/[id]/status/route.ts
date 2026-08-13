@@ -32,7 +32,9 @@ export async function POST(
       .from("medicine_orders")
       .update({ status })
       .eq("id", id)
-      .eq("assigned_store_id", store_id); // Only the store that claimed it can update it
+      .eq("assigned_store_id", store_id)
+      .select("id")
+      .single();
 
     if (error) {
       throw new Error(error.message);

@@ -14,7 +14,7 @@ type ToolCall = {
 };
 import { getDoctors } from "@/lib/db/doctors";
 import { stores, mainContact } from "@/data/stores";
-import { getDecryptedKey } from "@/lib/actions/settings";
+import { getDecryptedKey } from "@/lib/utils/settings";
 
 export async function POST(req: Request) {
   try {

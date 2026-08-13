@@ -47,5 +47,6 @@ export async function POST(req: NextRequest) {
 export async function DELETE() {
   const res = NextResponse.json({ ok: true });
   res.cookies.set(ADMIN_COOKIE, "", { ...cookieBase, maxAge: 0 });
+  res.cookies.set("admin_store_id", "", { ...cookieBase, maxAge: 0 });
   return res;
 }

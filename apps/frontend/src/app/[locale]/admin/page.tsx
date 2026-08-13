@@ -476,7 +476,7 @@ export default async function AdminPage() {
         <form
           action={async () => {
             "use server";
-            revalidateTag("stats", "max");
+            revalidateTag("stats", { expire: 0 });
           }}
         >
           <RefreshStatsButton />

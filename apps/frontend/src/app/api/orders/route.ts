@@ -14,7 +14,10 @@ export async function POST(request: Request) {
     const imgFile = formData.get("image") as File | null;
     const cartItemsRaw = formData.get("cart_items") as string | null;
 
-    if (!name || !phone || !address || (!imgFile && !cartItemsRaw)) {
+    const hasImage = imgFile && imgFile.size > 0;
+    const hasCart = !!cartItemsRaw;
+
+    if (!name || !phone || !address || (!hasImage && !hasCart)) {
       return NextResponse.json(
         { error: "Missing required fields or order items" },
         { status: 400 },
@@ -106,9 +109,15 @@ export async function POST(request: Request) {
     if (cartItemsRaw) {
       try {
         parsedCartItems = JSON.parse(cartItemsRaw);
+        if (!Array.isArray(parsedCartItems)) {
+           return NextResponse.json(
+             { error: "Cart items must be an array" },
+             { status: 400 },
+           );
+        }
       } catch (e) {
         return NextResponse.json(
-          { error: "Invalid cart data" },
+          { error: "Invalid cart data format" },
           { status: 400 },
         );
       }

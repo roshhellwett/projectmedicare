@@ -239,7 +239,7 @@ export default function AdminRatesTable() {
           <thead>
             <tr>
               <th className="w-16">Sl.No</th>
-              <th>Test Name</th>
+              <th aria-sort="ascending">Test Name</th>
               <th className="text-right">Janta Rate (₹)</th>
               <th className="text-center w-24">Actions</th>
             </tr>

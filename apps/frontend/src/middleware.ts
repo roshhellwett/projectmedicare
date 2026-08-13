@@ -29,7 +29,7 @@ function cleanupRateLimitMap(now: number) {
   }
 }
 
-export default function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "anonymous";
   const path = request.nextUrl.pathname;
 

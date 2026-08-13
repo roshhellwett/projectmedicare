@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { CheckCircle2, Loader2, UploadCloud, ImageIcon, Trash2, Plus, Minus } from "lucide-react";
+import { CheckCircle2, Loader2, ImageIcon, Trash2, Plus, Minus } from "lucide-react";
 import { showToast } from "./Toast";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useCartStore } from "@/lib/store/cartStore";
@@ -147,8 +147,8 @@ export default function OrderForm() {
       setFileName("");
       setPreview(null);
       clearCart();
-    } catch (err: any) {
-      showToast(err.message, "error");
+    } catch (err) {
+      showToast((err as Error).message, "error");
     } finally {
       setSubmitting(false);
     }
@@ -333,6 +333,7 @@ export default function OrderForm() {
           {preview ? (
             <div className="relative flex flex-col items-center justify-center p-4">
               <div className="h-32 w-full max-w-sm rounded overflow-hidden shadow-sm mb-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={preview}
                   alt="Prescription preview"

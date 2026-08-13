@@ -4,7 +4,9 @@ import { Search, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function SearchBox({
+import { Suspense } from "react";
+
+function SearchBoxInner({
   placeholder,
   defaultValue = "",
   className = "",
@@ -58,5 +60,21 @@ export default function SearchBox({
         </button>
       )}
     </div>
+  );
+}
+
+export default function SearchBox(props: {
+  placeholder?: string;
+  defaultValue?: string;
+  className?: string;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className={`h-11 w-full animate-pulse rounded-md bg-surface-muted ${props.className || ""}`} />
+      }
+    >
+      <SearchBoxInner {...props} />
+    </Suspense>
   );
 }

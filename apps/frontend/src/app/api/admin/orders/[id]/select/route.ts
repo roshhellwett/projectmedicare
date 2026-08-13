@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { selectMedicineOrder } from "@/lib/db/orders";
+import { requireAdmin } from "@/lib/auth/guard";
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    const error = await requireAdmin();
+    if (error) return error;
+
     const { id } = await params;
     const body = await request.json();
     const storeId = body.storeId;

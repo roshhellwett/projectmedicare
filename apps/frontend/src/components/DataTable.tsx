@@ -143,7 +143,17 @@ export default function DataTable<T>({
                 const nextDir: "asc" | "desc" =
                   isActive && sort.dir === "asc" ? "desc" : "asc";
                 return (
-                  <th key={col.key} className={align(col.align)}>
+                  <th
+                    key={col.key}
+                    className={align(col.align)}
+                    aria-sort={
+                      isActive
+                        ? sort.dir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                  >
                     {col.sortable ? (
                       <Link
                         href={buildHref({

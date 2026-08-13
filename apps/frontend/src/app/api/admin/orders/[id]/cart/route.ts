@@ -1,10 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth/guard";
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
     const { id } = await params;
     const body = await request.json();
@@ -22,7 +26,9 @@ export async function PUT(
     const { error } = await supabase
       .from("medicine_orders")
       .update({ cart_items })
-      .eq("id", id);
+      .eq("id", id)
+      .select("id")
+      .single();
 
     if (error) throw new Error(error.message);
 

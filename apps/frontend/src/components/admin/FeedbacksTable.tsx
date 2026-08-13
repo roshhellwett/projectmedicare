@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Trash2, ImageIcon } from "lucide-react";
 import { showToast } from "../Toast";
 import type { Feedback } from "@/lib/db/feedbacks";
+import Image from "next/image";
 
 export default function FeedbacksTable({
   initialData,
@@ -105,10 +106,11 @@ export default function FeedbacksTable({
                       rel="noreferrer"
                       className="block relative h-12 w-12 rounded border border-line overflow-hidden hover:opacity-80 transition-opacity"
                     >
-                      <img
+                      <Image
                         src={getImageUrl(f.image_url)}
                         alt="Feedback image"
-                        className="object-cover h-full w-full"
+                        fill
+                        className="object-cover"
                       />
                     </a>
                   ) : (

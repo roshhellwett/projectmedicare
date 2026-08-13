@@ -4,14 +4,22 @@ import { useState } from "react";
 import { Plus, Minus, Trash2, Save, Loader2 } from "lucide-react";
 import { showToast } from "../Toast";
 
+interface CartItem {
+  medicine_name: string;
+  pack_size: string;
+  price: number | string;
+  quantity: number;
+  [key: string]: any;
+}
+
 export default function AdminCartEditor({
   orderId,
   initialCart,
 }: {
   orderId: string;
-  initialCart: any[];
+  initialCart: CartItem[];
 }) {
-  const [items, setItems] = useState<any[]>(initialCart || []);
+  const [items, setItems] = useState<CartItem[]>(initialCart || []);
   const [saving, setSaving] = useState(false);
 
   const updateQuantity = (idx: number, qty: number) => {
@@ -34,8 +42,8 @@ export default function AdminCartEditor({
       });
       if (!res.ok) throw new Error("Failed to save cart");
       showToast("Cart updated successfully", "success");
-    } catch (err: any) {
-      showToast(err.message, "error");
+    } catch (err) {
+      showToast((err as Error).message, "error");
     } finally {
       setSaving(false);
     }

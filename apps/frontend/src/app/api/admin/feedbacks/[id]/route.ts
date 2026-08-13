@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isAdminAuthenticated } from "@/lib/auth/guard";
+import { requireAdmin } from "@/lib/auth/guard";
 
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const denied = await requireAdmin();
+  if (denied) return denied;
+
   try {
-    const auth = await isAdminAuthenticated();
-    if (!auth) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
 
     const { id } = await params;
     const supabase = createAdminClient();

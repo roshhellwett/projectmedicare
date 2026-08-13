@@ -4,7 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock, MapPin, MessageCircle, Phone, Stethoscope } from "lucide-react";
+import { Clock, MapPin, Phone, Stethoscope } from "lucide-react";
 import { stores } from "@/data/stores";
 
 export default function Footer() {
