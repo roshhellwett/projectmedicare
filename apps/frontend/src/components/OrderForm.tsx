@@ -357,13 +357,19 @@ export default function OrderForm() {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <Turnstile
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-          onSuccess={(token) => setTurnstileToken(token)}
-          onError={() => setTurnstileToken("")}
-          onExpire={() => setTurnstileToken("")}
-        />
+      <div className="mt-8 flex justify-center flex-col items-center gap-2">
+        {!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
+          <div className="text-sm font-medium text-amber-600 bg-amber-50 px-4 py-2 rounded border border-amber-200">
+            Security check configuration is missing. Please contact support.
+          </div>
+        ) : (
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken("")}
+            onExpire={() => setTurnstileToken("")}
+          />
+        )}
       </div>
 
       <button
