@@ -103,44 +103,47 @@ function SkeletonTile() {
 
 async function AlertsGroup({ currentStoreId, locale }: { currentStoreId?: string, locale: string }) {
   noStore();
-  const [orders, packageOrders, feedbacks] = await Promise.all([
+  const [orders, packageOrders] = await Promise.all([
     getMedicineOrders(),
     getPackageOrders(),
-    getFeedbacks(),
   ]);
 
-  const pendingOrders = orders.filter(o => o.status === "pending" && (!currentStoreId || !o.assigned_store_id)).slice(0, 3);
-  const pendingPackages = packageOrders.filter(o => o.status === "pending" && (!currentStoreId || !o.store_id)).slice(0, 3);
-  const recentFeedbacks = feedbacks.slice(0, 3);
+  const pendingOrders = orders
+    .filter(o => o.status === "pending" && (!currentStoreId || !o.assigned_store_id))
+    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    
+  const pendingPackages = packageOrders
+    .filter(o => o.status === "pending" && (!currentStoreId || !o.store_id))
+    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-  if (pendingOrders.length === 0 && pendingPackages.length === 0 && recentFeedbacks.length === 0) {
+  if (pendingOrders.length === 0 && pendingPackages.length === 0) {
     return null; // Nothing urgent
   }
 
   return (
     <div className="mb-10 space-y-6">
       <h2 className="text-lg font-bold text-foreground">Immediate Attention Required</h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
         
         {/* Medicine Orders Alert */}
         {pendingOrders.length > 0 && (
-          <div className="card !p-0 overflow-hidden border-error/30 ring-1 ring-error/20">
-            <div className="bg-error/10 px-4 py-3 border-b border-error/20 flex justify-between items-center">
+          <div className="card !p-0 overflow-hidden border-error/30 ring-1 ring-error/20 flex flex-col">
+            <div className="bg-error/10 px-4 py-3 border-b border-error/20 flex justify-between items-center shrink-0">
               <h3 className="font-semibold text-error flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4" />
                 New Medicine Orders
               </h3>
               <span className="text-xs font-bold bg-error text-white px-2 py-0.5 rounded-full">{pendingOrders.length}</span>
             </div>
-            <div className="divide-y divide-line">
+            <div className="flex overflow-x-auto divide-x divide-line hide-scrollbar">
               {pendingOrders.map(order => (
-                <div key={order.id} className="p-4 bg-surface hover:bg-surface-muted transition-colors">
-                  <div className="font-medium text-sm">{order.name}</div>
+                <div key={order.id} className="min-w-[220px] p-4 bg-surface hover:bg-surface-muted transition-colors shrink-0">
+                  <div className="font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">{order.name}</div>
                   <div className="text-xs text-muted mt-1">{new Date(order.created_at).toLocaleString()}</div>
                 </div>
               ))}
             </div>
-            <Link href={`/${locale}/admin/orders`} className="block text-center text-sm font-semibold text-primary py-3 hover:bg-primary/5 transition-colors">
+            <Link href={`/${locale}/admin/orders`} className="block shrink-0 border-t border-line text-center text-sm font-semibold text-primary py-3 hover:bg-primary/5 transition-colors">
               View All Orders
             </Link>
           </div>
@@ -148,47 +151,24 @@ async function AlertsGroup({ currentStoreId, locale }: { currentStoreId?: string
 
         {/* Package Bookings Alert */}
         {pendingPackages.length > 0 && (
-          <div className="card !p-0 overflow-hidden border-orange-500/30 ring-1 ring-orange-500/20">
-            <div className="bg-orange-500/10 px-4 py-3 border-b border-orange-500/20 flex justify-between items-center">
+          <div className="card !p-0 overflow-hidden border-orange-500/30 ring-1 ring-orange-500/20 flex flex-col">
+            <div className="bg-orange-500/10 px-4 py-3 border-b border-orange-500/20 flex justify-between items-center shrink-0">
               <h3 className="font-semibold text-orange-600 flex items-center gap-2">
                 <ClipboardList className="w-4 h-4" />
                 New Package Bookings
               </h3>
               <span className="text-xs font-bold bg-orange-500 text-white px-2 py-0.5 rounded-full">{pendingPackages.length}</span>
             </div>
-            <div className="divide-y divide-line">
+            <div className="flex overflow-x-auto divide-x divide-line hide-scrollbar">
               {pendingPackages.map(order => (
-                <div key={order.id} className="p-4 bg-surface hover:bg-surface-muted transition-colors">
-                  <div className="font-medium text-sm">{order.customer_name}</div>
+                <div key={order.id} className="min-w-[220px] p-4 bg-surface hover:bg-surface-muted transition-colors shrink-0">
+                  <div className="font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis">{order.customer_name}</div>
                   <div className="text-xs text-muted mt-1">{new Date(order.created_at).toLocaleString()}</div>
                 </div>
               ))}
             </div>
-            <Link href={`/${locale}/admin/package-orders`} className="block text-center text-sm font-semibold text-orange-600 py-3 hover:bg-orange-500/5 transition-colors">
+            <Link href={`/${locale}/admin/package-orders`} className="block shrink-0 border-t border-line text-center text-sm font-semibold text-orange-600 py-3 hover:bg-orange-500/5 transition-colors">
               View All Bookings
-            </Link>
-          </div>
-        )}
-
-        {/* Feedbacks Alert */}
-        {recentFeedbacks.length > 0 && (
-          <div className="card !p-0 overflow-hidden border-blue-500/30 ring-1 ring-blue-500/20">
-            <div className="bg-blue-500/10 px-4 py-3 border-b border-blue-500/20 flex justify-between items-center">
-              <h3 className="font-semibold text-blue-600 flex items-center gap-2">
-                <MessageCircle className="w-4 h-4" />
-                Recent Feedbacks
-              </h3>
-            </div>
-            <div className="divide-y divide-line">
-              {recentFeedbacks.map(fb => (
-                <div key={fb.id} className="p-4 bg-surface hover:bg-surface-muted transition-colors">
-                  <div className="font-medium text-sm">{fb.name}</div>
-                  <div className="text-xs text-muted mt-1 truncate">{fb.note}</div>
-                </div>
-              ))}
-            </div>
-            <Link href={`/${locale}/admin/feedbacks`} className="block text-center text-sm font-semibold text-blue-600 py-3 hover:bg-blue-500/5 transition-colors">
-              View All Feedbacks
             </Link>
           </div>
         )}
