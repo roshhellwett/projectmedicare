@@ -130,8 +130,9 @@ export default function OrdersTable({
 
     return filtered.filter((i) => {
       if (mode === "inbox") {
-        if (i.assigned_store_id) return false;
-        return !i.status || i.status === "pending";
+        const status = i.status || "pending";
+        if (status !== "pending") return false;
+        return !i.assigned_store_id || i.assigned_store_id === currentStoreId;
       } else {
         if (i.assigned_store_id !== currentStoreId) return false;
         if (activeTab === "claimed") return i.status === "claimed";

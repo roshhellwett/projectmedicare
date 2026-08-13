@@ -129,9 +129,9 @@ export default function PackageOrdersTable({
 
     return filtered.filter((i) => {
       if (mode === "inbox") {
-        if (i.store_id) return false;
         const status = i.status || "pending";
-        return status === "pending";
+        if (status !== "pending") return false;
+        return !i.store_id || i.store_id === currentStoreId;
       } else {
         if (i.store_id !== currentStoreId) return false;
         const status = i.status || "pending";
