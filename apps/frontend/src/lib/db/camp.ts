@@ -15,6 +15,7 @@ export type CampPost = {
   fee: string;
   image_url: string | null;
   image_path: string | null;
+  directions_url: string | null;
   is_active: boolean;
   created_at: string;
 };
@@ -71,6 +72,7 @@ export async function publishCamp(input: CampInput): Promise<CampPost> {
     p_fee: input.fee,
     p_image_url: input.image_url,
     p_image_path: input.image_path,
+    p_directions_url: input.directions_url,
   });
 
   if (error) throw new Error(error.message);

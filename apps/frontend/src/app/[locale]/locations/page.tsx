@@ -76,11 +76,7 @@ export default async function LocationsPage() {
 
             <div className="map-embed mt-4">
               <iframe
-                src={
-                  store.mapCid
-                    ? `https://www.google.com/maps?cid=${store.mapCid}&output=embed`
-                    : `https://www.google.com/maps?q=${encodeURIComponent(store.mapQuery)}&output=embed`
-                }
+                src={`https://www.google.com/maps?q=${encodeURIComponent(store.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

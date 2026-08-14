@@ -76,9 +76,12 @@ export default async function CampSection() {
               </div>
 
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                  `${camp.venue} ${camp.address}`,
-                )}`}
+                href={
+                  camp.directions_url ||
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${camp.venue} ${camp.address}`,
+                  )}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary btn-sm w-fit"

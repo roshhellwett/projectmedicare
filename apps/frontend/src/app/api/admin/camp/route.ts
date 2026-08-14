@@ -23,6 +23,9 @@ function parseInput(body: Record<string, unknown>) {
     image_path: body.image_path
       ? str(body.image_path, "Image path", { max: 300 })
       : null,
+    directions_url: body.directions_url
+      ? str(body.directions_url, "Directions URL", { max: 600 })
+      : null,
   };
 }
 

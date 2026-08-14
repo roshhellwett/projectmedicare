@@ -22,6 +22,7 @@ type FormState = {
   fee: string;
   image_url: string | null;
   image_path: string | null;
+  directions_url: string | null;
   file: File | null;
 };
 
@@ -35,6 +36,7 @@ function emptyForm(): FormState {
     fee: "Cost ₹100 only",
     image_url: null,
     image_path: null,
+    directions_url: null,
     file: null,
   };
 }
@@ -49,6 +51,7 @@ function fromCamp(camp: CampPost): FormState {
     fee: camp.fee,
     image_url: camp.image_url,
     image_path: camp.image_path,
+    directions_url: camp.directions_url,
     file: null,
   };
 }
@@ -268,6 +271,17 @@ export default function CampManager({
             onChange={(e) => set("address", e.target.value)}
             maxLength={300}
             required
+          />
+        </Field>
+
+        <Field label="Exact directions URL (Optional)">
+          <input
+            type="url"
+            className="input"
+            value={form.directions_url || ""}
+            onChange={(e) => set("directions_url", e.target.value)}
+            maxLength={600}
+            placeholder="e.g. https://maps.app.goo.gl/..."
           />
         </Field>
 
