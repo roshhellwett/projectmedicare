@@ -138,6 +138,9 @@ async function httpCheck(name, url, { expect = 200 } = {}) {
     const res = await fetch(url, {
       signal: controller.signal,
       redirect: "follow",
+      headers: {
+        "User-Agent": "JantaMedicare-Backend/1.0",
+      },
     });
     if (res.status !== expect) {
       throw new Error(`${url} responded ${res.status}, expected ${expect}`);
