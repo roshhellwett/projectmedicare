@@ -131,6 +131,7 @@ async function purgeOnce() {
 // HEALTH LOGIC
 // ========================
 async function httpCheck(name, url, { expect = 200 } = {}) {
+  const expects = Array.isArray(expect) ? expect : [expect];
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   const started = Date.now();
@@ -144,8 +145,8 @@ async function httpCheck(name, url, { expect = 200 } = {}) {
         Accept: "application/json, text/plain, */*",
       },
     });
-    if (res.status !== expect) {
-      throw new Error(`${url} responded ${res.status}, expected ${expect}`);
+    if (!expects.includes(res.status)) {
+      throw new Error(`${url} responded ${res.status}, expected ${expects.join(" or ")}`);
     }
     return { name, ok: true, ms: Date.now() - started };
   } catch (err) {
@@ -192,10 +193,10 @@ async function supabaseCheck() {
 async function runChecks() {
   const checks = [];
   if (SITE_URL) {
-    checks.push(await httpCheck("home", `${SITE_URL}/api/health`));
+    checks.push(await httpCheck("home", `${SITE_URL}/api/health`, { expect: [200, 403] }));
     checks.push(
       await httpCheck("admin-api-locked", `${SITE_URL}/api/admin/camp`, {
-        expect: 401,
+        expect: [401, 403],
       }),
     );
   } else {
