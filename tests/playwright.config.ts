@@ -35,6 +35,7 @@ export default defineConfig({
       TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
       ADMIN_PASSWORD: "test-password-123",
       SUPER_ADMIN_PASSWORD: "janta@123",
+      E2E_TEST_MODE: "true",
     },
   },
 });

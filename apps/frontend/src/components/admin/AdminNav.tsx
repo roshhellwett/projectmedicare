@@ -6,7 +6,6 @@ import { useLocale } from "next-intl";
 import { 
   LayoutDashboard, 
   Settings, 
-  ShoppingBag, 
   Pill, 
   FlaskConical, 
   Box, 

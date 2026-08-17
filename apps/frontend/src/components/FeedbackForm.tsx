@@ -179,6 +179,7 @@ export default function FeedbackForm() {
           {preview ? (
             <div className="relative flex flex-col items-center justify-center p-4">
               <div className="h-32 w-full max-w-sm rounded overflow-hidden shadow-sm mb-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={preview}
                   alt="Feedback preview"

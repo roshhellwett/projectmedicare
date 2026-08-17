@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createMedicineOrder, PRESCRIPTIONS_BUCKET } from "@/lib/db/orders";
 import { validateTurnstileToken } from "@/lib/turnstile";
+import { isE2ETestMode } from "@/lib/test-mode";
 
 export async function POST(request: Request) {
   try {
@@ -52,8 +53,8 @@ export async function POST(request: Request) {
     }
     const formattedPhone = "+91" + cleanPhone;
 
-    // Ignore E2E test submissions
-    if (name.startsWith("E2E ")) {
+    // E2E fixtures are allowed only in an explicitly opted-in non-production server.
+    if (isE2ETestMode() && name.startsWith("E2E ")) {
       return NextResponse.json({ success: true });
     }
 

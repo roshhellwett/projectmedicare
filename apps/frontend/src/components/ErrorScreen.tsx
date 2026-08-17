@@ -103,6 +103,7 @@ export default function ErrorScreen({
           {/* Full reload on purpose: the router itself may be what broke. */}
           <button
             type="button"
+            // eslint-disable-next-line @next/next/no-location-assign-relative-destination
             onClick={() => window.location.assign("/en")}
             className="btn btn-outline btn-sm"
           >

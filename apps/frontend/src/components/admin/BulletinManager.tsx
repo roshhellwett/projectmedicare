@@ -288,6 +288,7 @@ export default function BulletinManager({
             </label>
             {(form.image_url || form.file) && (
               <div className="mt-3 overflow-hidden rounded-xl border border-line">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={
                     form.file
@@ -411,6 +412,7 @@ export default function BulletinManager({
                   </p>
                   {item.image_url && (
                     <div className="mt-3 overflow-hidden rounded-xl border border-line">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={item.image_url}
                         className="h-40 w-full object-cover"

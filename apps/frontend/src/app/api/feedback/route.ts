@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { validateTurnstileToken } from "@/lib/turnstile";
+import { isE2ETestMode } from "@/lib/test-mode";
 
 export async function POST(request: Request) {
   try {
@@ -20,8 +21,8 @@ export async function POST(request: Request) {
 
     const turnstileToken = formData.get("cf-turnstile-response") as string;
     
-    // Ignore E2E test submissions
-    if (name.startsWith("E2E ")) {
+    // E2E fixtures are allowed only in an explicitly opted-in non-production server.
+    if (isE2ETestMode() && name.startsWith("E2E ")) {
       if (name === "E2E Test User 2") {
         return NextResponse.json(
           { error: "You have already submitted feedback from this number." },

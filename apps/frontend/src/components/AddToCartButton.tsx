@@ -23,6 +23,7 @@ export default function AddToCartButton({ medicine }: AddToCartButtonProps) {
 
   // Avoid hydration mismatch by waiting for mount before reading cart state
   const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {

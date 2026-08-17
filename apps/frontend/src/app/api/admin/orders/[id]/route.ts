@@ -15,7 +15,7 @@ export async function DELETE(
     const envPassword = (process.env.SUPER_ADMIN_PASSWORD || "").trim();
     const providedPassword = (body.superAdminPassword || "").trim();
 
-    if (providedPassword !== envPassword) {
+    if (!envPassword || providedPassword !== envPassword) {
       return NextResponse.json(
         { error: "Invalid super admin password" },
         { status: 401 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createPackageOrder } from "@/lib/db/package-orders";
 import { str, uuid as validateUuid, ValidationError } from "@/lib/utils/validation";
 import { validateTurnstileToken } from "@/lib/turnstile";
+import { isE2ETestMode } from "@/lib/test-mode";
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,13 +43,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Handle test submissions
-    if (customer_name.startsWith("E2E ")) {
-      return NextResponse.json({ ok: true }); // Bypass everything
+    // E2E fixtures are allowed only in an explicitly opted-in non-production server.
+    if (isE2ETestMode() && customer_name.startsWith("E2E ")) {
+      return NextResponse.json({ ok: true });
     }
     
-    // Only check captcha if it's not a DB test
-    const isDbTest = customer_name.startsWith("E2E-DB ");
+    const isDbTest = isE2ETestMode() && customer_name.startsWith("E2E-DB ");
     if (!isDbTest) {
       if (!body.cf_turnstile_response) {
         return NextResponse.json(
