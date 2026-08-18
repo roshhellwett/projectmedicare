@@ -13,7 +13,11 @@ type ToolCall = {
   function: { name: string; arguments: string };
 };
 import { getDoctors } from "@/lib/db/doctors";
-import { stores, mainContact } from "@/data/stores";
+import { getPharmacyStores } from "@/lib/db/stores";
+import { getActiveCamp } from "@/lib/db/camp";
+import { getVisibleBulletins } from "@/lib/db/bulletins";
+import { getPackages } from "@/lib/db/packages";
+import { createPublicClient } from "@/lib/supabase/admin";
 import { getDecryptedKey } from "@/lib/utils/settings";
 
 export async function POST(req: Request) {
@@ -61,19 +65,40 @@ export async function POST(req: Request) {
       contact: d.contact,
     }));
 
-    const systemPrompt = `You are the official Janta Medicare LLP AI Assistant.
-Your job is to assist users with finding medicines, diagnostic test rates, finding doctors, and general queries about Janta Medicare LLP.
-Always be polite, helpful, and concise.
+    const stores = await getPharmacyStores();
+    const supabase = createPublicClient();
+    const { data: globalSettings } = await supabase?.from("global_settings").select("*") || { data: [] };
+    const settingsMap = (globalSettings || []).reduce((acc: any, row: any) => {
+      try {
+        acc[row.key] = JSON.parse(row.value);
+      } catch (e) {
+        acc[row.key] = row.value;
+      }
+      return acc;
+    }, {});
+    const diagnosticPhone = settingsMap.support_phone?.diagnostic || "+91 9748660309";
+
+    const activeCamp = await getActiveCamp();
+    const visibleBulletins = await getVisibleBulletins(5);
+    const bulletinsText = visibleBulletins.map(b => `- [${b.kind.toUpperCase()}] ${b.body}`).join("\n");
+    const campText = activeCamp ? `We have an active camp: ${activeCamp.title} at ${activeCamp.venue} on ${activeCamp.camp_date}. Fee: ${activeCamp.fee}.` : "No active camps at the moment.";
+
+    const systemPrompt = `You are the official Janta Medicare LLP AI Assistant, a highly intelligent, empathetic, and professional virtual assistant.
+Your job is to assist users with finding medicines, checking diagnostic test rates, finding doctors, exploring health packages, and answering general queries about Janta Medicare LLP.
+Always be polite, helpful, clear, and concise. Do not use robotic phrasing.
 
 IMPORTANT RULES:
-1. Whenever the user asks to contact the pharmacy, book a test, or ask for a phone number to call, YOU MUST give them this exact number: ${mainContact.diagnostic}
+1. Whenever the user asks to contact the pharmacy, book a test, or ask for a phone number to call, YOU MUST give them this exact number: ${diagnosticPhone}
 2. To order medicines online, instruct the user to visit the /order page on our website.
-3. You have access to tools to search the medicines database and the diagnostic test rate chart database. USE THEM when a user asks for a price or if a medicine/test is available.
-4. If a user describes symptoms, you can suggest a doctor specialty, but ALWAYS remind them that you are an AI and they should consult a real doctor.
+3. You have access to real-time tools to search the medicines database, diagnostic test rate chart, and health packages. USE THEM PROACTIVELY when a user asks for prices, availability, or checkups. Do not ask for permission to check; just check and provide the answer.
+4. If a user describes symptoms, you can suggest a doctor specialty, but ALWAYS gently remind them that you are an AI and they should consult a real doctor for medical advice.
 5. Keep your answers brief, beautiful, and readable. You MUST strictly preserve the exact markdown formatting (*italics* and **bold**) that the tools provide to you!
 6. If the user asks for doctor details, use this data: ${JSON.stringify(doctorListForPrompt)}. The doctors who sit everyday at the chamber are: ${chamberDoctors}.
-7. The store locations are: ${JSON.stringify(stores.map((s) => s.name + " - " + s.address))}.
-8. CRITICAL: When you need to call a tool, you must ONLY output the tool call. Do not add any extra text, thoughts, or conversational filler before or after the tool call.
+7. The store locations are: ${stores.map(s => s.name).join(", ")}.
+8. Active Offers and Notices:
+${bulletinsText || "None currently."}
+9. Upcoming Events: ${campText}
+10. CRITICAL: When you need to call a tool, you must ONLY output the tool call. Do not add any extra text, thoughts, or conversational filler before or after the tool call.
 
 When using tools, summarize the result nicely. E.g., "Yes, we have Crocin available. The MRP is ₹15, but our Janta price is ₹12."`;
 
@@ -115,6 +140,24 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
           },
         },
       },
+      {
+        type: "function",
+        function: {
+          name: "search_packages",
+          description:
+            "Search for available health and diagnostic packages to get their tests, market price, and Janta price.",
+          parameters: {
+            type: "object",
+            properties: {
+              query: {
+                type: "string",
+                description:
+                  "The name of the package to search for (optional, leave empty to list all)",
+              },
+            },
+          },
+        },
+      },
     ];
 
     // Messages are already sanitized above — map to clean format
@@ -140,7 +183,7 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "llama-3.1-8b-instant",
+            model: "llama-3.3-70b-versatile",
             messages: currentMessages,
             tools: tools,
             tool_choice: "auto",
@@ -183,6 +226,16 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
             resultData = items.slice(0, 5).map((item: RateTest) => ({
               test: `*${item.test_name}*`,
               janta_rate: `**₹${item.jm_rate}**`, // Using jm_rate instead of undefined janta_rate
+            }));
+          } else if (toolCall.function.name === "search_packages") {
+            const allPackages = await getPackages();
+            const q = args.query ? args.query.toLowerCase() : "";
+            const filtered = q ? allPackages.filter(p => p.name.toLowerCase().includes(q) || p.tests.some(t => t.toLowerCase().includes(q))) : allPackages;
+            resultData = filtered.slice(0, 5).map(p => ({
+              package: `*${p.name}*`,
+              tests_included: p.tests.join(", "),
+              market_price: `₹${p.market_price}`,
+              janta_price: `**₹${p.janta_price}**`
             }));
           }
 
