@@ -43,8 +43,25 @@ const TypewriterMessage = ({
   const finalContent = message.isTyping ? displayed : message.content;
 
   return (
-    <div className="prose prose-sm prose-slate max-w-none text-foreground prose-p:leading-relaxed prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-primary-strong">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{finalContent}</ReactMarkdown>
+    <div className="prose prose-sm prose-slate max-w-none text-foreground break-words prose-p:leading-relaxed prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-primary-strong prose-a:text-primary prose-a:underline">
+      <ReactMarkdown 
+        remarkPlugins={[remarkGfm]}
+        components={{
+          table: ({ node, ...props }) => (
+            <div className="w-full overflow-x-auto my-2 rounded border border-line">
+              <table className="w-full text-left text-[0.75rem] border-collapse whitespace-nowrap" {...props} />
+            </div>
+          ),
+          th: ({ node, ...props }) => (
+            <th className="bg-surface-muted p-2 font-semibold border-b border-line" {...props} />
+          ),
+          td: ({ node, ...props }) => (
+            <td className="p-2 border-b border-line last:border-0 align-top" {...props} />
+          )
+        }}
+      >
+        {finalContent}
+      </ReactMarkdown>
       {message.isTyping && (
         <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-primary align-middle" />
       )}
@@ -199,7 +216,7 @@ export default function JantaChat() {
                       )}
                     </div>
                     <div
-                      className={`relative max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm ${
+                      className={`relative max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm overflow-hidden ${
                         m.role === "user"
                           ? "rounded-br-sm bg-foreground text-white"
                           : "rounded-bl-sm border border-line bg-surface text-foreground"
