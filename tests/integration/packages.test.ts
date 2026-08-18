@@ -34,11 +34,7 @@ describe("Packages Integration Tests", () => {
     const sRes = await adminSupabase
       .from("pharmacy_stores")
       .insert({
-        name: "Booking Test Store",
-        address: "123 Test",
-        phone: "9999999999",
-        lat: 0,
-        lng: 0,
+        name: "Booking Test Store"
       })
       .select()
       .single();
@@ -66,6 +62,7 @@ describe("Packages Integration Tests", () => {
       .from("packages")
       .select("*")
       .eq("id", testPackage.id);
+    console.log("PACKAGE TEST DATA:", data, "TEST PKG:", testPackage);
     expect(error).toBeNull();
     expect(data).toHaveLength(1);
   });

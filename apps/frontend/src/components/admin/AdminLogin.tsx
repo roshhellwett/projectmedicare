@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Lock, ShieldCheck } from "lucide-react";
 
 export default function AdminLogin({ configured }: { configured: boolean }) {
+    const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       if (res.ok) {
         // The session lives in an httpOnly cookie — reload so the server
@@ -25,7 +26,7 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
         return;
       }
       const data = await res.json().catch(() => ({}));
-      setError(data.error || "Incorrect password");
+      setError(data.error || "Incorrect username or password");
     } catch {
       setError("Connection error. Please try again.");
     } finally {
@@ -40,7 +41,7 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
           <div className="mx-auto mb-6 w-fit rounded-3xl bg-primary-soft p-5 text-primary">
             <Lock className="h-10 w-10" />
           </div>
-          <h1 className="mb-2 text-2xl font-extrabold">Admin Access</h1>
+          <h1 className="mb-2 text-2xl font-extrabold">Staff Login</h1>
           {!configured ? (
             <p className="rounded-2xl bg-accent-soft px-5 py-4 text-left text-sm font-semibold text-accent">
               Admin login is not configured yet. Set <code>ADMIN_PASSWORD</code>{" "}
@@ -52,14 +53,26 @@ export default function AdminLogin({ configured }: { configured: boolean }) {
               <div className="relative">
                 <ShieldCheck className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
                 <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter username"
+                  className="input !pl-11"
+                  autoComplete="username"
+                  aria-label="Username"
+                  autoFocus
+                />
+              </div>
+              <div className="relative">
+                <ShieldCheck className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+                <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter admin password"
+                  placeholder="Enter password"
                   className="input !pl-11"
                   autoComplete="current-password"
-                  aria-label="Admin password"
-                  autoFocus
+                  aria-label="Password"
                 />
               </div>
               {error && (

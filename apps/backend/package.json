@@ -9,9 +9,11 @@
   },
   "scripts": {
     "start": "node server.mjs",
+    "dev": "node --env-file=../../.env.local server.mjs",
     "purge:once": "RUN_ONCE=true node server.mjs"
   },
   "dependencies": {
-    "@sentry/node": "^8.55.0"
+    "@sentry/node": "^8.55.0",
+    "twilio": "^6.1.0"
   }
 }

@@ -24,21 +24,59 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let username: unknown;
   let password: unknown;
   try {
-    ({ password } = await req.json());
+    ({ username, password } = await req.json());
   } catch {
+    return NextResponse.json({ error: "Bad request" }, { status: 400 });
+  }
+
+  if (typeof username !== "string" || typeof password !== "string") {
     return NextResponse.json({ error: "Bad request" }, { status: 400 });
   }
 
   // Small constant delay to blunt brute-force attempts.
   await new Promise((r) => setTimeout(r, 250));
 
-  if (!checkAdminPassword(password)) {
-    return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
+  let role = "BILLER";
+
+  // Superadmin Fallback
+  if (username === "admin") {
+    if (!checkAdminPassword(password)) {
+      return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
+    }
+    role = "ADMIN";
+  } else {
+    // Check against admin_users table
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const client = createAdminClient();
+    if (!client) {
+      return NextResponse.json({ error: "Database error" }, { status: 500 });
+    }
+
+    const { data: user, error } = await client
+      .from("admin_users")
+      .select("password_hash, role")
+      .eq("username", username)
+      .single();
+
+    if (error || !user) {
+      return NextResponse.json({ error: "Incorrect username or password" }, { status: 401 });
+    }
+
+    // Hash the candidate password and compare
+    const { hashPassword, safeEqual } = await import("@/lib/auth/session");
+    const candidateHash = hashPassword(password);
+    
+    if (!safeEqual(candidateHash, user.password_hash)) {
+      return NextResponse.json({ error: "Incorrect username or password" }, { status: 401 });
+    }
+    
+    role = user.role;
   }
 
-  const { token, maxAge } = createSessionToken();
+  const { token, maxAge } = createSessionToken(username, role);
   const res = NextResponse.json({ ok: true });
   res.cookies.set(ADMIN_COOKIE, token, { ...cookieBase, maxAge });
   return res;

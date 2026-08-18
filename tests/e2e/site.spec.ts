@@ -75,14 +75,20 @@ test.describe("public site", () => {
 });
 
 test.describe("admin", () => {
-  test("admin panel asks for the password", async ({ page }) => {
+  test("admin panel asks for the username and password", async ({ page }) => {
     await page.goto("/en/admin");
+    await expect(page.locator('input[type="text"][placeholder*="username" i]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
   test("wrong password is rejected", async ({ page }) => {
     await page.goto("/en/admin");
+    const usernameInput = page.locator('input[type="text"][placeholder*="username" i]');
     const passwordInput = page.locator('input[type="password"]');
+    
+    await expect(usernameInput).toBeVisible();
+    await usernameInput.fill("admin");
+    
     await expect(passwordInput).toBeVisible();
     await passwordInput.fill("definitely-not-the-password");
     
@@ -96,6 +102,7 @@ test.describe("admin", () => {
   test("admin settings page is locked without a session", async ({ page }) => {
     await page.goto("/en/admin/settings");
     await expect(page.locator('input[type="password"]')).toBeVisible();
+    await expect(page.locator('input[type="text"][placeholder*="username" i]')).toBeVisible();
   });
 
   test("admin API is locked without a session", async ({ request }) => {
@@ -132,6 +139,10 @@ test.describe("admin", () => {
 
     // Login
     await page.goto("/en/admin");
+    const usernameInput = page.locator('input[type="text"][placeholder*="username" i]');
+    await expect(usernameInput).toBeVisible();
+    await usernameInput.fill("admin");
+    
     const passwordInput = page.locator('input[type="password"]');
     await expect(passwordInput).toBeVisible();
     await passwordInput.fill("test-password-123");

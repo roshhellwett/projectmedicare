@@ -373,15 +373,19 @@ export default async function RootLayout({
             >
               Skip to content
             </a>
-            <Navbar />
-            <AnnouncementBanner />
-            <main id="main" className="flex-1">
+            <div className="print:hidden">
+              <Navbar />
+              <AnnouncementBanner />
+            </div>
+            <main id="main" className="flex-1 print:flex-none print:w-full print:p-0 print:m-0">
               {children}
             </main>
-            <Footer />
-            <JantaChat />
-            <FloatingCart />
-            <ToastProvider />
+            <div className="print:hidden">
+              <Footer />
+              <JantaChat />
+              <FloatingCart />
+              <ToastProvider />
+            </div>
           </div>
         </NextIntlClientProvider>
       </body>

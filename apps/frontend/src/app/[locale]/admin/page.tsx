@@ -223,6 +223,24 @@ async function OperationsGroup({ currentStoreId, locale, t }: { currentStoreId?:
           cta="Open package bookings"
           badge={relevantPackageOrders.length > 0 ? relevantPackageOrders.length : undefined}
         />
+        <Tile
+          href={`/${locale}/admin/pos`}
+          icon={ShoppingBag}
+          tone="is-green"
+          title="POS & Billing"
+          desc="Quick checkout for walk-in patients."
+          status="Point of Sale"
+          cta="Open POS"
+        />
+        <Tile
+          href={`/${locale}/admin/invoices`}
+          icon={FileText}
+          tone=""
+          title="Invoice History"
+          desc="View and manage generated invoices and returns."
+          status="All transactions"
+          cta="Open Invoices"
+        />
       </div>
     </div>
   );
@@ -248,6 +266,15 @@ async function CatalogGroup({ locale, t }: { locale: string, t: any }) {
           desc={t("medicines.desc")}
           status={`${stats.medicinesCount.toLocaleString()} medicines in catalogue`}
           cta="Open medicines manager"
+        />
+        <Tile
+          href={`/${locale}/admin/inventory`}
+          icon={Box}
+          tone=""
+          title="Inventory & Batches"
+          desc="Manage medicine stock, barcodes, and expiry dates."
+          status="Stock Management"
+          cta="Open Inventory"
         />
         <Tile
           href={`/${locale}/admin/rates`}

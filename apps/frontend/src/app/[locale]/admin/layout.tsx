@@ -40,18 +40,18 @@ export default async function AdminLayout({
   const selectedStore = stores.find((s) => s.id === storeId);
 
   return (
-    <div className="bg-background relative min-h-screen flex flex-col md:flex-row">
+    <div className="bg-background relative min-h-screen flex flex-col md:flex-row print:bg-white print:block">
       {!selectedStore && <AdminStoreSelector stores={stores} />}
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-64 shrink-0 h-screen sticky top-0">
+      <div className="hidden md:block w-64 shrink-0 h-screen sticky top-0 print:hidden">
         <AdminNav />
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 min-w-0 flex flex-col min-h-screen md:h-screen md:overflow-hidden">
+      <div className="flex-1 min-w-0 flex flex-col min-h-screen md:h-screen md:overflow-hidden print:h-auto print:overflow-visible print:block">
         {/* Top Header */}
-        <header className="border-b border-line bg-surface/80 backdrop-blur sticky top-0 z-30 px-4 py-3 flex items-center justify-between md:justify-end">
+        <header className="border-b border-line bg-surface/80 backdrop-blur sticky top-0 z-30 px-4 py-3 flex items-center justify-between md:justify-end print:hidden">
           {/* Mobile Header Left Side */}
           <div className="md:hidden flex items-center gap-3">
             <MobileAdminNav />
@@ -89,7 +89,7 @@ export default async function AdminLayout({
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto print:overflow-visible">
           {children}
         </main>
       </div>

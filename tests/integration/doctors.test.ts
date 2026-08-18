@@ -62,10 +62,17 @@ describe("Doctors Table Tests", () => {
   });
 
   it("should reject anon users from updating doctors", async () => {
-    const { error } = await anonSupabase
+    await anonSupabase
       .from("doctors")
       .update({ name: "Dr. Hacked" })
       .eq("id", testDoctor.id);
-    expect(error).not.toBeNull();
+
+    // Verify it was not updated
+    const { data } = await adminSupabase
+      .from("doctors")
+      .select("name")
+      .eq("id", testDoctor.id)
+      .single();
+    expect(data?.name).toBe("Dr. Jane Doe");
   });
 });

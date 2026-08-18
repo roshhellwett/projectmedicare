@@ -10,6 +10,10 @@ type SessionPayload = {
   exp: number;
   /** random id so two sessions are never byte-identical */
   jti: string;
+  /** username of the authenticated user */
+  username?: string;
+  /** role of the user: ADMIN or BILLER */
+  role?: string;
 };
 
 function secret(): string {
@@ -50,12 +54,14 @@ export function safeEqual(a: string, b: string): boolean {
   return timingSafeEqual(ab, bb);
 }
 
-export function createSessionToken(): { token: string; maxAge: number } {
+export function createSessionToken(username?: string, role?: string): { token: string; maxAge: number } {
   const now = Math.floor(Date.now() / 1000);
   const payload: SessionPayload = {
     iat: now,
     exp: now + SESSION_TTL_SECONDS,
     jti: randomBytes(8).toString("hex"),
+    ...(username && { username }),
+    ...(role && { role }),
   };
   const body = b64url(JSON.stringify(payload));
   return { token: `${body}.${sign(body)}`, maxAge: SESSION_TTL_SECONDS };
@@ -87,6 +93,16 @@ export function verifySessionToken(token: string | undefined | null): boolean {
   }
 }
 
+export function getSessionPayload(token: string | undefined | null): SessionPayload | null {
+  if (!verifySessionToken(token)) return null;
+  try {
+    const [body] = token!.split(".");
+    return JSON.parse(fromB64url(body).toString("utf8")) as SessionPayload;
+  } catch {
+    return null;
+  }
+}
+
 export function isAdminPasswordConfigured(): boolean {
   return Boolean(
     process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD.length >= 6,
@@ -97,4 +113,8 @@ export function checkAdminPassword(candidate: unknown): boolean {
   if (typeof candidate !== "string" || !isAdminPasswordConfigured())
     return false;
   return safeEqual(candidate, process.env.ADMIN_PASSWORD as string);
+}
+
+export function hashPassword(password: string): string {
+  return createHmac("sha256", secret()).update(password).digest("hex");
 }

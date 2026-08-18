@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import { requireAdmin } from "@/lib/auth/guard";
+import { requireAdmin, requireAuth } from "@/lib/auth/guard";
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
 import { num, str, ValidationError } from "@/lib/utils/validation";
 
-const SORTABLE = ["s_no", "medicine_name", "expiry_date", "pack_size", "mrp", "selling_price", "purchase", "sale", "quantity"];
+const SORTABLE = ["s_no", "medicine_name", "pack_size", "hsn_code", "gst"];
 
 function db(write: boolean) {
   const client = write
@@ -28,22 +28,14 @@ function parse(body: Record<string, unknown>) {
   return {
     s_no: num(body.s_no, "S No"),
     medicine_name: str(body.medicine_name, "Medicine name", { max: 200 }),
-    expiry_date: str(body.expiry_date, "Expiry Date", { max: 50, optional: true }),
-    buying_price: num(body.buying_price, "Buying Price"),
-    selling_price: num(body.selling_price, "Selling price"),
     pack_size: str(body.pack_size, "Pack size", { max: 60, optional: true }),
-    batch_number: str(body.batch_number, "Batch Number", { max: 100, optional: true }),
-    mrp: num(body.mrp, "MRP"),
-    purchase: num(body.purchase, "Purchase"),
-    sale: num(body.sale, "Sale"),
-    quantity: num(body.quantity, "Quantity"),
     hsn_code: str(body.hsn_code, "HSN Code", { max: 50, optional: true }),
     gst: num(body.gst, "GST"),
   };
 }
 
 export async function GET(req: NextRequest) {
-  const denied = await requireAdmin();
+  const denied = await requireAuth();
   if (denied) return denied;
   try {
     const url = new URL(req.url);

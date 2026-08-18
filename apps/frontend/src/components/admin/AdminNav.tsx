@@ -16,7 +16,8 @@ import {
   MessageCircle, 
   FileText,
   Store,
-  Inbox
+  Inbox,
+  AlertTriangle
 } from "lucide-react";
 
 const GROUPS = [
@@ -24,10 +25,19 @@ const GROUPS = [
     title: "Overview",
     items: [
       { href: "", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/alerts", label: "Inventory Alerts", icon: AlertTriangle },
     ]
   },
   {
-    title: "Store Management",
+    title: "Point of Sale & Billing",
+    items: [
+      { href: "/pos", label: "POS / New Bill", icon: Store },
+      { href: "/invoices", label: "Invoice History", icon: FileText },
+      { href: "/inventory", label: "Inventory & Stock", icon: Box },
+    ]
+  },
+  {
+    title: "Online Orders & Store",
     items: [
       { href: "/orders", label: "Medicine Inbox", icon: Inbox },
       { href: "/package-orders", label: "Package Inbox", icon: Inbox },
@@ -35,7 +45,7 @@ const GROUPS = [
     ]
   },
   {
-    title: "Catalog",
+    title: "Master Catalog",
     items: [
       { href: "/medicines", label: "Medicines", icon: Pill },
       { href: "/rates", label: "Lab Tests", icon: FlaskConical },

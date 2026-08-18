@@ -24,13 +24,21 @@ INSERT INTO public.package_orders (id, customer_name, phone_number, package_id, 
 ON CONFLICT (id) DO NOTHING;
 
 -- 4. Medicines
-INSERT INTO public.medicines (s_no, medicine_name, selling_price, pack_size, mrp) VALUES
-(1, 'Paracetamol 500mg', 15.00, '10 Tablets', 20.00),
-(2, 'Azithromycin 500mg', 60.00, '3 Tablets', 75.00),
-(3, 'Pantoprazole 40mg', 45.00, '10 Tablets', 65.00),
-(4, 'Vitamin C Zinc', 55.00, '15 Tablets', 85.00),
-(5, 'Cough Syrup 100ml', 80.00, '1 Bottle', 110.00)
+INSERT INTO public.medicines (id, s_no, medicine_name, pack_size) VALUES
+(1, 1, 'Paracetamol 500mg', '10 Tablets'),
+(2, 2, 'Azithromycin 500mg', '3 Tablets'),
+(3, 3, 'Pantoprazole 40mg', '10 Tablets'),
+(4, 4, 'Vitamin C Zinc', '15 Tablets'),
+(5, 5, 'Cough Syrup 100ml', '1 Bottle')
 ON CONFLICT (id) DO NOTHING;
+
+-- 4.5 Medicine Batches
+INSERT INTO public.medicine_batches (medicine_id, barcode, batch_number, buying_price, selling_price, mrp, stock) VALUES
+(1, '8901111', 'B-101', 10.00, 15.00, 20.00, 100),
+(2, '8902222', 'B-102', 50.00, 60.00, 75.00, 50),
+(3, '8903333', 'B-103', 35.00, 45.00, 65.00, 200),
+(4, '8904444', 'B-104', 40.00, 55.00, 85.00, 150),
+(5, '8905555', 'B-105', 60.00, 80.00, 110.00, 30);
 
 -- 5. Patient Rates
 INSERT INTO public.patient_rates (sl_no, test_name, jm_rate, vail_name) VALUES

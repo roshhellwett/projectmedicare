@@ -112,3 +112,82 @@ export async function deleteEnvKey(id: string) {
   return { success: true };
 }
 
+export async function updateGlobalSettings(settings: Record<string, any>) {
+  const authed = await isAdminAuthenticated();
+  if (!authed) throw new Error("Unauthorized");
+
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error('Supabase is not configured');
+
+  const updates = Object.entries(settings).map(([key, value]) => ({
+    key,
+    value: JSON.stringify(value),
+    updated_at: new Date().toISOString()
+  }));
+
+  const { error } = await supabase.from("global_settings").upsert(updates, { onConflict: "key" });
+  if (error) throw new Error("Failed to update global settings");
+
+  revalidatePath("/admin/settings");
+  return { success: true };
+}
+
+export async function updatePharmacyStore(id: string, updates: any) {
+  const authed = await isAdminAuthenticated();
+  if (!authed) throw new Error("Unauthorized");
+
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error('Supabase is not configured');
+
+  const { error } = await supabase.from("pharmacy_stores").update(updates).eq("id", id);
+  if (error) throw new Error("Failed to update store profile");
+
+  revalidatePath("/admin/settings");
+  return { success: true };
+}
+
+export async function upsertAdminUser(user: { id?: string; username: string; password?: string; role: string }) {
+  const authed = await isAdminAuthenticated();
+  if (!authed) throw new Error("Unauthorized");
+
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error('Supabase is not configured');
+
+  const { hashPassword } = await import("@/lib/auth/session");
+
+  const payload: any = {
+    username: user.username,
+    role: user.role,
+    updated_at: new Date().toISOString()
+  };
+
+  if (user.password) {
+    payload.password_hash = hashPassword(user.password);
+  }
+
+  if (user.id) {
+    const { error } = await supabase.from("admin_users").update(payload).eq("id", user.id);
+    if (error) throw new Error("Failed to update user");
+  } else {
+    if (!user.password) throw new Error("Password is required for new users");
+    const { error } = await supabase.from("admin_users").insert([payload]);
+    if (error) throw new Error("Failed to create user (username may already exist)");
+  }
+
+  revalidatePath("/admin/settings");
+  return { success: true };
+}
+
+export async function deleteAdminUser(id: string) {
+  const authed = await isAdminAuthenticated();
+  if (!authed) throw new Error("Unauthorized");
+
+  const supabase = createAdminClient();
+  if (!supabase) throw new Error('Supabase is not configured');
+
+  const { error } = await supabase.from("admin_users").delete().eq("id", id);
+  if (error) throw new Error("Failed to delete user");
+
+  revalidatePath("/admin/settings");
+  return { success: true };
+}

@@ -7,7 +7,7 @@ export type PackageOrder = {
   customer_name: string;
   phone_number: string;
   package_id: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: "pending" | "confirmed" | "preparing" | "out_for_delivery" | "completed" | "cancelled";
   store_id: string | null;
   selected_at: string | null;
   created_at: string;
@@ -92,7 +92,7 @@ export async function deletePackageOrder(id: string): Promise<void> {
 export async function updatePackageOrderStatus(
   orderId: string,
   storeId: string,
-  status: "pending" | "confirmed" | "completed" | "cancelled"
+  status: "pending" | "confirmed" | "preparing" | "out_for_delivery" | "completed" | "cancelled"
 ): Promise<void> {
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Supabase admin client not available");

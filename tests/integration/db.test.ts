@@ -45,11 +45,7 @@ describe("Database Integration Tests", () => {
       const s1 = await supabase
         .from("pharmacy_stores")
         .insert({
-          name: "Test Store 1",
-          address: "123 Test St",
-          phone: "1111111111",
-          lat: 0,
-          lng: 0,
+          name: "Test Store 1"
         })
         .select("id")
         .single();
@@ -60,11 +56,7 @@ describe("Database Integration Tests", () => {
       const s2 = await supabase
         .from("pharmacy_stores")
         .insert({
-          name: "Test Store 2",
-          address: "456 Test Ave",
-          phone: "2222222222",
-          lat: 0,
-          lng: 0,
+          name: "Test Store 2"
         })
         .select("id")
         .single();

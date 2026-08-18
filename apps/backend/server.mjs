@@ -1,4 +1,5 @@
 import http from "node:http";
+import twilio from "twilio";
 
 // Purge env
 const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
@@ -10,6 +11,16 @@ const PURGE_INTERVAL_MINUTES = clamp(
   1440,
 );
 const GRACE_HOURS = clamp(process.env.PURGE_GRACE_HOURS, 24, 0, 720);
+
+// SMS env
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || "";
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
+const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || "JANTAMEDICARE";
+const SMS_INTERVAL_SECONDS = clamp(process.env.SMS_INTERVAL_SECONDS, 10, 5, 60);
+
+const twilioClient = TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN 
+  ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
+  : null;
 
 // Health env
 const SITE_URL = (process.env.SITE_URL || "").replace(/\/+$/, "");
@@ -27,6 +38,7 @@ const PORT = Number(process.env.PORT) || 8080;
 let sentry = null;
 let lastPurge = { at: null, removed: null, ok: null, error: null };
 let lastHealth = { at: null, ok: null, checks: [] };
+let lastSms = { at: null, sent: 0, failed: 0 };
 
 function clamp(raw, fallback, min, max) {
   const n = Number(raw);
@@ -215,6 +227,84 @@ async function runChecks() {
 }
 
 // ========================
+// SMS LOGIC
+// ========================
+async function processSmsQueue() {
+  if (!SUPABASE_URL || !SERVICE_KEY) return;
+
+  try {
+    // 1. Fetch pending messages
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/sms_queue?status=eq.pending&limit=10`,
+      {
+        headers: {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+        },
+      }
+    );
+    if (!res.ok) throw new Error(`Supabase fetch failed: ${res.status}`);
+    const messages = await res.json();
+    
+    if (messages.length === 0) return;
+
+    let sentCount = 0;
+    let failedCount = 0;
+
+    // 2. Process each message
+    for (const msg of messages) {
+      try {
+        if (!twilioClient) {
+          log("info", "[MOCK SMS] Would send SMS", { to: msg.phone_number, body: msg.message });
+        } else {
+          // Note: Hardcoded to "sms_order_confirmation" for Twilio Trial compatibility.
+          // In production with an upgraded account, this should be: body: msg.message
+          await twilioClient.messages.create({
+            body: "sms_order_confirmation",
+            from: TWILIO_PHONE_NUMBER,
+            to: msg.phone_number,
+          });
+        }
+        
+        // Mark as sent
+        await fetch(`${SUPABASE_URL}/rest/v1/sms_queue?id=eq.${msg.id}`, {
+          method: "PATCH",
+          headers: {
+            apikey: SERVICE_KEY,
+            Authorization: `Bearer ${SERVICE_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "sent", updated_at: new Date().toISOString() }),
+        });
+        sentCount++;
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        log("error", "Failed to send SMS", { id: msg.id, to: msg.phone_number, error: errorMsg });
+        
+        // Mark as failed
+        await fetch(`${SUPABASE_URL}/rest/v1/sms_queue?id=eq.${msg.id}`, {
+          method: "PATCH",
+          headers: {
+            apikey: SERVICE_KEY,
+            Authorization: `Bearer ${SERVICE_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "failed", error_message: errorMsg, updated_at: new Date().toISOString() }),
+        });
+        failedCount++;
+      }
+    }
+
+    lastSms = { at: new Date().toISOString(), sent: sentCount, failed: failedCount };
+    if (sentCount > 0 || failedCount > 0) {
+      log("info", "SMS queue processed", { sent: sentCount, failed: failedCount });
+    }
+  } catch (err) {
+    log("error", "Error processing SMS queue", { error: err instanceof Error ? err.message : String(err) });
+  }
+}
+
+// ========================
 // SERVER LOGIC
 // ========================
 function startServer() {
@@ -257,6 +347,10 @@ function startServer() {
             intervalMinutes: PURGE_INTERVAL_MINUTES,
             lastRun: lastPurge,
           },
+          sms: {
+            intervalSeconds: SMS_INTERVAL_SECONDS,
+            lastRun: lastSms,
+          },
         }),
       );
       return;
@@ -279,12 +373,14 @@ async function main() {
   requirePurgeConfig();
   await initSentry();
 
-  log("info", "Backend worker starting (Purge + Health)", {
+  log("info", "Backend worker starting (Purge + Health + SMS)", {
     site: SITE_URL || null,
     purgeInterval: PURGE_INTERVAL_MINUTES,
     healthInterval: HEALTH_INTERVAL_MINUTES,
+    smsInterval: SMS_INTERVAL_SECONDS,
     graceHours: GRACE_HOURS,
     runOnce: RUN_ONCE,
+    twilioEnabled: !!twilioClient,
   });
 
   const server = startServer();
@@ -297,11 +393,13 @@ async function main() {
 
   const healthTimer = setInterval(runChecks, HEALTH_INTERVAL_MINUTES * 60_000);
   const purgeTimer = setInterval(purgeOnce, PURGE_INTERVAL_MINUTES * 60_000);
+  const smsTimer = setInterval(processSmsQueue, SMS_INTERVAL_SECONDS * 1000);
 
   const shutdown = (signal) => {
     log("info", "Shutting down", { signal });
     clearInterval(healthTimer);
     clearInterval(purgeTimer);
+    clearInterval(smsTimer);
     server.close();
     process.exit(0);
   };

@@ -64,7 +64,7 @@ export default function OrdersTable({
     }
   };
 
-  const handleUpdateStatus = async (id: string, newStatus: "delivered" | "cancelled") => {
+  const handleUpdateStatus = async (id: string, newStatus: "preparing" | "out_for_delivery" | "delivered" | "cancelled") => {
     setProcessingId(id);
     try {
       const res = await fetch(`/api/admin/orders/${id}/status`, {
@@ -135,7 +135,7 @@ export default function OrdersTable({
         return !i.assigned_store_id || i.assigned_store_id === currentStoreId;
       } else {
         if (i.assigned_store_id !== currentStoreId) return false;
-        if (activeTab === "claimed") return i.status === "claimed";
+        if (activeTab === "claimed") return ["claimed", "preparing", "out_for_delivery"].includes(i.status || "pending");
         if (activeTab === "delivered") return i.status === "delivered";
         if (activeTab === "cancelled") return i.status === "cancelled";
         return true;
@@ -235,7 +235,7 @@ export default function OrdersTable({
                 return (
                   <tr
                     key={item.id}
-                    className={`transition-colors ${isMine && status === "claimed" ? "bg-primary/5" : "hover:bg-surface-muted"}`}
+                    className={`transition-colors ${isMine && ["claimed", "preparing", "out_for_delivery"].includes(status) ? "bg-primary/5" : "hover:bg-surface-muted"}`}
                   >
                     <td className="p-4 align-top">
                       <div className="font-medium text-foreground text-base">
@@ -292,6 +292,18 @@ export default function OrdersTable({
                         </span>
                       )}
 
+                      {status === "preparing" && (
+                        <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
+                          Preparing
+                        </span>
+                      )}
+
+                      {status === "out_for_delivery" && (
+                        <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold border border-blue-200">
+                          Out for Delivery
+                        </span>
+                      )}
+
                       {status === "delivered" && (
                         <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold border border-green-200">
                           <CheckCircle2 className="h-3 w-3" />
@@ -322,15 +334,35 @@ export default function OrdersTable({
                           </button>
                         )}
 
-                        {status === "claimed" && isMine && (
+                        {["claimed", "preparing", "out_for_delivery"].includes(status) && isMine && (
                            <>
-                            <button
-                              onClick={() => handleUpdateStatus(item.id, "delivered")}
-                              disabled={processingId === item.id}
-                              className="btn btn-primary btn-sm w-full max-w-[140px]"
-                            >
-                              Mark Delivered
-                            </button>
+                            {status === "claimed" && (
+                              <button
+                                onClick={() => handleUpdateStatus(item.id, "preparing")}
+                                disabled={processingId === item.id}
+                                className="btn btn-primary btn-sm w-full max-w-[140px]"
+                              >
+                                Mark Preparing
+                              </button>
+                            )}
+                            {status === "preparing" && (
+                              <button
+                                onClick={() => handleUpdateStatus(item.id, "out_for_delivery")}
+                                disabled={processingId === item.id}
+                                className="btn btn-primary btn-sm w-full max-w-[140px]"
+                              >
+                                Out for Delivery
+                              </button>
+                            )}
+                            {status === "out_for_delivery" && (
+                              <button
+                                onClick={() => handleUpdateStatus(item.id, "delivered")}
+                                disabled={processingId === item.id}
+                                className="btn btn-primary btn-sm w-full max-w-[140px]"
+                              >
+                                Mark Delivered
+                              </button>
+                            )}
                             <button
                               onClick={() => handleUpdateStatus(item.id, "cancelled")}
                               disabled={processingId === item.id}

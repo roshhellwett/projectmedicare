@@ -59,20 +59,33 @@ describe("Announcements Integration Tests", () => {
   });
 
   it("should prevent anon users from updating announcements", async () => {
-    const { error } = await anonSupabase
+    await anonSupabase
       .from("announcements")
       .update({ title: "Hacked Title" })
       .eq("id", testAnnouncement.id);
 
-    expect(error).not.toBeNull();
+    // Verify it was not updated
+    const { data } = await adminSupabase
+      .from("announcements")
+      .select("title")
+      .eq("id", testAnnouncement.id)
+      .single();
+    expect(data?.title).toBe("Test Announcement");
   });
 
   it("should prevent anon users from deleting announcements", async () => {
-    const { error } = await anonSupabase
+    await anonSupabase
       .from("announcements")
       .delete()
       .eq("id", testAnnouncement.id);
 
-    expect(error).not.toBeNull();
+    // Verify it still exists
+    const { data } = await adminSupabase
+      .from("announcements")
+      .select("id")
+      .eq("id", testAnnouncement.id)
+      .single();
+    expect(data).toBeDefined();
+    expect(data?.id).toBe(testAnnouncement.id);
   });
 });

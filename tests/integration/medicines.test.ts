@@ -20,11 +20,12 @@ describe("Medicines and Patient Rates Tests", () => {
     const medRes = await adminSupabase
       .from("medicines")
       .insert({
-        s_no: 999,
-        medicine_name: "Test Paracetamol",
-        selling_price: 15.5,
-        pack_size: "10 Tabs",
-        mrp: 20.0,
+        id: Math.floor(Math.random() * 1000000) + 10000,
+        s_no: Math.floor(Math.random() * 1000000),
+        medicine_name: "Test Medicine Global",
+        pack_size: "1 Strip",
+        gst: 0,
+        hsn_code: "3004",
       })
       .select()
       .single();
@@ -34,10 +35,10 @@ describe("Medicines and Patient Rates Tests", () => {
     const rateRes = await adminSupabase
       .from("patient_rates")
       .insert({
+        id: Math.floor(Math.random() * 1000000),
         sl_no: 999,
         test_name: "Test Blood Count",
-        jm_rate: "Rs. 100",
-        vail_name: "Purple",
+        jm_rate: "Rs. 100"
       })
       .select()
       .single();
@@ -63,23 +64,15 @@ describe("Medicines and Patient Rates Tests", () => {
         .eq("id", testMedicine.id);
       expect(error).toBeNull();
       expect(data).toHaveLength(1);
-      expect(data[0].medicine_name).toBe("Test Paracetamol");
+      expect(data[0].medicine_name).toBe("Test Medicine Global");
     });
 
     it("should reject anon users from inserting medicines", async () => {
       const { error } = await anonSupabase.from("medicines").insert({
         s_no: 1000,
         medicine_name: "Hacker Med",
-        selling_price: 10,
         pack_size: "1",
-        mrp: 10,
-        buying_price: 10.0,
-        purchase: 1,
-        sale: 1,
-        quantity: 100,
         gst: 12,
-        expiry_date: "30-10-2027",
-        batch_number: "TESTBATCH2",
       });
       // RLS should deny this (either returns empty/no rows affected or explicit RLS error)
       expect(error).not.toBeNull();
@@ -99,11 +92,22 @@ describe("Medicines and Patient Rates Tests", () => {
     });
 
     it("should reject anon users from deleting patient rates", async () => {
-      const { error } = await anonSupabase
+      const result = await anonSupabase
         .from("patient_rates")
         .delete()
-        .eq("id", testPatientRate.id);
-      expect(error).not.toBeNull();
+        .eq("id", testPatientRate.id)
+        .select();
+      console.log("ANON DELETE RESULT:", result);
+
+      // Verify it still exists
+      const { data, error } = await adminSupabase
+        .from("patient_rates")
+        .select("id")
+        .eq("id", testPatientRate.id)
+        .single();
+      console.log("MEDICINES DELETE TEST ERROR:", error);
+      expect(data).toBeDefined();
+      expect(data?.id).toBe(testPatientRate.id);
     });
   });
 });

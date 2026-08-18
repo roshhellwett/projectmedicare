@@ -11,7 +11,7 @@ export type MedicineOrder = {
   note: string | null;
   prescription_url: string;
   assigned_store_id: string | null;
-  status: "pending" | "claimed" | "delivered" | "cancelled";
+  status: "pending" | "claimed" | "preparing" | "out_for_delivery" | "delivered" | "cancelled";
   selected_at: string | null;
   created_at: string;
   cart_items: any[] | null;

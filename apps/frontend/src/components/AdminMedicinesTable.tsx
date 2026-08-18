@@ -28,15 +28,7 @@ export default function AdminMedicinesTable() {
   const [showAdd, setShowAdd] = useState(false);
   const [newMed, setNewMed] = useState({
     medicine_name: "",
-    expiry_date: "",
-    buying_price: "",
-    selling_price: "",
     pack_size: "",
-    batch_number: "",
-    mrp: "",
-    purchase: "",
-    sale: "",
-    quantity: "",
     hsn_code: "",
     gst: "",
     s_no: "",
@@ -97,12 +89,6 @@ export default function AdminMedicinesTable() {
       pack_size: data.pack_size
         ? data.pack_size.replace(/\s*[xX*]\s*/g, " x ").trim()
         : "",
-      expiry_date: data.expiry_date
-        ? data.expiry_date.replace(/\//g, "-").trim()
-        : "",
-      batch_number: data.batch_number
-        ? data.batch_number.toUpperCase().trim()
-        : "",
     };
   };
 
@@ -145,15 +131,7 @@ export default function AdminMedicinesTable() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           medicine_name: normalized.medicine_name.trim(),
-          expiry_date: normalized.expiry_date,
-          buying_price: Number(normalized.buying_price) || 0,
-          selling_price: Number(normalized.selling_price) || 0,
           pack_size: normalized.pack_size,
-          batch_number: normalized.batch_number,
-          mrp: Number(normalized.mrp) || 0,
-          purchase: Number(normalized.purchase) || 0,
-          sale: Number(normalized.sale) || 0,
-          quantity: Number(normalized.quantity) || 0,
           hsn_code: normalized.hsn_code,
           gst: Number(normalized.gst) || 0,
           s_no: Number(normalized.s_no) || 0,
@@ -164,15 +142,7 @@ export default function AdminMedicinesTable() {
         setShowAdd(false);
         setNewMed({
           medicine_name: "",
-          expiry_date: "",
-          buying_price: "",
-          selling_price: "",
           pack_size: "",
-          batch_number: "",
-          mrp: "",
-          purchase: "",
-          sale: "",
-          quantity: "",
           hsn_code: "",
           gst: "",
           s_no: "",
@@ -270,26 +240,14 @@ export default function AdminMedicinesTable() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Expiry Date</label>
+              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">HSN Code</label>
               <input
                 type="text"
-                value={newMed.expiry_date}
+                value={newMed.hsn_code}
                 onChange={(e) =>
-                  setNewMed({ ...newMed, expiry_date: e.target.value })
+                  setNewMed({ ...newMed, hsn_code: e.target.value })
                 }
-                placeholder="MM/YY or DD/MM/YYYY"
-                className="admin-input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Batch Number</label>
-              <input
-                type="text"
-                value={newMed.batch_number}
-                onChange={(e) =>
-                  setNewMed({ ...newMed, batch_number: e.target.value })
-                }
-                placeholder="Batch No."
+                placeholder="HSN Code"
                 className="admin-input w-full"
               />
             </div>
@@ -300,50 +258,6 @@ export default function AdminMedicinesTable() {
                 value={newMed.gst}
                 onChange={(e) => setNewMed({ ...newMed, gst: e.target.value })}
                 placeholder="e.g. 5 or 12"
-                className="admin-input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">MRP (₹)</label>
-              <input
-                type="number"
-                value={newMed.mrp}
-                onChange={(e) => setNewMed({ ...newMed, mrp: e.target.value })}
-                placeholder="MRP"
-                className="admin-input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Selling Price (₹)</label>
-              <input
-                type="number"
-                value={newMed.selling_price}
-                onChange={(e) =>
-                  setNewMed({ ...newMed, selling_price: e.target.value })
-                }
-                placeholder="Selling Price"
-                className="admin-input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Buying Price (₹)</label>
-              <input
-                type="number"
-                value={newMed.buying_price}
-                onChange={(e) =>
-                  setNewMed({ ...newMed, buying_price: e.target.value })
-                }
-                placeholder="Buying Price"
-                className="admin-input w-full"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Quantity</label>
-              <input
-                type="number"
-                value={newMed.quantity}
-                onChange={(e) => setNewMed({ ...newMed, quantity: e.target.value })}
-                placeholder="Quantity"
                 className="admin-input w-full"
               />
             </div>
@@ -378,24 +292,21 @@ export default function AdminMedicinesTable() {
               <th className="w-16">S.No</th>
               <th>Medicine Name</th>
               <th>Pack Size</th>
-              <th>Expiry</th>
-              <th>Batch</th>
+              <th>HSN Code</th>
               <th className="text-right">GST %</th>
-              <th className="text-right">MRP (₹)</th>
-              <th className="text-right">Selling Price (₹)</th>
               <th className="text-center w-24">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={9} className="py-16 text-center">
+                <td colSpan={6} className="py-16 text-center">
                   <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
                 </td>
               </tr>
             ) : items.length === 0 ? (
               <tr>
-                <td colSpan={9} className="py-16 text-center text-muted">
+                <td colSpan={6} className="py-16 text-center text-muted">
                   No medicines found.
                 </td>
               </tr>
@@ -467,39 +378,19 @@ export default function AdminMedicinesTable() {
                     {editId === item.id ? (
                       <input
                         type="text"
-                        defaultValue={item.expiry_date}
-                        placeholder="Expiry"
+                        defaultValue={item.hsn_code}
+                        placeholder="HSN Code"
                         onChange={(e) =>
                           setEditData({
                             ...editData,
-                            expiry_date: e.target.value,
+                            hsn_code: e.target.value,
                           })
                         }
                         className="admin-input !w-24"
                       />
                     ) : (
                       <span className="text-muted text-sm">
-                        {item.expiry_date || "-"}
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {editId === item.id ? (
-                      <input
-                        type="text"
-                        defaultValue={item.batch_number}
-                        placeholder="Batch"
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            batch_number: e.target.value,
-                          })
-                        }
-                        className="admin-input !w-24"
-                      />
-                    ) : (
-                      <span className="text-muted text-sm">
-                        {item.batch_number || "-"}
+                        {item.hsn_code || "-"}
                       </span>
                     )}
                   </td>
@@ -520,46 +411,6 @@ export default function AdminMedicinesTable() {
                     ) : (
                       <span className="text-muted text-sm">
                         {item.gst}%
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-right">
-                    {editId === item.id ? (
-                      <input
-                        type="number"
-                        defaultValue={item.mrp}
-                        placeholder="MRP"
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            mrp: Number(e.target.value),
-                          })
-                        }
-                        className="admin-input !w-24 text-right"
-                      />
-                    ) : (
-                      <span className="text-muted line-through text-sm">
-                        ₹{Number(item.mrp).toFixed(2)}
-                      </span>
-                    )}
-                  </td>
-                  <td className="text-right">
-                    {editId === item.id ? (
-                      <input
-                        type="number"
-                        defaultValue={item.selling_price}
-                        placeholder="Sell Price"
-                        onChange={(e) =>
-                          setEditData({
-                            ...editData,
-                            selling_price: Number(e.target.value),
-                          })
-                        }
-                        className="admin-input !w-24 text-right"
-                      />
-                    ) : (
-                      <span className="font-bold text-secondary-dark">
-                        ₹{Number(item.selling_price).toFixed(2)}
                       </span>
                     )}
                   </td>
