@@ -183,7 +183,7 @@ When using tools, summarize the result nicely. E.g., "Yes, we have Crocin availa
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
+            model: "openai/gpt-oss-120b",
             messages: currentMessages,
             tools: tools,
             tool_choice: "auto",
