@@ -18,7 +18,9 @@ const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
 const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER || "JANTAMEDICARE";
 const SMS_INTERVAL_SECONDS = clamp(process.env.SMS_INTERVAL_SECONDS, 10, 5, 60);
 
-const twilioClient = TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN 
+// Disabled by default to prevent backend errors for unpaid accounts
+const TWILIO_ENABLED = process.env.TWILIO_ENABLED === "true";
+const twilioClient = TWILIO_ENABLED && TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN 
   ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) 
   : null;
 
