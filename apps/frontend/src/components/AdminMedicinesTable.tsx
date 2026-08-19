@@ -31,6 +31,8 @@ export default function AdminMedicinesTable() {
     pack_size: "",
     hsn_code: "",
     gst: "",
+    mrp: "",
+    selling_price: "",
     s_no: "",
   });
   const [saving, setSaving] = useState(false);
@@ -134,6 +136,8 @@ export default function AdminMedicinesTable() {
           pack_size: normalized.pack_size,
           hsn_code: normalized.hsn_code,
           gst: Number(normalized.gst) || 0,
+          mrp: Number(normalized.mrp) || 0,
+          selling_price: Number(normalized.selling_price) || 0,
           s_no: Number(normalized.s_no) || 0,
         }),
       });
@@ -145,6 +149,8 @@ export default function AdminMedicinesTable() {
           pack_size: "",
           hsn_code: "",
           gst: "",
+          mrp: "",
+          selling_price: "",
           s_no: "",
         });
         fetchData();
@@ -202,7 +208,7 @@ export default function AdminMedicinesTable() {
       {showAdd && (
         <div className="card mb-6 animate-fade-up">
           <h3 className="font-extrabold text-lg mb-4">Add New Medicine</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-4">
             <div className="col-span-1 lg:col-span-2">
               <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Medicine Name *</label>
               <input
@@ -223,7 +229,7 @@ export default function AdminMedicinesTable() {
                 onChange={(e) =>
                   setNewMed({ ...newMed, s_no: e.target.value })
                 }
-                placeholder="Serial No."
+                placeholder="S.No"
                 className="admin-input w-full"
               />
             </div>
@@ -252,12 +258,32 @@ export default function AdminMedicinesTable() {
               />
             </div>
             <div>
+              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">MRP (₹)</label>
+              <input
+                type="number"
+                value={newMed.mrp}
+                onChange={(e) => setNewMed({ ...newMed, mrp: e.target.value })}
+                placeholder="MRP"
+                className="admin-input w-full"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Price (₹)</label>
+              <input
+                type="number"
+                value={newMed.selling_price}
+                onChange={(e) => setNewMed({ ...newMed, selling_price: e.target.value })}
+                placeholder="Selling Price"
+                className="admin-input w-full"
+              />
+            </div>
+            <div>
               <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">GST %</label>
               <input
                 type="number"
                 value={newMed.gst}
                 onChange={(e) => setNewMed({ ...newMed, gst: e.target.value })}
-                placeholder="e.g. 5 or 12"
+                placeholder="e.g. 5"
                 className="admin-input w-full"
               />
             </div>
@@ -293,6 +319,8 @@ export default function AdminMedicinesTable() {
               <th>Medicine Name</th>
               <th>Pack Size</th>
               <th>HSN Code</th>
+              <th className="text-right">MRP (₹)</th>
+              <th className="text-right">Price (₹)</th>
               <th className="text-right">GST %</th>
               <th className="text-center w-24">Actions</th>
             </tr>
@@ -300,13 +328,13 @@ export default function AdminMedicinesTable() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="py-16 text-center">
+                <td colSpan={8} className="py-16 text-center">
                   <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
                 </td>
               </tr>
             ) : items.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-16 text-center text-muted">
+                <td colSpan={8} className="py-16 text-center text-muted">
                   No medicines found.
                 </td>
               </tr>
@@ -398,6 +426,46 @@ export default function AdminMedicinesTable() {
                     {editId === item.id ? (
                       <input
                         type="number"
+                        defaultValue={item.mrp}
+                        placeholder="MRP"
+                        onChange={(e) =>
+                          setEditData({
+                            ...editData,
+                            mrp: Number(e.target.value),
+                          })
+                        }
+                        className="admin-input !w-20 text-right"
+                      />
+                    ) : (
+                      <span className="text-muted text-sm line-through">
+                        ₹{item.mrp || 0}
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-right">
+                    {editId === item.id ? (
+                      <input
+                        type="number"
+                        defaultValue={item.selling_price}
+                        placeholder="Price"
+                        onChange={(e) =>
+                          setEditData({
+                            ...editData,
+                            selling_price: Number(e.target.value),
+                          })
+                        }
+                        className="admin-input !w-20 text-right"
+                      />
+                    ) : (
+                      <span className="font-bold text-secondary-dark">
+                        ₹{item.selling_price || 0}
+                      </span>
+                    )}
+                  </td>
+                  <td className="text-right">
+                    {editId === item.id ? (
+                      <input
+                        type="number"
                         defaultValue={item.gst}
                         placeholder="GST %"
                         onChange={(e) =>
@@ -406,11 +474,11 @@ export default function AdminMedicinesTable() {
                             gst: Number(e.target.value),
                           })
                         }
-                        className="admin-input !w-20 text-right"
+                        className="admin-input !w-16 text-right"
                       />
                     ) : (
-                      <span className="text-muted text-sm">
-                        {item.gst}%
+                      <span className="text-muted text-sm font-bold">
+                        {item.gst || 0}%
                       </span>
                     )}
                   </td>

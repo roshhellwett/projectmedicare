@@ -4,7 +4,7 @@ import { requireAdmin, requireAuth } from "@/lib/auth/guard";
 import { createAdminClient, createPublicClient } from "@/lib/supabase/admin";
 import { num, str, ValidationError } from "@/lib/utils/validation";
 
-const SORTABLE = ["s_no", "medicine_name", "pack_size", "hsn_code", "gst"];
+const SORTABLE = ["s_no", "medicine_name", "pack_size", "hsn_code", "gst", "mrp", "selling_price"];
 
 function db(write: boolean) {
   const client = write
@@ -31,6 +31,8 @@ function parse(body: Record<string, unknown>) {
     pack_size: str(body.pack_size, "Pack size", { max: 60, optional: true }),
     hsn_code: str(body.hsn_code, "HSN Code", { max: 50, optional: true }),
     gst: num(body.gst, "GST"),
+    mrp: body.mrp ? num(body.mrp, "MRP") : 0,
+    selling_price: body.selling_price ? num(body.selling_price, "Selling Price") : 0,
   };
 }
 
@@ -111,14 +113,28 @@ export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
     const id = num(body.id, "id", { max: Number.MAX_SAFE_INTEGER });
-    const { data, error } = await db(true)
+    const parsedBody = parse(body);
+    const client = db(true);
+    
+    const { data, error } = await client
       .from("medicines")
-      .update(parse(body))
+      .update(parsedBody)
       .eq("id", id)
       .select()
       .single();
+      
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
+      
+    // Sync to medicine_batches
+    await client
+      .from("medicine_batches")
+      .update({
+          mrp: parsedBody.mrp,
+          selling_price: parsedBody.selling_price
+      })
+      .eq("medicine_id", id);
+      
     revalidateTag("medicines", { expire: 0 });
     revalidateTag("stats", { expire: 0 });
     return NextResponse.json({ item: data });

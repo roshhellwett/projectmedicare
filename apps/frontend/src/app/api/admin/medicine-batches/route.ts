@@ -33,8 +33,8 @@ function parse(body: Record<string, unknown>) {
     buying_price: num(body.buying_price, "Buying Price"),
     selling_price: num(body.selling_price, "Selling price"),
     mrp: num(body.mrp, "MRP"),
-    purchase: num(body.purchase, "Purchase"),
-    sale: num(body.sale, "Sale"),
+    purchase: body.purchase ? num(body.purchase, "Purchase") : 0,
+    sale: body.sale ? num(body.sale, "Sale") : 0,
     stock: num(body.stock, "Stock"),
   };
 }
@@ -106,6 +106,10 @@ export async function POST(req: NextRequest) {
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
       
+    // Sync price to medicines table and other batches
+    await client.from("medicines").update({ mrp: parsed.mrp, selling_price: parsed.selling_price }).eq("id", parsed.medicine_id);
+    await client.from("medicine_batches").update({ mrp: parsed.mrp, selling_price: parsed.selling_price }).eq("medicine_id", parsed.medicine_id).neq("id", data.id);
+      
     revalidateTag("medicines", { expire: 0 });
     revalidateTag("stats", { expire: 0 });
     return NextResponse.json({ item: data });
@@ -120,15 +124,22 @@ export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
     const id = num(body.id, "id", { max: Number.MAX_SAFE_INTEGER });
-    const { data, error } = await db(true)
+    const parsed = parse(body);
+    const client = db(true);
+    
+    const { data, error } = await client
       .from("medicine_batches")
-      .update(parse(body))
+      .update(parsed)
       .eq("id", id)
       .select()
       .single();
       
     if (error)
       return NextResponse.json({ error: error.message }, { status: 500 });
+      
+    // Sync price to medicines table and other batches
+    await client.from("medicines").update({ mrp: parsed.mrp, selling_price: parsed.selling_price }).eq("id", parsed.medicine_id);
+    await client.from("medicine_batches").update({ mrp: parsed.mrp, selling_price: parsed.selling_price }).eq("medicine_id", parsed.medicine_id).neq("id", id);
       
     revalidateTag("medicines", { expire: 0 });
     revalidateTag("stats", { expire: 0 });

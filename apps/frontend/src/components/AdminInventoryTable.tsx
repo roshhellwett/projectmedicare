@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight, Edit3, Loader2, Plus, Save, Search, Trash2, X, Package } from "lucide-react";
 import { showToast } from "./Toast";
 
@@ -16,6 +16,11 @@ export default function AdminInventoryTable() {
   
   const [showAdd, setShowAdd] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  
+  const [medSearch, setMedSearch] = useState("");
+  const [showMedDropdown, setShowMedDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
   const [newBatch, setNewBatch] = useState({
     medicine_id: "",
@@ -26,6 +31,7 @@ export default function AdminInventoryTable() {
     selling_price: "",
     mrp: "",
     stock: "",
+    gst: "",
   });
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -72,43 +78,85 @@ export default function AdminInventoryTable() {
     };
   }, [fetchData]);
 
-  const handleAdd = async () => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowMedDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSave = async () => {
     if (!newBatch.medicine_id) {
       showToast("Select a medicine first", "error");
       return;
     }
     setSaving(true);
     try {
+      const medId = Number(newBatch.medicine_id);
+      const selectedMed = medicines.find(m => m.id === medId);
+      
+      // Sync GST back to medicines table if changed
+      const newGst = Number(newBatch.gst) || 0;
+      if (selectedMed && selectedMed.gst !== newGst) {
+          await fetch("/api/admin/medicines", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: medId, gst: newGst })
+          }).catch(console.error);
+      }
+
+      const method = editId ? "PUT" : "POST";
+      const body = {
+          id: editId || undefined,
+          medicine_id: medId,
+          barcode: newBatch.barcode,
+          batch_number: newBatch.batch_number,
+          expiry_date: newBatch.expiry_date,
+          buying_price: Number(newBatch.buying_price) || 0,
+          selling_price: Number(newBatch.selling_price) || 0,
+          mrp: Number(newBatch.mrp) || 0,
+          stock: Number(newBatch.stock) || 0,
+      };
+
       const res = await fetch("/api/admin/medicine-batches", {
-        method: "POST",
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            medicine_id: Number(newBatch.medicine_id),
-            barcode: newBatch.barcode,
-            batch_number: newBatch.batch_number,
-            expiry_date: newBatch.expiry_date,
-            buying_price: Number(newBatch.buying_price) || 0,
-            selling_price: Number(newBatch.selling_price) || 0,
-            mrp: Number(newBatch.mrp) || 0,
-            stock: Number(newBatch.stock) || 0,
-        }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
-        showToast("Batch added successfully");
-        setShowAdd(false);
-        setNewBatch({
-          medicine_id: "", barcode: "", batch_number: "", expiry_date: "", buying_price: "", selling_price: "", mrp: "", stock: ""
-        });
+        showToast(`Batch ${editId ? 'updated' : 'added'} successfully`);
+        resetForm();
         fetchData();
       } else {
         const json = await res.json();
-        showToast(json.error || "Failed to add", "error");
+        showToast(json.error || "Failed to save", "error");
       }
     } catch {
-      showToast("Failed to add", "error");
+      showToast("Failed to save", "error");
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleEdit = (item: any) => {
+      setEditId(item.id);
+      setNewBatch({
+          medicine_id: String(item.medicine_id),
+          barcode: item.barcode || "",
+          batch_number: item.batch_number || "",
+          expiry_date: item.expiry_date || "",
+          buying_price: String(item.buying_price || ""),
+          selling_price: String(item.selling_price || ""),
+          mrp: String(item.mrp || ""),
+          stock: String(item.stock || ""),
+          gst: String(item.gst || 0),
+      });
+      setMedSearch(item.medicine_name || "");
+      setShowAdd(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id: number) => {
@@ -130,6 +178,19 @@ export default function AdminInventoryTable() {
     }
   };
 
+  const resetForm = () => {
+      setShowAdd(false);
+      setEditId(null);
+      setMedSearch("");
+      setNewBatch({
+        medicine_id: "", barcode: "", batch_number: "", expiry_date: "", buying_price: "", selling_price: "", mrp: "", stock: "", gst: ""
+      });
+  };
+
+  const filteredMedicines = medicines.filter(m => 
+      m.medicine_name.toLowerCase().includes(medSearch.toLowerCase())
+  );
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -145,29 +206,55 @@ export default function AdminInventoryTable() {
           />
         </div>
         <button
-          onClick={() => setShowAdd(!showAdd)}
+          onClick={() => {
+              if (showAdd) resetForm();
+              else setShowAdd(true);
+          }}
           className="btn btn-primary shrink-0"
         >
-          <Plus className="h-4 w-4" /> Add Stock (Batch)
+          {showAdd ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />} 
+          {showAdd ? "Close" : "Add Stock (Batch)"}
         </button>
       </div>
 
       {showAdd && (
-        <div className="card mb-6 animate-fade-up">
-          <h3 className="font-extrabold text-lg mb-4">Add New Batch / Stock</h3>
+        <div className="card mb-6 animate-fade-up border-primary/20 bg-slate-50">
+          <h3 className="font-extrabold text-lg mb-4">{editId ? 'Edit Batch' : 'Add New Batch / Stock'}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="col-span-1 lg:col-span-2">
+            <div className="col-span-1 lg:col-span-2 relative" ref={dropdownRef}>
               <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Medicine *</label>
-              <select
-                value={newBatch.medicine_id}
-                onChange={(e) => setNewBatch({ ...newBatch, medicine_id: e.target.value })}
-                className="admin-input w-full"
-              >
-                <option value="">Select Medicine...</option>
-                {medicines.map((m) => (
-                  <option key={m.id} value={m.id}>{m.medicine_name} ({m.pack_size})</option>
-                ))}
-              </select>
+              <input
+                  type="text"
+                  placeholder="Type to search medicine..."
+                  value={medSearch}
+                  onFocus={() => setShowMedDropdown(true)}
+                  onChange={(e) => {
+                      setMedSearch(e.target.value);
+                      setNewBatch({ ...newBatch, medicine_id: "" });
+                      setShowMedDropdown(true);
+                  }}
+                  className="admin-input w-full bg-white"
+              />
+              {showMedDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-line rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {filteredMedicines.length > 0 ? filteredMedicines.map((m) => (
+                          <div 
+                              key={m.id} 
+                              className="p-3 border-b border-line last:border-0 hover:bg-slate-50 cursor-pointer"
+                              onClick={() => {
+                                  setNewBatch({ ...newBatch, medicine_id: String(m.id), gst: String(m.gst || 0) });
+                                  setMedSearch(m.medicine_name);
+                                  setShowMedDropdown(false);
+                              }}
+                          >
+                              <div className="font-semibold text-sm">{m.medicine_name}</div>
+                              <div className="text-xs text-muted">Pack: {m.pack_size} | GST: {m.gst}%</div>
+                          </div>
+                      )) : (
+                          <div className="p-3 text-sm text-muted text-center">No medicines found.</div>
+                      )}
+                  </div>
+              )}
             </div>
             <div>
               <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">Barcode</label>
@@ -176,7 +263,7 @@ export default function AdminInventoryTable() {
                 value={newBatch.barcode}
                 onChange={(e) => setNewBatch({ ...newBatch, barcode: e.target.value })}
                 placeholder="Scan Barcode"
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
               />
             </div>
             <div>
@@ -186,7 +273,7 @@ export default function AdminInventoryTable() {
                 value={newBatch.batch_number}
                 onChange={(e) => setNewBatch({ ...newBatch, batch_number: e.target.value })}
                 placeholder="Batch No."
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
               />
             </div>
             <div>
@@ -196,7 +283,7 @@ export default function AdminInventoryTable() {
                 value={newBatch.expiry_date}
                 onChange={(e) => setNewBatch({ ...newBatch, expiry_date: e.target.value })}
                 placeholder="MM/YY"
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
               />
             </div>
             <div>
@@ -205,7 +292,7 @@ export default function AdminInventoryTable() {
                 type="number"
                 value={newBatch.mrp}
                 onChange={(e) => setNewBatch({ ...newBatch, mrp: e.target.value })}
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
               />
             </div>
             <div>
@@ -214,7 +301,7 @@ export default function AdminInventoryTable() {
                 type="number"
                 value={newBatch.selling_price}
                 onChange={(e) => setNewBatch({ ...newBatch, selling_price: e.target.value })}
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
               />
             </div>
             <div>
@@ -223,16 +310,26 @@ export default function AdminInventoryTable() {
                 type="number"
                 value={newBatch.stock}
                 onChange={(e) => setNewBatch({ ...newBatch, stock: e.target.value })}
-                className="admin-input w-full"
+                className="admin-input w-full bg-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-muted mb-1 uppercase tracking-wider">GST (%)</label>
+              <input
+                type="number"
+                value={newBatch.gst}
+                onChange={(e) => setNewBatch({ ...newBatch, gst: e.target.value })}
+                placeholder="0"
+                className="admin-input w-full bg-white"
               />
             </div>
           </div>
           <div className="flex gap-2 mt-4">
-            <button onClick={handleAdd} disabled={saving} className="btn btn-green">
+            <button onClick={handleSave} disabled={saving} className="btn btn-green">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              {saving ? "Saving..." : "Save Batch"}
+              {saving ? "Saving..." : editId ? "Update Batch" : "Save Batch"}
             </button>
-            <button onClick={() => setShowAdd(false)} className="btn btn-outline !border-line !text-muted !bg-transparent">
+            <button onClick={resetForm} className="btn btn-outline !border-line !text-muted !bg-transparent">
               <X className="h-4 w-4" /> Cancel
             </button>
           </div>
@@ -255,7 +352,7 @@ export default function AdminInventoryTable() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={7} className="py-16 text-center"><Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" /></td></tr>
+              <tr><td colSpan={8} className="py-16 text-center"><Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" /></td></tr>
             ) : items.length === 0 ? (
               <tr><td colSpan={8} className="py-16 text-center text-muted">No inventory found.</td></tr>
             ) : (
@@ -270,7 +367,10 @@ export default function AdminInventoryTable() {
                   <td className="text-right font-bold text-muted">{item.gst ?? 0}%</td>
                   <td>
                     <div className="flex items-center justify-center gap-1">
-                      <button onClick={() => handleDelete(item.id)} className="p-2 rounded-xl hover:bg-accent-soft text-muted hover:text-accent transition-colors" title="Delete">
+                      <button onClick={() => handleEdit(item)} className="p-2 rounded-xl hover:bg-accent-soft text-muted hover:text-accent transition-colors" title="Edit">
+                        <Edit3 className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => handleDelete(item.id)} className="p-2 rounded-xl hover:bg-red-50 text-muted hover:text-red-500 transition-colors" title="Delete">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
